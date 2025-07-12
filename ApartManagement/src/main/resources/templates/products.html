@@ -1,0 +1,44 @@
+
+<!doctype html>
+
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Quản lý sản phẩm</title>
+        <th:context th:replace="base :: resources"></th:context>
+
+  
+    </head>
+    <body>
+        <div th:replace="base :: header"></div>
+        <h1 class="text-center text-info mt-2">QUẢN LÝ SẢN PHẨM</h1>
+        
+        <form th:action="@{/products}" method="post" enctype="multipart/form-data" th:object="${product}">
+            <div class="form-floating mb-3 mt-3">
+                <input type="text" class="form-control" id="name" placeholder="Ten san pham" th:field="*{name}">
+                <label for="name">Ten san pham</label>
+            </div>
+             <div class="form-floating mb-3 mt-3">
+                <input type="number" class="form-control" id="price" placeholder="Gia san pham" th:field="*{price}">
+                <label for="price">Gia</label>
+            </div>
+            <div class="form-floating">
+              <select class="form-select" id="cate" th:field="*{categoryId}">
+                <option th:each="c: ${categories}" th:text="${c.name}" th:value="${c.id}"></option>
+                               </select>
+              <label for="cate" class="form-label">Danh muc</label>
+            </div>
+             <div class="form-floating mb-3 mt-3">
+                <input type="file" class="form-control" id="price" placeholder="Gia san pham" th:field="*{file}">
+                
+            </div>
+            <div class="form-floating mb-3 mt-3">
+                <button type="submit" class="btn btn-success">Them san pham</button>
+                
+            </div>
+
+        </form>
+        
+        
+        
+    </body>
+</html>

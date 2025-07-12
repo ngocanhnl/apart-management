@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<persistence version="3.0" xmlns="https://jakarta.ee/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="https://jakarta.ee/xml/ns/persistence https://jakarta.ee/xml/ns/persistence/persistence_3_0.xsd">
+  <!-- Define Persistence Unit -->
+  <persistence-unit name="my_persistence_unit">
+    <class>com.ngocanh.pojo.User</class>
+    <class>com.ngocanh.pojo.Survey</class>
+    <class>com.ngocanh.pojo.Lockeritem</class>
+    <class>com.ngocanh.pojo.Complaint</class>
+    <class>com.ngocanh.pojo.Vehiclecardregistration</class>
+    <class>com.ngocanh.pojo.Invoice</class>
+    <class>com.ngocanh.pojo.Locker</class>
+  </persistence-unit>
+</persistence>
