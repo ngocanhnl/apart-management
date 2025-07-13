@@ -4,6 +4,9 @@
  */
 package com.ngocanh.pojo;
 
+import java.io.Serializable;
+import java.util.Date;
+import java.util.Set;
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -19,13 +22,10 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
-import java.io.Serializable;
-import java.util.Date;
-import java.util.Set;
 
 /**
  *
- * @author Ngoc Anh
+ * @author ADMIN
  */
 @Entity
 @Table(name = "user")
@@ -80,8 +80,8 @@ public class User implements Serializable {
     private Date createdAt;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private Set<Complaint> complaintSet;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "createdBy")
-    private Set<Survey> surveySet;
+    @OneToMany(mappedBy = "userId")
+    private Set<Surveyuser> surveyuserSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private Set<Invoice> invoiceSet;
     @JoinColumn(name = "locker_id", referencedColumnName = "locker_id")
@@ -209,12 +209,12 @@ public class User implements Serializable {
         this.complaintSet = complaintSet;
     }
 
-    public Set<Survey> getSurveySet() {
-        return surveySet;
+    public Set<Surveyuser> getSurveyuserSet() {
+        return surveyuserSet;
     }
 
-    public void setSurveySet(Set<Survey> surveySet) {
-        this.surveySet = surveySet;
+    public void setSurveyuserSet(Set<Surveyuser> surveyuserSet) {
+        this.surveyuserSet = surveyuserSet;
     }
 
     public Set<Invoice> getInvoiceSet() {

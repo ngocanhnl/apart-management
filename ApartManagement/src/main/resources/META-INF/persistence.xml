@@ -9,5 +9,9 @@
     <class>com.ngocanh.pojo.Vehiclecardregistration</class>
     <class>com.ngocanh.pojo.Invoice</class>
     <class>com.ngocanh.pojo.Locker</class>
+    <class>com.ngocanh.pojo.Question</class>
+    <class>com.ngocanh.pojo.Surveyuser</class>
+    <class>com.ngocanh.pojo.Answer</class>
+    <class>com.ngocanh.pojo.Surveyquestion</class>
   </persistence-unit>
 </persistence>
