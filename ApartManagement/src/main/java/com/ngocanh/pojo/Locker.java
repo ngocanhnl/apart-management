@@ -4,6 +4,8 @@
  */
 package com.ngocanh.pojo;
 
+import java.io.Serializable;
+import java.util.Set;
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -16,12 +18,10 @@ import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import java.io.Serializable;
-import java.util.Set;
 
 /**
  *
- * @author Ngoc Anh
+ * @author ADMIN
  */
 @Entity
 @Table(name = "locker")

@@ -4,35 +4,31 @@
  */
 package com.ngocanh.pojo;
 
+import java.io.Serializable;
+import java.util.Set;
 import jakarta.persistence.Basic;
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
-import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
-import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
-import java.io.Serializable;
-import java.util.Date;
 
 /**
  *
- * @author Ngoc Anh
+ * @author ADMIN
  */
 @Entity
 @Table(name = "survey")
 @NamedQueries({
     @NamedQuery(name = "Survey.findAll", query = "SELECT s FROM Survey s"),
     @NamedQuery(name = "Survey.findBySurveyId", query = "SELECT s FROM Survey s WHERE s.surveyId = :surveyId"),
-    @NamedQuery(name = "Survey.findByTitle", query = "SELECT s FROM Survey s WHERE s.title = :title"),
-    @NamedQuery(name = "Survey.findByCreatedAt", query = "SELECT s FROM Survey s WHERE s.createdAt = :createdAt"),
-    @NamedQuery(name = "Survey.findByExpiredAt", query = "SELECT s FROM Survey s WHERE s.expiredAt = :expiredAt")})
+    @NamedQuery(name = "Survey.findByTitle", query = "SELECT s FROM Survey s WHERE s.title = :title")})
 public class Survey implements Serializable {
 
     private static final long serialVersionUID = 1L;
@@ -47,15 +43,10 @@ public class Survey implements Serializable {
     @Lob
     @Column(name = "description")
     private String description;
-    @Column(name = "created_at")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createdAt;
-    @Column(name = "expired_at")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date expiredAt;
-    @JoinColumn(name = "created_by", referencedColumnName = "user_id")
-    @ManyToOne(optional = false)
-    private User createdBy;
+    @OneToMany(mappedBy = "surveyId")
+    private Set<Surveyuser> surveyuserSet;
+    @OneToMany(cascade = CascadeType.ALL, mappedBy = "surveyId")
+    private Set<Surveyquestion> surveyquestionSet;
 
     public Survey() {
     }
@@ -93,28 +84,20 @@ public class Survey implements Serializable {
         this.description = description;
     }
 
-    public Date getCreatedAt() {
-        return createdAt;
+    public Set<Surveyuser> getSurveyuserSet() {
+        return surveyuserSet;
     }
 
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
+    public void setSurveyuserSet(Set<Surveyuser> surveyuserSet) {
+        this.surveyuserSet = surveyuserSet;
     }
 
-    public Date getExpiredAt() {
-        return expiredAt;
+    public Set<Surveyquestion> getSurveyquestionSet() {
+        return surveyquestionSet;
     }
 
-    public void setExpiredAt(Date expiredAt) {
-        this.expiredAt = expiredAt;
-    }
-
-    public User getCreatedBy() {
-        return createdBy;
-    }
-
-    public void setCreatedBy(User createdBy) {
-        this.createdBy = createdBy;
+    public void setSurveyquestionSet(Set<Surveyquestion> surveyquestionSet) {
+        this.surveyquestionSet = surveyquestionSet;
     }
 
     @Override
