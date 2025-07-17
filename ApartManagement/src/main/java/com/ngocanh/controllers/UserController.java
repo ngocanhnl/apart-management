@@ -4,6 +4,7 @@
  */
 package com.ngocanh.controllers;
 
+import com.ngocanh.pojo.User;
 import com.ngocanh.services.UserService;
 import java.util.Map;
 import org.hibernate.annotations.CreationTimestamp;
@@ -11,6 +12,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 
@@ -24,8 +27,9 @@ public class UserController {
     private UserService userService;
     
     @PostMapping("/users")
-    public String createUser(Model model){
-        return "user";
+    public String createUser(@ModelAttribute(value="user") User u){
+        this.userService.updateOrCreateuser(u);
+        return "redirect:/users";
     }
     
     @GetMapping("/users")
@@ -33,6 +37,18 @@ public class UserController {
         model.addAttribute("users", this.userService.getUsers(params));
         
         return "user";
+    }
+    @GetMapping("/user/{userId}")
+    public String updateProduct(Model model,@PathVariable(value = "userId") int id){
+        model.addAttribute("user", this.userService.getUserById(id));
+        
+        return "userCreateForm";
+    }
+    @GetMapping("/userCreateForm")
+    public String createuser(Model model){
+        model.addAttribute("user", new User());
+        
+        return "userCreateForm";
     }
     
     

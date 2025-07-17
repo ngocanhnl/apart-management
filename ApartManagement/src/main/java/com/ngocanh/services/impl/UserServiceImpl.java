@@ -11,15 +11,25 @@ import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import com.cloudinary.Cloudinary;
+import com.cloudinary.utils.ObjectUtils;
+import java.io.IOException;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /**
  *
  * @author Ngoc Anh
  */
 @Service
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
+
     @Autowired
     private UserRepositoriy userRepo;
+
+    @Autowired
+    private Cloudinary cloudinary;
+
     @Override
     public User createUser(String username, String password, String role, String fullName) {
         return this.createUser(username, password, role, fullName);
@@ -29,5 +39,26 @@ public class UserServiceImpl implements UserService{
     public List<User> getUsers(Map<String, String> params) {
         return this.userRepo.getUsers(params);
     }
-    
+
+    @Override
+    public void updateOrCreateuser(User user) {
+
+        if (!user.getFile().isEmpty()) {
+            try {
+                Map res = cloudinary.uploader().upload(user.getFile().getBytes(),
+                        ObjectUtils.asMap("resource_type", "auto"));
+                user.setAvatarUrl(res.get("secure_url").toString());
+            } catch (IOException ex) {
+                Logger.getLogger(UserServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+            }
+        }
+
+        this.userRepo.updateOrCreateUser(user);
+    }
+
+    @Override
+    public User getUserById(int id) {
+        return this.userRepo.getUserById(id);
+    }
+
 }

@@ -17,4 +17,6 @@ import java.util.Map;
 public interface UserRepositoriy {
     public User createUser(String username, String password, String role, String fullName);
     public List<User> getUsers(Map<String, String> params);
+    public void updateOrCreateUser(User user);
+    public User getUserById(int id);
 }

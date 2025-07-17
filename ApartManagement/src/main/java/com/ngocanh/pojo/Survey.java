@@ -4,8 +4,6 @@
  */
 package com.ngocanh.pojo;
 
-import java.io.Serializable;
-import java.util.Set;
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -18,54 +16,64 @@ import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Temporal;
+import jakarta.persistence.TemporalType;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.Set;
 
 /**
  *
- * @author ADMIN
+ * @author Ngoc Anh
  */
 @Entity
 @Table(name = "survey")
 @NamedQueries({
     @NamedQuery(name = "Survey.findAll", query = "SELECT s FROM Survey s"),
-    @NamedQuery(name = "Survey.findBySurveyId", query = "SELECT s FROM Survey s WHERE s.surveyId = :surveyId"),
-    @NamedQuery(name = "Survey.findByTitle", query = "SELECT s FROM Survey s WHERE s.title = :title")})
+    @NamedQuery(name = "Survey.findById", query = "SELECT s FROM Survey s WHERE s.id = :id"),
+    @NamedQuery(name = "Survey.findByTitle", query = "SELECT s FROM Survey s WHERE s.title = :title"),
+    @NamedQuery(name = "Survey.findByCreatedAt", query = "SELECT s FROM Survey s WHERE s.createdAt = :createdAt")})
 public class Survey implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "survey_id")
-    private Integer surveyId;
+    @Column(name = "id")
+    private Integer id;
     @Basic(optional = false)
     @Column(name = "title")
     private String title;
     @Lob
     @Column(name = "description")
     private String description;
-    @OneToMany(mappedBy = "surveyId")
-    private Set<Surveyuser> surveyuserSet;
+    @Lob
+    @Column(name = "questions_json")
+    private String questionsJson;
+    @Column(name = "created_at")
+    @Temporal(TemporalType.TIMESTAMP)
+    private Date createdAt;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "surveyId")
-    private Set<Surveyquestion> surveyquestionSet;
+    private Set<SurveyResponse> surveyResponseSet;
 
     public Survey() {
     }
 
-    public Survey(Integer surveyId) {
-        this.surveyId = surveyId;
+    public Survey(Integer id) {
+        this.id = id;
     }
 
-    public Survey(Integer surveyId, String title) {
-        this.surveyId = surveyId;
+    public Survey(Integer id, String title) {
+        this.id = id;
         this.title = title;
     }
 
-    public Integer getSurveyId() {
-        return surveyId;
+    public Integer getId() {
+        return id;
     }
 
-    public void setSurveyId(Integer surveyId) {
-        this.surveyId = surveyId;
+    public void setId(Integer id) {
+        this.id = id;
     }
 
     public String getTitle() {
@@ -84,26 +92,34 @@ public class Survey implements Serializable {
         this.description = description;
     }
 
-    public Set<Surveyuser> getSurveyuserSet() {
-        return surveyuserSet;
+    public String getQuestionsJson() {
+        return questionsJson;
     }
 
-    public void setSurveyuserSet(Set<Surveyuser> surveyuserSet) {
-        this.surveyuserSet = surveyuserSet;
+    public void setQuestionsJson(String questionsJson) {
+        this.questionsJson = questionsJson;
     }
 
-    public Set<Surveyquestion> getSurveyquestionSet() {
-        return surveyquestionSet;
+    public Date getCreatedAt() {
+        return createdAt;
     }
 
-    public void setSurveyquestionSet(Set<Surveyquestion> surveyquestionSet) {
-        this.surveyquestionSet = surveyquestionSet;
+    public void setCreatedAt(Date createdAt) {
+        this.createdAt = createdAt;
+    }
+
+    public Set<SurveyResponse> getSurveyResponseSet() {
+        return surveyResponseSet;
+    }
+
+    public void setSurveyResponseSet(Set<SurveyResponse> surveyResponseSet) {
+        this.surveyResponseSet = surveyResponseSet;
     }
 
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (surveyId != null ? surveyId.hashCode() : 0);
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
@@ -114,7 +130,7 @@ public class Survey implements Serializable {
             return false;
         }
         Survey other = (Survey) object;
-        if ((this.surveyId == null && other.surveyId != null) || (this.surveyId != null && !this.surveyId.equals(other.surveyId))) {
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -122,7 +138,7 @@ public class Survey implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ngocanh.pojo.Survey[ surveyId=" + surveyId + " ]";
+        return "com.ngocanh.pojo.Survey[ id=" + id + " ]";
     }
     
 }
