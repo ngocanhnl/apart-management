@@ -71,4 +71,20 @@ public class UserRepositoryImpl implements UserRepositoriy {
 //        }
         return query.getResultList();
     }
+
+    @Override
+    public void updateOrCreateUser(User user) {
+        Session s = this.factory.getObject().getCurrentSession();
+        if (user.getUserId() == null) {
+            s.persist(user);
+        } else {
+            s.merge(user);
+        }
+    }
+
+    @Override
+    public User getUserById(int id) {
+        Session s = this.factory.getObject().getCurrentSession();
+        return s.get(User.class, id);
+    }
 }

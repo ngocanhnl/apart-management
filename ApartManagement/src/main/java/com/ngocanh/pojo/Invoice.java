@@ -4,9 +4,6 @@
  */
 package com.ngocanh.pojo;
 
-import java.io.Serializable;
-import java.math.BigDecimal;
-import java.util.Date;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -20,10 +17,13 @@ import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import java.io.Serializable;
+import java.math.BigDecimal;
+import java.util.Date;
 
 /**
  *
- * @author ADMIN
+ * @author Ngoc Anh
  */
 @Entity
 @Table(name = "invoice")

@@ -4,9 +4,6 @@
  */
 package com.ngocanh.pojo;
 
-import java.io.Serializable;
-import java.util.Date;
-import java.util.Set;
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -22,10 +19,15 @@ import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.persistence.Transient;
+import java.io.Serializable;
+import java.util.Date;
+import java.util.Set;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
- * @author ADMIN
+ * @author Ngoc Anh
  */
 @Entity
 @Table(name = "user")
@@ -78,10 +80,10 @@ public class User implements Serializable {
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
+    @OneToMany(mappedBy = "userId")
+    private Set<SurveyResponse> surveyResponseSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private Set<Complaint> complaintSet;
-    @OneToMany(mappedBy = "userId")
-    private Set<Surveyuser> surveyuserSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private Set<Invoice> invoiceSet;
     @JoinColumn(name = "locker_id", referencedColumnName = "locker_id")
@@ -89,6 +91,12 @@ public class User implements Serializable {
     private Locker lockerId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private Set<Vehiclecardregistration> vehiclecardregistrationSet;
+    
+    
+    @Transient
+    private MultipartFile file;
+
+    
 
     public User() {
     }
@@ -104,13 +112,14 @@ public class User implements Serializable {
         this.role = role;
         this.fullName = fullName;
     }
-
-      public User(String username, String password, String role, String fullName) {
+    public User(String username, String password, String role, String fullName) {
+       
         this.username = username;
         this.password = password;
         this.role = role;
         this.fullName = fullName;
     }
+
     public Integer getUserId() {
         return userId;
     }
@@ -207,20 +216,20 @@ public class User implements Serializable {
         this.createdAt = createdAt;
     }
 
+    public Set<SurveyResponse> getSurveyResponseSet() {
+        return surveyResponseSet;
+    }
+
+    public void setSurveyResponseSet(Set<SurveyResponse> surveyResponseSet) {
+        this.surveyResponseSet = surveyResponseSet;
+    }
+
     public Set<Complaint> getComplaintSet() {
         return complaintSet;
     }
 
     public void setComplaintSet(Set<Complaint> complaintSet) {
         this.complaintSet = complaintSet;
-    }
-
-    public Set<Surveyuser> getSurveyuserSet() {
-        return surveyuserSet;
-    }
-
-    public void setSurveyuserSet(Set<Surveyuser> surveyuserSet) {
-        this.surveyuserSet = surveyuserSet;
     }
 
     public Set<Invoice> getInvoiceSet() {
@@ -270,6 +279,20 @@ public class User implements Serializable {
     @Override
     public String toString() {
         return "com.ngocanh.pojo.User[ userId=" + userId + " ]";
+    }
+
+    /**
+     * @return the file
+     */
+    public MultipartFile getFile() {
+        return file;
+    }
+
+    /**
+     * @param file the file to set
+     */
+    public void setFile(MultipartFile file) {
+        this.file = file;
     }
     
 }

@@ -1,0 +1,296 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Create User</title>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <!-- Bootstrap 5 CSS -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+        <!-- Bootstrap Icons -->
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
+        <!-- Custom CSS -->
+        <style>
+            body {
+                background-color: #f8f9fa;
+                min-height: 100vh;
+                font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            }
+
+            .form-container {
+                background: white;
+                border-radius: 12px;
+                box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+                border: 1px solid #e9ecef;
+                padding: 2.5rem;
+                margin-top: 2rem;
+            }
+
+            .form-title {
+                color: #495057;
+                font-weight: 600;
+                font-size: 2rem;
+                text-align: center;
+                margin-bottom: 2rem;
+                position: relative;
+            }
+
+            .form-title::after {
+                content: '';
+                position: absolute;
+                bottom: -10px;
+                left: 50%;
+                transform: translateX(-50%);
+                width: 60px;
+                height: 3px;
+                background: #6c757d;
+                border-radius: 2px;
+            }
+
+            .form-floating {
+                margin-bottom: 1.5rem;
+            }
+
+            .form-floating > .form-control {
+                border: 2px solid #e9ecef;
+                border-radius: 8px;
+                padding: 1rem 0.75rem;
+                font-size: 1rem;
+                transition: all 0.3s ease;
+                background: white;
+            }
+
+            .form-floating > .form-control:focus {
+                border-color: #495057;
+                box-shadow: 0 0 0 0.2rem rgba(73, 80, 87, 0.25);
+                background: white;
+            }
+
+            .form-floating > label {
+                color: #6c757d;
+                font-weight: 500;
+                padding: 1rem 0.75rem;
+            }
+
+            .form-floating > .form-control:focus ~ label,
+            .form-floating > .form-control:not(:placeholder-shown) ~ label {
+                color: #495057;
+                transform: scale(0.85) translateY(-0.5rem) translateX(0.15rem);
+            }
+
+            .btn-submit {
+                background: #495057;
+                border: none;
+                padding: 0.8rem 2rem;
+                border-radius: 8px;
+                font-weight: 600;
+                font-size: 1.1rem;
+                transition: all 0.3s ease;
+                box-shadow: 0 2px 8px rgba(73, 80, 87, 0.2);
+                width: 100%;
+                color: white;
+            }
+
+            .btn-submit:hover {
+                background: #343a40;
+                transform: translateY(-1px);
+                box-shadow: 0 4px 12px rgba(73, 80, 87, 0.3);
+            }
+
+            .role-select {
+                background: white;
+                border: 2px solid #e9ecef;
+                border-radius: 8px;
+            }
+
+            .role-select:focus {
+                background: white;
+                border-color: #495057;
+                box-shadow: 0 0 0 0.2rem rgba(73, 80, 87, 0.25);
+            }
+
+            .card-hover {
+                transition: transform 0.3s ease;
+            }
+
+            .card-hover:hover {
+                transform: translateY(-2px);
+            }
+
+            @media (max-width: 768px) {
+                .form-container {
+                    margin: 1rem;
+                    padding: 1.5rem;
+                }
+
+                .form-title {
+                    font-size: 1.75rem;
+                }
+            }
+        </style>
+    </head>
+    <body>
+        <div class="container">
+            <div class="row justify-content-center">
+                <div class="col-md-6 col-lg-5">
+                    <div class="form-container card-hover">
+                        <h2 class="form-title">
+                            <i class="bi bi-person-plus-fill me-2"></i>
+                            Create New User
+                        </h2>
+
+                        <form th:action="@{/users}" th:object="${user}" method="post" novalidate enctype="multipart/form-data">
+                            <input type="hidden" th:field="*{userId}" />
+                            <input type="hidden" th:field="*{avatarUrl}" />
+                            <!-- Username Field -->
+                            <div class="form-floating mb-3">
+                                <input type="text" 
+                                       class="form-control" 
+                                       id="username" 
+                                       th:field="*{username}" 
+                                       placeholder="Username"
+                                       required>
+                                <label for="username">
+                                    <i class="bi bi-person-circle me-2"></i>Username
+                                </label>
+                            </div>
+
+                            <!-- Password Field -->
+                            <div class="form-floating mb-3">
+                                <input type="password" 
+                                       class="form-control" 
+                                       id="password" 
+                                       th:field="*{password}" 
+                                       placeholder="Password"
+                                       required>
+                                <label for="password">
+                                    <i class="bi bi-lock-fill me-2"></i>Password
+                                </label>
+                            </div>
+
+                            <!-- Full Name Field -->
+                            <div class="form-floating mb-3">
+                                <input type="text" 
+                                       class="form-control" 
+                                       id="fullName" 
+                                       th:field="*{fullName}" 
+                                       placeholder="Full Name"
+                                       required>
+                                <label for="fullName">
+                                    <i class="bi bi-person-badge me-2"></i>Full Name
+                                </label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="text" 
+                                       class="form-control" 
+                                       id="phone" 
+                                       th:field="*{phone}" 
+                                       placeholder="Phone number"
+                                       >
+                                <label for="phone">
+                                    <i class="bi bi-person-badge me-2"></i>Phone
+                                </label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="text" 
+                                       class="form-control" 
+                                       id="email" 
+                                       th:field="*{email}" 
+                                       placeholder="Email"
+                                       >
+                                <label for="email">
+                                    <i class="bi bi-person-badge me-2"></i>Email
+                                </label>
+                            </div>
+                            <div class="form-floating mb-3">
+                                <input type="text" 
+                                       class="form-control" 
+                                       id="address" 
+                                       th:field="*{address}" 
+                                       placeholder="Address"
+                                       >
+                                <label for="address">
+                                    <i class="bi bi-person-badge me-2"></i>Address
+                                </label>
+                            </div>
+                            <div class="form-floating mb-3 mt-3">
+                                <input type="file" class="form-control" id="file" th:field="*{file}" />
+                            </div>
+                            <div class="form-floating mb-3 mt-3" th:if="${user.avatarUrl != null}">
+                                <img th:src="${user.avatarUrl}" width="300" />
+                            </div>
+
+                            <!-- Role Field -->
+                            <div class="form-floating mb-4">
+                                <select class="form-select role-select" 
+                                        id="role" 
+                                        th:field="*{role}" 
+                                        required>
+                                    <option value="">Choose Role...</option>
+                                    <option value="admin">Administrator</option>
+                                    <option value="resident">User</option>           
+                                </select>
+                                <label for="role">
+                                    <i class="bi bi-shield-check me-2"></i>Role
+                                </label>
+                            </div>
+                            <div class="form-floating mb-4">
+                                <select class="form-select role-select" 
+                                        id="active" 
+                                        th:field="*{isActive}" 
+                                        required>
+                                    <option value="">Choose </option>
+                                    <option value="true">Active</option>
+                                    <option value="false">Not active</option>
+                                </select>
+                                <label for="active">
+                                    <i class="bi bi-shield-check me-2"></i>Active
+                                </label>
+                            </div>
+
+                            <!-- Submit Button -->
+                           
+                            <button type="submit" class="btn btn-primary btn-submit">
+                                <span th:if="${user.userId == null}">Create user</span>
+                                <span th:if="${user.userId != null}">Update</span>
+                            </button>
+                        </form>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Bootstrap 5 JS -->
+        <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
+        <!-- Optional: Form validation script -->
+        <script>
+            // Bootstrap form validation
+            (function () {
+                'use strict';
+                window.addEventListener('load', function () {
+                    var forms = document.getElementsByClassName('needs-validation');
+                    var validation = Array.prototype.filter.call(forms, function (form) {
+                        form.addEventListener('submit', function (event) {
+                            if (form.checkValidity() === false) {
+                                event.preventDefault();
+                                event.stopPropagation();
+                            }
+                            form.classList.add('was-validated');
+                        }, false);
+                    });
+                }, false);
+            })();
+
+            // Add smooth focus transitions
+            document.querySelectorAll('.form-control, .form-select').forEach(function (element) {
+                element.addEventListener('focus', function () {
+                    this.parentElement.style.transform = 'translateY(-1px)';
+                });
+
+                element.addEventListener('blur', function () {
+                    this.parentElement.style.transform = 'translateY(0)';
+                });
+            });
+        </script>
+    </body>
+</html>
