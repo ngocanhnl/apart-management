@@ -31,6 +31,7 @@ import java.util.Date;
     @NamedQuery(name = "Lockeritem.findByItemId", query = "SELECT l FROM Lockeritem l WHERE l.itemId = :itemId"),
     @NamedQuery(name = "Lockeritem.findByItemName", query = "SELECT l FROM Lockeritem l WHERE l.itemName = :itemName"),
     @NamedQuery(name = "Lockeritem.findByStatus", query = "SELECT l FROM Lockeritem l WHERE l.status = :status"),
+    @NamedQuery(name = "Lockeritem.findByImage", query = "SELECT l FROM Lockeritem l WHERE l.image = :image"),
     @NamedQuery(name = "Lockeritem.findByReceivedAt", query = "SELECT l FROM Lockeritem l WHERE l.receivedAt = :receivedAt"),
     @NamedQuery(name = "Lockeritem.findByCreatedAt", query = "SELECT l FROM Lockeritem l WHERE l.createdAt = :createdAt")})
 public class Lockeritem implements Serializable {
@@ -46,6 +47,8 @@ public class Lockeritem implements Serializable {
     private String itemName;
     @Column(name = "status")
     private String status;
+    @Column(name = "image")
+    private String image;
     @Column(name = "received_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date receivedAt;
@@ -90,6 +93,14 @@ public class Lockeritem implements Serializable {
 
     public void setStatus(String status) {
         this.status = status;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public Date getReceivedAt() {

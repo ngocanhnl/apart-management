@@ -17,6 +17,9 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.ngocanh.formatters.UserFormatter;
+
+import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 
 /**
@@ -57,5 +60,13 @@ public class WebAppContextConfigs implements WebMvcConfigurer {
         registry.addResourceHandler("/css/**")
                 .addResourceLocations("classpath:/static/css/");
     }
+
+
+    @Override
+    public void addFormatters(FormatterRegistry registry) {
+        registry.addFormatter(new UserFormatter());
+    }
+    
+    
 
 }

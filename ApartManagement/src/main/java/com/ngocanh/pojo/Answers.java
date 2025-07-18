@@ -10,25 +10,24 @@ import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
+import jakarta.persistence.JoinColumn;
 import jakarta.persistence.Lob;
+import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import java.io.Serializable;
-import java.util.Set;
 
 /**
  *
  * @author Ngoc Anh
  */
 @Entity
-@Table(name = "survey")
+@Table(name = "answers")
 @NamedQueries({
-    @NamedQuery(name = "Survey.findAll", query = "SELECT s FROM Survey s"),
-    @NamedQuery(name = "Survey.findById", query = "SELECT s FROM Survey s WHERE s.id = :id"),
-    @NamedQuery(name = "Survey.findByTitle", query = "SELECT s FROM Survey s WHERE s.title = :title")})
-public class Survey implements Serializable {
+    @NamedQuery(name = "Answers.findAll", query = "SELECT a FROM Answers a"),
+    @NamedQuery(name = "Answers.findById", query = "SELECT a FROM Answers a WHERE a.id = :id")})
+public class Answers implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -36,25 +35,21 @@ public class Survey implements Serializable {
     @Basic(optional = false)
     @Column(name = "id")
     private Integer id;
-    @Basic(optional = false)
-    @Column(name = "title")
-    private String title;
     @Lob
-    @Column(name = "description")
-    private String description;
-    @OneToMany(mappedBy = "surveyId")
-    private Set<Questions> questionsSet;
+    @Column(name = "answer_text")
+    private String answerText;
+    @JoinColumn(name = "question_id", referencedColumnName = "id")
+    @ManyToOne
+    private Questions questionId;
+    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
+    @ManyToOne
+    private User userId;
 
-    public Survey() {
+    public Answers() {
     }
 
-    public Survey(Integer id) {
+    public Answers(Integer id) {
         this.id = id;
-    }
-
-    public Survey(Integer id, String title) {
-        this.id = id;
-        this.title = title;
     }
 
     public Integer getId() {
@@ -65,28 +60,28 @@ public class Survey implements Serializable {
         this.id = id;
     }
 
-    public String getTitle() {
-        return title;
+    public String getAnswerText() {
+        return answerText;
     }
 
-    public void setTitle(String title) {
-        this.title = title;
+    public void setAnswerText(String answerText) {
+        this.answerText = answerText;
     }
 
-    public String getDescription() {
-        return description;
+    public Questions getQuestionId() {
+        return questionId;
     }
 
-    public void setDescription(String description) {
-        this.description = description;
+    public void setQuestionId(Questions questionId) {
+        this.questionId = questionId;
     }
 
-    public Set<Questions> getQuestionsSet() {
-        return questionsSet;
+    public User getUserId() {
+        return userId;
     }
 
-    public void setQuestionsSet(Set<Questions> questionsSet) {
-        this.questionsSet = questionsSet;
+    public void setUserId(User userId) {
+        this.userId = userId;
     }
 
     @Override
@@ -99,10 +94,10 @@ public class Survey implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Survey)) {
+        if (!(object instanceof Answers)) {
             return false;
         }
-        Survey other = (Survey) object;
+        Answers other = (Answers) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -111,7 +106,7 @@ public class Survey implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ngocanh.pojo.Survey[ id=" + id + " ]";
+        return "com.ngocanh.pojo.Answers[ id=" + id + " ]";
     }
     
 }
