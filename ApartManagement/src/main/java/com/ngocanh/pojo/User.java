@@ -80,10 +80,10 @@ public class User implements Serializable {
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
-    @OneToMany(mappedBy = "userId")
-    private Set<SurveyResponse> surveyResponseSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private Set<Complaint> complaintSet;
+    @OneToMany(mappedBy = "userId")
+    private Set<Answers> answersSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private Set<Invoice> invoiceSet;
     @JoinColumn(name = "locker_id", referencedColumnName = "locker_id")
@@ -91,12 +91,10 @@ public class User implements Serializable {
     private Locker lockerId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private Set<Vehiclecardregistration> vehiclecardregistrationSet;
-    
-    
+
+        
     @Transient
     private MultipartFile file;
-
-    
 
     public User() {
     }
@@ -112,6 +110,7 @@ public class User implements Serializable {
         this.role = role;
         this.fullName = fullName;
     }
+    
     public User(String username, String password, String role, String fullName) {
        
         this.username = username;
@@ -119,6 +118,7 @@ public class User implements Serializable {
         this.role = role;
         this.fullName = fullName;
     }
+
 
     public Integer getUserId() {
         return userId;
@@ -216,20 +216,20 @@ public class User implements Serializable {
         this.createdAt = createdAt;
     }
 
-    public Set<SurveyResponse> getSurveyResponseSet() {
-        return surveyResponseSet;
-    }
-
-    public void setSurveyResponseSet(Set<SurveyResponse> surveyResponseSet) {
-        this.surveyResponseSet = surveyResponseSet;
-    }
-
     public Set<Complaint> getComplaintSet() {
         return complaintSet;
     }
 
     public void setComplaintSet(Set<Complaint> complaintSet) {
         this.complaintSet = complaintSet;
+    }
+
+    public Set<Answers> getAnswersSet() {
+        return answersSet;
+    }
+
+    public void setAnswersSet(Set<Answers> answersSet) {
+        this.answersSet = answersSet;
     }
 
     public Set<Invoice> getInvoiceSet() {

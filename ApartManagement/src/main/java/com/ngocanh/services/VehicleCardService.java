@@ -5,6 +5,7 @@
 package com.ngocanh.services;
 
 import com.ngocanh.pojo.User;
+import com.ngocanh.pojo.Vehiclecardregistration;
 import java.util.List;
 import java.util.Map;
 
@@ -12,10 +13,8 @@ import java.util.Map;
  *
  * @author Ngoc Anh
  */
-public interface UserService {
-    public User createUser(String username, String password, String role, String fullName);
-    public List<User> getUsers(Map<String,String> params);
-    public List<User> getUsers();
-    public void updateOrCreateuser(User user);
-    public User getUserById(int id);
+public interface VehicleCardService {
+    public List<Vehiclecardregistration> getAllVehiclecardregistration(Map<String,String> params);
+        public void updateOrCreateCard(Vehiclecardregistration card);
+        public Vehiclecardregistration getCardById(int id);
 }

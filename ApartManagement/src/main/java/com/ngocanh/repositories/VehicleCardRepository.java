@@ -4,20 +4,17 @@
  */
 package com.ngocanh.repositories;
 
-
 import com.ngocanh.pojo.User;
+import com.ngocanh.pojo.Vehiclecardregistration;
 import java.util.List;
 import java.util.Map;
-
 
 /**
  *
  * @author Ngoc Anh
  */
-public interface UserRepositoriy {
-    public User createUser(String username, String password, String role, String fullName);
-    public List<User> getUsers(Map<String, String> params);
-    public List<User> getUsers();
-    public void updateOrCreateUser(User user);
-    public User getUserById(int id);
+public interface VehicleCardRepository {
+    public List<Vehiclecardregistration> getAllVehiclecardregistration(Map<String,String> params);
+    public void updateOrCreateVehicleCard(Vehiclecardregistration card);
+    public Vehiclecardregistration getCardById(int id);
 }

@@ -14,5 +14,7 @@
     <class>com.ngocanh.pojo.Answer</class>
     <class>com.ngocanh.pojo.Surveyquestion</class>
     <class>com.ngocanh.pojo.SurveyResponse</class>
+    <class>com.ngocanh.pojo.Questions</class>
+    <class>com.ngocanh.pojo.Answers</class>
   </persistence-unit>
 </persistence>

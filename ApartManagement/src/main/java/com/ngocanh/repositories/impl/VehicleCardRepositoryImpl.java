@@ -5,7 +5,8 @@
 package com.ngocanh.repositories.impl;
 
 import com.ngocanh.pojo.User;
-import com.ngocanh.repositories.UserRepositoriy;
+import com.ngocanh.pojo.Vehiclecardregistration;
+import com.ngocanh.repositories.VehicleCardRepository;
 import jakarta.persistence.Query;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -26,34 +27,25 @@ import org.springframework.transaction.annotation.Transactional;
  */
 @Repository
 @Transactional
-public class UserRepositoryImpl implements UserRepositoriy {
+public class VehicleCardRepositoryImpl implements VehicleCardRepository {
 
-    private int PAGE_SIZE = 10;
     @Autowired
     private LocalSessionFactoryBean factory;
+    private int PAGE_SIZE = 10;
 
     @Override
-    public User createUser(String username, String password, String role, String fullName) {
-        Session s = this.factory.getObject().getCurrentSession();
-
-        User a = new User(username, password, role, fullName);
-        s.persist(a);
-        return a;
-    }
-
-    @Override
-    public List<User> getUsers(Map<String, String> params) {
+    public List<Vehiclecardregistration> getAllVehiclecardregistration(Map<String, String> params) {
         Session s = this.factory.getObject().getCurrentSession();
         CriteriaBuilder b = s.getCriteriaBuilder();
-        CriteriaQuery<User> q = b.createQuery(User.class);
-        Root root = q.from(User.class);
+        CriteriaQuery<Vehiclecardregistration> q = b.createQuery(Vehiclecardregistration.class);
+        Root root = q.from(Vehiclecardregistration.class);
 
         if (params != null) {
             List<Predicate> predicates = new ArrayList<>();
 
             String kw = params.get("kw");
             if (kw != null && !kw.isEmpty()) {
-                predicates.add(b.like(root.get("fullName"), String.format("%%%s%%", kw)));
+                predicates.add(b.like(root.get("relativeName"), String.format("%%%s%%", kw)));
             }
 
             q.where(predicates.toArray(Predicate[]::new));
@@ -73,28 +65,19 @@ public class UserRepositoryImpl implements UserRepositoriy {
     }
 
     @Override
-    public void updateOrCreateUser(User user) {
+    public void updateOrCreateVehicleCard(Vehiclecardregistration card) {
         Session s = this.factory.getObject().getCurrentSession();
-        if (user.getUserId() == null) {
-            s.persist(user);
+        if (card.getRegistrationId()== null) {
+            s.persist(card);
         } else {
-            s.merge(user);
+            s.merge(card);
         }
     }
 
     @Override
-    public User getUserById(int id) {
+    public Vehiclecardregistration getCardById(int id) {
         Session s = this.factory.getObject().getCurrentSession();
-        return s.get(User.class, id);
+        return s.get(Vehiclecardregistration.class, id);
     }
 
-    @Override
-    public List<User> getUsers() {
-        Session s = this.factory.getObject().getCurrentSession();
-        CriteriaBuilder b = s.getCriteriaBuilder();
-        CriteriaQuery<User> q = b.createQuery(User.class);
-        Root root = q.from(User.class);
-        Query query = s.createQuery(q);
-        return query.getResultList();
-    }
 }

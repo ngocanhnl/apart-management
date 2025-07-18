@@ -61,4 +61,9 @@ public class UserServiceImpl implements UserService {
         return this.userRepo.getUserById(id);
     }
 
+    @Override
+    public List<User> getUsers() {
+        return this.userRepo.getUsers();
+    }
+
 }

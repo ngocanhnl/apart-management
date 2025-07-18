@@ -15,23 +15,21 @@ import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
+import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
-import jakarta.persistence.Temporal;
-import jakarta.persistence.TemporalType;
 import java.io.Serializable;
-import java.util.Date;
+import java.util.Set;
 
 /**
  *
  * @author Ngoc Anh
  */
 @Entity
-@Table(name = "survey_response")
+@Table(name = "questions")
 @NamedQueries({
-    @NamedQuery(name = "SurveyResponse.findAll", query = "SELECT s FROM SurveyResponse s"),
-    @NamedQuery(name = "SurveyResponse.findById", query = "SELECT s FROM SurveyResponse s WHERE s.id = :id"),
-    @NamedQuery(name = "SurveyResponse.findByCreatedAt", query = "SELECT s FROM SurveyResponse s WHERE s.createdAt = :createdAt")})
-public class SurveyResponse implements Serializable {
+    @NamedQuery(name = "Questions.findAll", query = "SELECT q FROM Questions q"),
+    @NamedQuery(name = "Questions.findById", query = "SELECT q FROM Questions q WHERE q.id = :id")})
+public class Questions implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
@@ -40,22 +38,18 @@ public class SurveyResponse implements Serializable {
     @Column(name = "id")
     private Integer id;
     @Lob
-    @Column(name = "answers_json")
-    private String answersJson;
-    @Column(name = "created_at")
-    @Temporal(TemporalType.TIMESTAMP)
-    private Date createdAt;
+    @Column(name = "content")
+    private String content;
+    @OneToMany(mappedBy = "questionId")
+    private Set<Answers> answersSet;
     @JoinColumn(name = "survey_id", referencedColumnName = "id")
-    @ManyToOne(optional = false)
-    private Survey surveyId;
-    @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     @ManyToOne
-    private User userId;
+    private Survey surveyId;
 
-    public SurveyResponse() {
+    public Questions() {
     }
 
-    public SurveyResponse(Integer id) {
+    public Questions(Integer id) {
         this.id = id;
     }
 
@@ -67,20 +61,20 @@ public class SurveyResponse implements Serializable {
         this.id = id;
     }
 
-    public String getAnswersJson() {
-        return answersJson;
+    public String getContent() {
+        return content;
     }
 
-    public void setAnswersJson(String answersJson) {
-        this.answersJson = answersJson;
+    public void setContent(String content) {
+        this.content = content;
     }
 
-    public Date getCreatedAt() {
-        return createdAt;
+    public Set<Answers> getAnswersSet() {
+        return answersSet;
     }
 
-    public void setCreatedAt(Date createdAt) {
-        this.createdAt = createdAt;
+    public void setAnswersSet(Set<Answers> answersSet) {
+        this.answersSet = answersSet;
     }
 
     public Survey getSurveyId() {
@@ -89,14 +83,6 @@ public class SurveyResponse implements Serializable {
 
     public void setSurveyId(Survey surveyId) {
         this.surveyId = surveyId;
-    }
-
-    public User getUserId() {
-        return userId;
-    }
-
-    public void setUserId(User userId) {
-        this.userId = userId;
     }
 
     @Override
@@ -109,10 +95,10 @@ public class SurveyResponse implements Serializable {
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof SurveyResponse)) {
+        if (!(object instanceof Questions)) {
             return false;
         }
-        SurveyResponse other = (SurveyResponse) object;
+        Questions other = (Questions) object;
         if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
@@ -121,7 +107,7 @@ public class SurveyResponse implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ngocanh.pojo.SurveyResponse[ id=" + id + " ]";
+        return "com.ngocanh.pojo.Questions[ id=" + id + " ]";
     }
     
 }
