@@ -15,7 +15,9 @@ import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
 import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
+import jakarta.persistence.Transient;
 import java.io.Serializable;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -44,6 +46,9 @@ public class Survey implements Serializable {
     private String description;
     @OneToMany(mappedBy = "surveyId")
     private Set<Questions> questionsSet;
+    
+    @Transient
+    private List<String> questions;
 
     public Survey() {
     }
@@ -112,6 +117,20 @@ public class Survey implements Serializable {
     @Override
     public String toString() {
         return "com.ngocanh.pojo.Survey[ id=" + id + " ]";
+    }
+
+    /**
+     * @return the questions
+     */
+    public List<String> getQuestions() {
+        return questions;
+    }
+
+    /**
+     * @param questions the questions to set
+     */
+    public void setQuestions(List<String> questions) {
+        this.questions = questions;
     }
     
 }

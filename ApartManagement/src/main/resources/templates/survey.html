@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Tạo khảo sát</title>
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    </head>
+    <body class="bg-light">
+        <div class="container mt-5">
+            <h2 class="mb-4">Tạo khảo sát mới</h2>
+
+            <form method="post" th:action="@{/surveys}" th:object="${survey}" id="surveyForm">
+                <!-- Tiêu đề khảo sát -->
+                 <input type="hidden" th:field="*{id}" />
+                <div class="mb-3">
+                    <label>Tiêu đề</label>
+                    <input type="text" th:field="*{title}" class="form-control" required>
+                </div>
+
+                <!-- Mô tả -->
+                <div class="mb-3">
+                    <label>Mô tả</label>
+                    <textarea th:field="*{description}" class="form-control"></textarea>
+                </div>
+
+                <!-- Câu hỏi -->
+                <div id="questions-container">
+                    <div th:if="${questions != null}" th:each="q, iterStat : ${questions}">
+                        <div class="mb-3">
+                            <label >Câu hỏi</label>
+                            <div class="input-group">
+                                <input type="text" class="form-control"
+                                       th:name="${'questions[' + iterStat.index + '].content'}"
+                                       th:value="${q.content}" required>
+                                <button type="button" class="btn btn-outline-danger" onclick="this.closest('.mb-3').remove()">Xóa</button>
+                            </div>
+                        </div>
+                    </div>
+
+                </div>
+                <!--                <div id="questions-container">
+                                     Câu hỏi sẽ được thêm động vào đây 
+                                </div>-->
+
+                <button type="button" class="btn btn-secondary mt-3" onclick="addQuestion()">+ Thêm câu hỏi</button>
+                <button type="submit" class="btn btn-primary mt-3">Lưu khảo sát</button>
+            </form>
+        </div>
+
+        <!-- JS thêm câu hỏi động -->
+        <script>
+            let questionIndex = /*[[${#lists.size(questions)}]]*/ 0;
+
+            function addQuestion() {
+                const container = document.getElementById('questions-container');
+
+                const div = document.createElement('div');
+                div.className = 'mb-3';
+                div.innerHTML = `
+            <label>Câu hỏi</label>
+            <div class="input-group">
+                <input type="text" name="questions[${questionIndex}]" class="form-control" required>
+                <button type="button" class="btn btn-outline-danger" onclick="this.closest('.mb-3').remove()">Xóa</button>
+            </div>
+        `;
+                container.appendChild(div);
+
+                questionIndex++;
+            }
+            function toggleOptions(select, index) {
+                const optionsDiv = document.getElementById(`options-${index}`);
+                if (select.value === 'radio' || select.value === 'checkbox') {
+                    optionsDiv.classList.remove('d-none');
+                } else {
+                    optionsDiv.classList.add('d-none');
+                }
+            }
+
+            function updateOptions(index, value) {
+                const lines = value.split('\n');
+                const container = document.getElementById(`hidden-options-${index}`);
+                container.innerHTML = '';
+                lines.forEach((line, i) => {
+                    if (line.trim() !== '') {
+                        const input = document.createElement('input');
+                        input.type = 'hidden';
+                        input.name = `questions[${index}].options[${i}]`;
+                        input.value = line.trim();
+                        container.appendChild(input);
+                    }
+                });
+            }
+            
+        </script>
+    </body>
+</html>
