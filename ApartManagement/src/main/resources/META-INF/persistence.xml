@@ -16,5 +16,7 @@
     <class>com.ngocanh.pojo.SurveyResponse</class>
     <class>com.ngocanh.pojo.Questions</class>
     <class>com.ngocanh.pojo.Answers</class>
+    <class>com.ngocanh.pojo.Invoices</class>
+    <class>com.ngocanh.pojo.UserInvoice</class>
   </persistence-unit>
 </persistence>

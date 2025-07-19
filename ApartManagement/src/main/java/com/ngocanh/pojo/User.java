@@ -84,15 +84,14 @@ public class User implements Serializable {
     private Set<Complaint> complaintSet;
     @OneToMany(mappedBy = "userId")
     private Set<Answers> answersSet;
-    @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
-    private Set<Invoice> invoiceSet;
+    @OneToMany(mappedBy = "userId")
+    private Set<UserInvoice> userInvoiceSet;
     @JoinColumn(name = "locker_id", referencedColumnName = "locker_id")
     @ManyToOne
     private Locker lockerId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private Set<Vehiclecardregistration> vehiclecardregistrationSet;
 
-        
     @Transient
     private MultipartFile file;
 
@@ -110,15 +109,14 @@ public class User implements Serializable {
         this.role = role;
         this.fullName = fullName;
     }
-    
+
     public User(String username, String password, String role, String fullName) {
-       
+
         this.username = username;
         this.password = password;
         this.role = role;
         this.fullName = fullName;
     }
-
 
     public Integer getUserId() {
         return userId;
@@ -232,12 +230,12 @@ public class User implements Serializable {
         this.answersSet = answersSet;
     }
 
-    public Set<Invoice> getInvoiceSet() {
-        return invoiceSet;
+    public Set<UserInvoice> getUserInvoiceSet() {
+        return userInvoiceSet;
     }
 
-    public void setInvoiceSet(Set<Invoice> invoiceSet) {
-        this.invoiceSet = invoiceSet;
+    public void setUserInvoiceSet(Set<UserInvoice> userInvoiceSet) {
+        this.userInvoiceSet = userInvoiceSet;
     }
 
     public Locker getLockerId() {
@@ -294,5 +292,5 @@ public class User implements Serializable {
     public void setFile(MultipartFile file) {
         this.file = file;
     }
-    
+
 }
