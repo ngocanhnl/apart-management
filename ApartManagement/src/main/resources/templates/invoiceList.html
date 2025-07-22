@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!--<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
     <head>
         <title>Danh sách Hóa đơn</title>
@@ -8,8 +8,9 @@
     <body>
         <div class="container mt-4">
             <h2 class="mb-3">Danh sách Hóa đơn</h2>
+            <a th:href="@{/invoices/add}" class="btn btn-success">+ Thêm hóa đơn</a>
 
-            <!-- Form tìm kiếm theo tên người dùng -->
+
             <form method="get" action="#" class="row g-3 mb-4">
                 <div class="col-auto">
                     <input type="text" class="form-control" name="name" placeholder="Tìm theo tên người dùng"
@@ -20,10 +21,11 @@
                 </div>
             </form>
 
-            <!-- Bảng hiển thị danh sách hóa đơn -->
+
             <table class="table table-bordered table-hover">
                 <thead class="table-light">
                     <tr>
+                        <th>Id</th>
                         <th>Họ tên</th>
                         <th>Tên đăng nhập</th>
                         <th>Loại</th>
@@ -32,31 +34,114 @@
                         <th>Ngày thanh toán</th>
                         <th>Trạng thái</th>
                         <th>Ngày tạo</th>
+                        <th>Hành động</th>  Mới 
                     </tr>
                 </thead>
                 <tbody>
                     <tr th:each="row : ${invoices}">
-                        <td th:text="${row[0]}">Nguyễn Văn A</td> <!-- fullName -->
-                        <td th:text="${row[1]}">username</td>      <!-- username -->
-                        <td th:text="${row[2]}">Điện</td>          <!-- type -->
-                        <td th:text="${#numbers.formatDecimal(row[3], 0, 'COMMA', 2, 'POINT')} + ' VNĐ'">100,000 VNĐ</td> <!-- amount -->
-                        <td th:text="${#dates.format(row[4], 'dd/MM/yyyy')}">10/07/2025</td> <!-- dueDate -->
-                        <td th:text="${#dates.format(row[5], 'dd/MM/yyyy')}">12/07/2025</td> <!-- paidDate -->
+                        <td th:text="${row[0]}"></td>
+                        <td th:text="${row[1]}"></td>
+                        <td th:text="${row[2]}"></td>
+                        <td th:text="${#numbers.formatDecimal(row[3], 0, 'COMMA', 2, 'POINT')} + ' VNĐ'"></td>
+                        <td th:text="${#dates.format(row[4], 'dd/MM/yyyy')}"></td>
+                        <td th:text="${#dates.format(row[5], 'dd/MM/yyyy')}"></td>
                         <td>
                             <span th:if="${row[6] == 'paid'}" class="badge bg-success" th:text="${row[6]}"></span>
                             <span th:if="${row[6] == 'pending'}" class="badge bg-warning text-dark" th:text="${row[6]}"></span>
                             <span th:if="${row[6] == 'cancelled'}" class="badge bg-danger" th:text="${row[6]}"></span>
                             <span th:if="${row[6] != 'paid' and row[6] != 'pending' and row[6] != 'cancelled'}"
                                   class="badge bg-secondary" th:text="${row[6]}"></span>
-
                         </td>
-                        <td th:text="${#dates.format(row[7], 'dd/MM/yyyy HH:mm')}">09/07/2025 14:30</td> <!-- createdAt -->
+                        <td th:text="${#dates.format(row[7], 'dd/MM/yyyy HH:mm')}"></td>
+                        <td>
+                            <a th:if="${row[6] == 'pending'}"
+                               th:href="@{'/invoices/pay/' + ${row[0]}}" 
+                               class="btn btn-sm btn-primary">
+                                Thanh toán
+                            </a>
+                        </td>
                     </tr>
                     <tr th:if="${invoices.size() == 0}">
-                        <td colspan="8" class="text-center text-muted">Không có hóa đơn nào phù hợp.</td>
+                        <td colspan="9" class="text-center text-muted">Không có hóa đơn nào phù hợp.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+    </body>
+</html>-->
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <title>Danh sách Hóa đơn</title>
+        <meta charset="UTF-8">
+        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    </head>
+    <body>
+        <div class="container mt-4">
+            <div class="d-flex justify-content-between align-items-center mb-3">
+                <h2 class="mb-0">Danh sách Hóa đơn</h2>
+                <a th:href="@{/invoices/add}" class="btn btn-success">+ Thêm hóa đơn</a>
+            </div>
+
+            <!-- Form tìm kiếm -->
+            <form method="get" action="#" class="row g-3 mb-4">
+                <div class="col-auto">
+                    <input type="text" class="form-control" name="name" placeholder="Tìm theo tên người dùng"
+                           th:value="${param.name}">
+                </div>
+                <div class="col-auto">
+                    <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+                </div>
+            </form>
+
+            <!-- Bảng danh sách -->
+            <table class="table table-bordered table-hover">
+                <thead class="table-light">
+                    <tr>
+                        <th>ID</th>
+                        <th>Họ tên</th>
+                        <th>Tên đăng nhập</th>
+                        <th>Loại</th>
+                        <th>Số tiền</th>
+                        <th>Ngày đến hạn</th>
+                        <th>Ngày thanh toán</th>
+                        <th>Trạng thái</th>
+                        <th>Ngày tạo</th>
+                        <th>Hành động</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="row : ${invoices}">
+                        <td th:text="${row[0]}"></td>
+                        <td th:text="${row[1]}"></td>
+                        <td th:text="${row[2]}"></td>
+                        <td th:text="${row[3]}"></td>
+                        <td th:text="${#numbers.formatDecimal(row[4], 0, 'COMMA', 2, 'POINT')} + ' VNĐ'"></td>
+                        <td th:text="${#dates.format(row[5], 'dd/MM/yyyy')}"></td>
+                        <td th:text="${#dates.format(row[6], 'dd/MM/yyyy')}"></td>
+                        <td>
+                            <span th:if="${row[7] == 'paid'}" class="badge bg-success" th:text="${row[7]}">paid</span>
+                            <span th:if="${row[7] == 'pending'}" class="badge bg-warning text-dark" th:text="${row[7]}">pending</span>
+                            <span th:if="${row[7] == 'cancelled'}" class="badge bg-danger" th:text="${row[7]}">cancelled</span>
+                            <span th:if="${row[7] != 'paid' and row[7] != 'pending' and row[7] != 'cancelled'}"
+                                  class="badge bg-secondary" th:text="${row[7]}">unknown</span>
+                        </td>
+                        <td th:text="${#dates.format(row[8], 'dd/MM/yyyy HH:mm')}">09/07/2025 14:30</td>
+                        <td>
+                            <a th:href="@{'/invoices/pay/' + ${row[0]}}" 
+                               class="btn btn-primary"
+                               th:if="${row[7] == 'pending'}">
+                                Thanh toán
+                            </a>
+
+                        </td>
+                    </tr>
+                    <tr th:if="${invoices.size() == 0}">
+                        <td colspan="10" class="text-center text-muted">Không có hóa đơn nào phù hợp.</td>
                     </tr>
                 </tbody>
             </table>
         </div>
     </body>
 </html>
+

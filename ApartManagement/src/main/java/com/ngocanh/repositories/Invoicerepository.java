@@ -14,4 +14,5 @@ import java.util.Map;
  */
 public interface Invoicerepository {
     public List<Object[]> getAllInvoice(Map<String,String> params);
+    public void updateOrCreateInvoice(Invoices invoice);
 }

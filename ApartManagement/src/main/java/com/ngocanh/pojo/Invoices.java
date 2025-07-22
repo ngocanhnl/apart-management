@@ -12,14 +12,13 @@ import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
-import jakarta.persistence.OneToMany;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.persistence.Transient;
 import java.io.Serializable;
-import java.math.BigDecimal;
 import java.util.Date;
-import java.util.Set;
+import org.springframework.format.annotation.DateTimeFormat;
 
 /**
  *
@@ -32,6 +31,7 @@ import java.util.Set;
     @NamedQuery(name = "Invoices.findById", query = "SELECT i FROM Invoices i WHERE i.id = :id"),
     @NamedQuery(name = "Invoices.findByType", query = "SELECT i FROM Invoices i WHERE i.type = :type"),
     @NamedQuery(name = "Invoices.findByAmount", query = "SELECT i FROM Invoices i WHERE i.amount = :amount"),
+    @NamedQuery(name = "Invoices.findByDescrition", query = "SELECT i FROM Invoices i WHERE i.descrition = :descrition"),
     @NamedQuery(name = "Invoices.findByDueDate", query = "SELECT i FROM Invoices i WHERE i.dueDate = :dueDate"),
     @NamedQuery(name = "Invoices.findByPaidDate", query = "SELECT i FROM Invoices i WHERE i.paidDate = :paidDate"),
     @NamedQuery(name = "Invoices.findByStatus", query = "SELECT i FROM Invoices i WHERE i.status = :status"),
@@ -47,12 +47,14 @@ public class Invoices implements Serializable {
     @Basic(optional = false)
     @Column(name = "type")
     private String type;
-    // @Max(value=?)  @Min(value=?)//if you know range of your decimal fields consider using these annotations to enforce field validation
     @Basic(optional = false)
     @Column(name = "amount")
-    private BigDecimal amount;
+    private int amount;
+    @Column(name = "descrition")
+    private String descrition;
     @Column(name = "due_date")
     @Temporal(TemporalType.DATE)
+    @DateTimeFormat(pattern = "yyyy-MM-dd")
     private Date dueDate;
     @Column(name = "paid_date")
     @Temporal(TemporalType.DATE)
@@ -62,9 +64,12 @@ public class Invoices implements Serializable {
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
-    @OneToMany(mappedBy = "invoiceId")
-    private Set<UserInvoice> userInvoiceSet;
 
+    
+    @Transient
+    private Integer userId;
+    
+    
     public Invoices() {
     }
 
@@ -72,7 +77,7 @@ public class Invoices implements Serializable {
         this.id = id;
     }
 
-    public Invoices(Integer id, String type, BigDecimal amount) {
+    public Invoices(Integer id, String type, int amount) {
         this.id = id;
         this.type = type;
         this.amount = amount;
@@ -94,12 +99,20 @@ public class Invoices implements Serializable {
         this.type = type;
     }
 
-    public BigDecimal getAmount() {
+    public int getAmount() {
         return amount;
     }
 
-    public void setAmount(BigDecimal amount) {
+    public void setAmount(int amount) {
         this.amount = amount;
+    }
+
+    public String getDescrition() {
+        return descrition;
+    }
+
+    public void setDescrition(String descrition) {
+        this.descrition = descrition;
     }
 
     public Date getDueDate() {
@@ -134,14 +147,6 @@ public class Invoices implements Serializable {
         this.createdAt = createdAt;
     }
 
-    public Set<UserInvoice> getUserInvoiceSet() {
-        return userInvoiceSet;
-    }
-
-    public void setUserInvoiceSet(Set<UserInvoice> userInvoiceSet) {
-        this.userInvoiceSet = userInvoiceSet;
-    }
-
     @Override
     public int hashCode() {
         int hash = 0;
@@ -165,6 +170,20 @@ public class Invoices implements Serializable {
     @Override
     public String toString() {
         return "com.ngocanh.pojo.Invoices[ id=" + id + " ]";
+    }
+
+    /**
+     * @return the userId
+     */
+    public Integer getUserId() {
+        return userId;
+    }
+
+    /**
+     * @param userId the userId to set
+     */
+    public void setUserId(Integer userId) {
+        this.userId = userId;
     }
     
 }

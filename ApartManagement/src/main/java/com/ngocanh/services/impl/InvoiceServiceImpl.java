@@ -4,6 +4,7 @@
  */
 package com.ngocanh.services.impl;
 
+import com.ngocanh.pojo.Invoices;
 import com.ngocanh.repositories.Invoicerepository;
 import com.ngocanh.services.InvoiceService;
 import java.util.List;
@@ -22,6 +23,12 @@ private Invoicerepository invoiceRepo;
     @Override
     public List<Object[]> getAllInvoice(Map<String, String> params) {
         return this.invoiceRepo.getAllInvoice(params);
+    }
+
+    @Override
+    public void updateOrCreateInvoice(Invoices invoice) {
+        
+        this.invoiceRepo.updateOrCreateInvoice(invoice);
     }
     
 }
