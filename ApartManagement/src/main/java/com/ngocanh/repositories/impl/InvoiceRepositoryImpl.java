@@ -41,12 +41,19 @@ public class InvoiceRepositoryImpl implements Invoicerepository {
         CriteriaBuilder b = s.getCriteriaBuilder();
         CriteriaQuery<Object[]> q = b.createQuery(Object[].class);
 
+//    Root<UserInvoice> uiRoot = q.from(UserInvoice.class);
+//        Join<UserInvoice, Invoices> invoiceJoin = uiRoot.join("invoiceId"); // JOIN UserInvoice
+//        Join<UserInvoice, User> userJoin = uiRoot.join("userId");
         Root<Invoices> iRoot = q.from(Invoices.class);
-        Join<Invoices, UserInvoice> uiJoin = iRoot.join("userInvoiceSet"); // JOIN UserInvoice
-        Join<UserInvoice, User> uJoin = uiJoin.join("userId");
+        Root<UserInvoice> uiRoot = q.from(UserInvoice.class);
+        Root<User> uRoot = q.from(User.class);
 
-        q.multiselect(uJoin.get("fullName"),
-                uJoin.get("username"),
+        q.where(b.and(b.equal(uRoot.get("userId"), uiRoot.get("userId").get("userId")), b.equal(iRoot.get("id"), uiRoot.get("invoiceId").get("id"))));
+
+        q.multiselect(
+                iRoot.get("id"),
+                uRoot.get("fullName"),
+                uRoot.get("username"),
                 iRoot.get("type"),
                 iRoot.get("amount"),
                 iRoot.get("dueDate"),
@@ -56,10 +63,12 @@ public class InvoiceRepositoryImpl implements Invoicerepository {
         );
         if (params != null) {
             List<Predicate> predicates = new ArrayList<>();
+            predicates.add(b.equal(uRoot.get("userId"), uiRoot.get("userId").get("userId")));
+            predicates.add(b.equal(iRoot.get("id"), uiRoot.get("invoiceId").get("id")));
 
             String kw = params.get("name");
             if (kw != null && !kw.isEmpty()) {
-                predicates.add(b.like(uJoin.get("fullName"), String.format("%%%s%%", kw)));
+                predicates.add(b.like(uRoot.get("fullName"), String.format("%%%s%%", kw)));
             }
 
             q.where(predicates.toArray(Predicate[]::new));
@@ -76,6 +85,21 @@ public class InvoiceRepositoryImpl implements Invoicerepository {
             }
         }
         return query.getResultList();
+    }
+
+    @Override
+    public void updateOrCreateInvoice(Invoices invoice) {
+        Session s = this.factory.getObject().getCurrentSession();
+        if (invoice.getId() == null) {
+            s.persist(invoice);
+            UserInvoice ui = new UserInvoice();
+            ui.setInvoiceId(invoice);
+            ui.setUserId(new User(invoice.getUserId()));
+            s.persist(ui);
+        } else {
+            s.merge(invoice);
+
+        }
     }
 
 }
