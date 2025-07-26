@@ -4,9 +4,11 @@
  */
 package com.ngocanh.repositories.impl;
 
-import com.ngocanh.pojo.Invoices;
+import com.ngocanh.pojo.Invoice;
+import com.ngocanh.pojo.Payment;
+
 import com.ngocanh.pojo.User;
-import com.ngocanh.pojo.UserInvoice;
+
 import com.ngocanh.repositories.Invoicerepository;
 import jakarta.persistence.Query;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -41,30 +43,24 @@ public class InvoiceRepositoryImpl implements Invoicerepository {
         CriteriaBuilder b = s.getCriteriaBuilder();
         CriteriaQuery<Object[]> q = b.createQuery(Object[].class);
 
-//    Root<UserInvoice> uiRoot = q.from(UserInvoice.class);
-//        Join<UserInvoice, Invoices> invoiceJoin = uiRoot.join("invoiceId"); // JOIN UserInvoice
-//        Join<UserInvoice, User> userJoin = uiRoot.join("userId");
-        Root<Invoices> iRoot = q.from(Invoices.class);
-        Root<UserInvoice> uiRoot = q.from(UserInvoice.class);
+        Root<Invoice> iRoot = q.from(Invoice.class);
+//        Root<Payment> pRoot = q.from(Payment.class);
         Root<User> uRoot = q.from(User.class);
-
-        q.where(b.and(b.equal(uRoot.get("userId"), uiRoot.get("userId").get("userId")), b.equal(iRoot.get("id"), uiRoot.get("invoiceId").get("id"))));
-
+        
+//        q.where(b.and(b.equal(uRoot.get("userId"), iRoot.get("userId").get("userId")), b.equal(iRoot.get("id"), pRoot.get("invoiceId").get("id"))));
+        q.where(b.equal(uRoot.get("userId"), iRoot.get("userId").get("userId")));
         q.multiselect(
                 iRoot.get("id"),
                 uRoot.get("fullName"),
                 uRoot.get("username"),
-                iRoot.get("type"),
-                iRoot.get("amount"),
-                iRoot.get("dueDate"),
-                iRoot.get("paidDate"),
-                iRoot.get("status"),
-                iRoot.get("createdAt")
+                iRoot.get("name"),
+                iRoot.get("total"),
+                iRoot.get("isPaid")
+               
         );
         if (params != null) {
             List<Predicate> predicates = new ArrayList<>();
-            predicates.add(b.equal(uRoot.get("userId"), uiRoot.get("userId").get("userId")));
-            predicates.add(b.equal(iRoot.get("id"), uiRoot.get("invoiceId").get("id")));
+            predicates.add(b.equal(uRoot.get("userId"), iRoot.get("userId").get("userId")));
 
             String kw = params.get("name");
             if (kw != null && !kw.isEmpty()) {
@@ -88,14 +84,10 @@ public class InvoiceRepositoryImpl implements Invoicerepository {
     }
 
     @Override
-    public void updateOrCreateInvoice(Invoices invoice) {
+    public void updateOrCreateInvoice(Invoice invoice) {
         Session s = this.factory.getObject().getCurrentSession();
         if (invoice.getId() == null) {
             s.persist(invoice);
-            UserInvoice ui = new UserInvoice();
-            ui.setInvoiceId(invoice);
-            ui.setUserId(new User(invoice.getUserId()));
-            s.persist(ui);
         } else {
             s.merge(invoice);
 

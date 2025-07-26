@@ -46,6 +46,7 @@ public class Survey implements Serializable {
     private String description;
     @OneToMany(mappedBy = "surveyId")
     private Set<Questions> questionsSet;
+
     @Transient
     private List<String> questions;
 

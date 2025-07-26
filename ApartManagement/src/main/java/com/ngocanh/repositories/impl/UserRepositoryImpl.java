@@ -17,6 +17,7 @@ import java.util.Map;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -31,6 +32,9 @@ public class UserRepositoryImpl implements UserRepositoriy {
     private int PAGE_SIZE = 10;
     @Autowired
     private LocalSessionFactoryBean factory;
+    
+    @Autowired
+    private BCryptPasswordEncoder passwordEncoder;
 
     @Override
     public User createUser(String username, String password, String role, String fullName) {
@@ -96,5 +100,29 @@ public class UserRepositoryImpl implements UserRepositoriy {
         Root root = q.from(User.class);
         Query query = s.createQuery(q);
         return query.getResultList();
+    }
+
+    @Override
+    public User getUserByUsername(String username) {
+        Session s = this.factory.getObject().getCurrentSession();
+        Query q = s.createNamedQuery("User.findByUsername", User.class);
+        q.setParameter("username", username);
+
+        return (User) q.getSingleResult();
+    }
+
+    @Override
+    public boolean authenticate(String username, String password) {
+        User u = this.getUserByUsername(username);
+
+        return this.passwordEncoder.matches(password, u.getPassword());
+    }
+
+    @Override
+    public User addUser(User u) {
+         Session s = this.factory.getObject().getCurrentSession();
+        s.persist(u);
+        
+        return u;
     }
 }

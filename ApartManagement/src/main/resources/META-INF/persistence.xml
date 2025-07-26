@@ -18,5 +18,6 @@
     <class>com.ngocanh.pojo.Answers</class>
     <class>com.ngocanh.pojo.Invoices</class>
     <class>com.ngocanh.pojo.UserInvoice</class>
+    <class>com.ngocanh.pojo.Payment</class>
   </persistence-unit>
 </persistence>
