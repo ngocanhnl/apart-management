@@ -51,5 +51,10 @@ public class UserController {
         return "userCreateForm";
     }
     
+    @GetMapping("/login")
+    public String loginView() {
+        return "login";
+    }
+    
     
 }

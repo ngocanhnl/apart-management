@@ -4,7 +4,7 @@
  */
 package com.ngocanh.services;
 
-import com.ngocanh.pojo.Invoices;
+import com.ngocanh.pojo.Invoice;
 import java.util.List;
 import java.util.Map;
 
@@ -14,5 +14,5 @@ import java.util.Map;
  */
 public interface InvoiceService {
     public List<Object[]> getAllInvoice(Map<String, String> params);
-     public void updateOrCreateInvoice(Invoices invoice);
+     public void updateOrCreateInvoice(Invoice invoice);
 }

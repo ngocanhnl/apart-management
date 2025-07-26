@@ -1,54 +1,49 @@
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-    <head>
-        <title>Thêm Hóa đơn mới</title>
-        <meta charset="UTF-8">
-        <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    </head>
-    <body>
-        <div class="container mt-5">
-            <h2 class="mb-4">Thêm Hóa đơn mới</h2>
+<head>
+    <meta charset="UTF-8">
+    <title>New invoice</title>
+    
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body>
+<div class="container mt-5">
+    <h2 class="mb-4">Thêm Hóa đơn mới</h2>
 
-            <form th:action="@{/invoices/add}" th:object="${invoice}" method="post">
-                <div class="mb-3">
-                    <label for="type" class="form-label">Loại hóa đơn</label>
-                    <select class="form-select" id="type" th:field="*{type}" required>
-                        <option value="" disabled selected>-- Chọn loại hóa đơn --</option>
-                        <option value="management_fee">Phí quản lý</option>
-                        <option value="parking_fee">Phí giữ xe</option>
-                        <option value="service_fee">Phí dịch vụ</option>
-                        <option value="other">Khác</option>
-                    </select>
-                </div>
-
-                <div class="mb-3">
-                    <label for="amount" class="form-label">Số tiền</label>
-                    <input type="number" class="form-control" id="amount" th:field="*{amount}" step="0.01" required>
-                </div>
-                 <div class="mb-3">
-                    <label for="description" class="form-label">Số tiền</label>
-                    <input type="text" class="form-control" id="description" th:field="*{descrition}" >
-                </div>
-
-                <div class="mb-3">
-                    <label for="dueDate" class="form-label">Ngày đến hạn</label>
-                    <input type="date" class="form-control" id="dueDate" th:field="*{dueDate}" required>
-                </div>
-                <div class="mb-3">
-                    <label for="user" class="form-label">Người dùng</label>
-                    <select class="form-select" id="user" th:field="*{userId}" required>
-                        <option value="" disabled selected>-- Chọn người dùng --</option>
-                        <option th:each="u : ${users}" 
-                                th:value="${u.userId}" 
-                                th:text="${u.fullName}"> 
-                        </option>
-                    </select>
-                </div>
-
-
-                <button type="submit" class="btn btn-primary">Lưu hóa đơn</button>
-                <a th:href="@{/invoices}" class="btn btn-secondary ms-2">Quay lại danh sách</a>
-            </form>
+    <form th:action="@{/invoice/add/{userId}(userId=${userId})}" th:object="${invoice}" method="post">
+        <!-- Tên hóa đơn -->
+        <div class="mb-3">
+            <label for="name" class="form-label">Loại hóa đơn</label>
+            <select class="form-select" id="name" th:field="*{name}" required>
+                <option value="" disabled selected>-- Chọn loại hóa đơn --</option>
+                <option value="Phí quản lý">Phí quản lý</option>
+                <option value="Phí giữ xe">Phí giữ xe</option>
+                <option value="Phí dịch vụ">Phí dịch vụ</option>
+                <option value="Khác">Khác</option>
+            </select>
         </div>
-    </body>
+
+        <!-- Tổng tiền -->
+        <div class="mb-3">
+            <label for="total" class="form-label">Số tiền</label>
+            <input type="number" class="form-control" id="total" th:field="*{total}" required min="0">
+        </div>
+
+        <!-- Trạng thái hóa đơn -->
+        <div class="mb-3">
+            <label for="isPaid" class="form-label">Trạng thái</label>
+            <select class="form-select" id="isPaid" th:field="*{isPaid}" required>
+                <option value="" disabled selected>-- Chọn trạng thái --</option>
+                <option value="Chưa thanh toán">Chưa thanh toán</option>
+                <option value="Đã thanh toán">Đã thanh toán</option>
+                <option value="Chờ xác minh">Chờ xác minh</option>
+            </select>
+        </div>
+
+        <!-- Nút lưu -->
+        <button type="submit" class="btn btn-primary">Lưu hóa đơn</button>
+        <a th:href="@{/invoices}" class="btn btn-secondary ms-2">Quay lại danh sách</a>
+    </form>
+</div>
+</body>
 </html>

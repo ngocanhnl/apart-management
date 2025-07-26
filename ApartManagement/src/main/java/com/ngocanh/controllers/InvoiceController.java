@@ -5,7 +5,7 @@
 package com.ngocanh.controllers;
 
 import com.ngocanh.configs.VNPayConfig;
-import com.ngocanh.pojo.Invoices;
+import com.ngocanh.pojo.Invoice;
 import com.ngocanh.pojo.User;
 import com.ngocanh.services.InvoiceService;
 import com.ngocanh.services.UserService;
@@ -56,15 +56,27 @@ public class InvoiceController {
 
     @GetMapping("/invoices/add")
     public String addInvoice(Model model, @RequestParam Map<String, String> params) {
-        model.addAttribute("invoice", new Invoices());
+//        model.addAttribute("invoice", new Invoice());
         model.addAttribute("users", this.userService.getUsers(params));
+        return "InvoiceListUser";
+    }
+
+    @GetMapping("/invoice/add/{userId}")
+    public String addInvoiceUser(Model model, @RequestParam Map<String, String> params, @PathVariable(value = "userId") int userId) {
+        model.addAttribute("invoice", new Invoice());
+        model.addAttribute("userId", userId);
         return "invoiceForm";
     }
 
-    @PostMapping("/invoices/add")
-    public String addPostInvoice(Model model, @ModelAttribute(value = "invoice") Invoices invoice) {
+    @PostMapping("/invoice/add/{userId}")
+    public String addInvoiceSubmit(@PathVariable("userId") Integer userId,
+            @ModelAttribute("invoice") Invoice invoice) {
+      
+        User user = userService.getUserById(userId);
+        invoice.setUserId(user);
+        invoice.setCreatedAt(new Date());
         this.invoiceService.updateOrCreateInvoice(invoice);
-
+//        invoiceRepository.save(invoice);
         return "redirect:/invoices";
     }
 

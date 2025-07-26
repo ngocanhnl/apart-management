@@ -4,7 +4,7 @@
  */
 package com.ngocanh.services.impl;
 
-import com.ngocanh.pojo.Invoices;
+import com.ngocanh.pojo.Invoice;
 import com.ngocanh.repositories.Invoicerepository;
 import com.ngocanh.services.InvoiceService;
 import java.util.List;
@@ -26,7 +26,7 @@ private Invoicerepository invoiceRepo;
     }
 
     @Override
-    public void updateOrCreateInvoice(Invoices invoice) {
+    public void updateOrCreateInvoice(Invoice invoice) {
         
         this.invoiceRepo.updateOrCreateInvoice(invoice);
     }

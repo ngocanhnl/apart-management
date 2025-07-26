@@ -1,5 +1,7 @@
 <!doctype html>
-<html xmlns:th="http://www.thymeleaf.org">
+<html xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/thymeleaf-extras-springsecurity6"
+      >
     <head>
         <title>Trang chu</title>
 
@@ -22,12 +24,14 @@
             <div class="pt-3">
                 <h4 class="text-center mb-4">Quan ly chung cu</h4>
                 <a th:href="@{/}">Dashboard</a>
-                <a th:href="@{/users}">User</a>
-                <a href="#">Locker</a>
-                <a th:href="@{/surveys}">Survey</a>
+                <a th:href="@{/users}" sec:authorize="isAuthenticated()">User</a>
+                <a href="#" sec:authorize="isAuthenticated()">Locker</a>
+                <a th:href="@{/surveys}" sec:authorize="isAuthenticated()">Survey</a>
                 <a th:href="@{/vehicle-cards}">Vehicle card</a>
                 <a th:href="@{/invoices}">Hoa don</a>
                 <a href="#">Complain</a>
+                <a th:href="@{/logout}" sec:authorize="isAuthenticated()">Log out</a>
+                
             </div>
         </nav>
 
