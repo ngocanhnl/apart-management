@@ -29,8 +29,8 @@ public class UserController {
     }
     
     @GetMapping("/users")
-    public String getUser(Model model, @RequestParam Map<String, String> params){
-        model.addAttribute("users", this.userService.getUsers(params));
+    public String getUser(Model model){
+        model.addAttribute("users", this.userService.getUsers());
         
         return "user";
     }

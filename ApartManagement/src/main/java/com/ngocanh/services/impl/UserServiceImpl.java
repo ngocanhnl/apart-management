@@ -26,8 +26,13 @@ public class UserServiceImpl implements UserService{
     }
 
     @Override
-    public List<User> getUsers(Map<String, String> params) {
-        return this.userRepo.getUsers(params);
+    public List<User> getUsers() {
+        return this.userRepo.getUsers();
+    }
+
+    @Override
+    public List<User> getUsersByName(String name) {
+            return this.userRepo.getUsersByName(name);
     }
     
 }

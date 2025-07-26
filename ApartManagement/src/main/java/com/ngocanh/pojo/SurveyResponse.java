@@ -13,6 +13,7 @@ import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.GenerationType;
 import jakarta.persistence.Id;
 import jakarta.persistence.JoinColumn;
+import jakarta.persistence.Lob;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
@@ -25,42 +26,53 @@ import jakarta.persistence.TemporalType;
  * @author ADMIN
  */
 @Entity
-@Table(name = "surveyuser")
+@Table(name = "survey_response")
 @NamedQueries({
-    @NamedQuery(name = "Surveyuser.findAll", query = "SELECT s FROM Surveyuser s"),
-    @NamedQuery(name = "Surveyuser.findBySurveyUserid", query = "SELECT s FROM Surveyuser s WHERE s.surveyUserid = :surveyUserid"),
-    @NamedQuery(name = "Surveyuser.findByCreatedAt", query = "SELECT s FROM Surveyuser s WHERE s.createdAt = :createdAt")})
-public class Surveyuser implements Serializable {
+    @NamedQuery(name = "SurveyResponse.findAll", query = "SELECT s FROM SurveyResponse s"),
+    @NamedQuery(name = "SurveyResponse.findById", query = "SELECT s FROM SurveyResponse s WHERE s.id = :id"),
+    @NamedQuery(name = "SurveyResponse.findByCreatedAt", query = "SELECT s FROM SurveyResponse s WHERE s.createdAt = :createdAt")})
+public class SurveyResponse implements Serializable {
 
     private static final long serialVersionUID = 1L;
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Basic(optional = false)
-    @Column(name = "surveyUser_id")
-    private Integer surveyUserid;
+    @Column(name = "id")
+    private Integer id;
+    @Lob
+    @Column(name = "answers_json")
+    private String answersJson;
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
-    @JoinColumn(name = "survey_id", referencedColumnName = "survey_id")
-    @ManyToOne
+    @JoinColumn(name = "survey_id", referencedColumnName = "id")
+    @ManyToOne(optional = false)
     private Survey surveyId;
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     @ManyToOne
     private User userId;
 
-    public Surveyuser() {
+    public SurveyResponse() {
     }
 
-    public Surveyuser(Integer surveyUserid) {
-        this.surveyUserid = surveyUserid;
+    public SurveyResponse(Integer id) {
+        this.id = id;
     }
 
-    public Integer getSurveyUserid() {
-        return surveyUserid;
+    public Integer getId() {
+        return id;
     }
 
-    public void setSurveyUserid(Integer surveyUserid) {
-        this.surveyUserid = surveyUserid;
+    public void setId(Integer id) {
+        this.id = id;
+    }
+
+    public String getAnswersJson() {
+        return answersJson;
+    }
+
+    public void setAnswersJson(String answersJson) {
+        this.answersJson = answersJson;
     }
 
     public Date getCreatedAt() {
@@ -90,18 +102,18 @@ public class Surveyuser implements Serializable {
     @Override
     public int hashCode() {
         int hash = 0;
-        hash += (surveyUserid != null ? surveyUserid.hashCode() : 0);
+        hash += (id != null ? id.hashCode() : 0);
         return hash;
     }
 
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
-        if (!(object instanceof Surveyuser)) {
+        if (!(object instanceof SurveyResponse)) {
             return false;
         }
-        Surveyuser other = (Surveyuser) object;
-        if ((this.surveyUserid == null && other.surveyUserid != null) || (this.surveyUserid != null && !this.surveyUserid.equals(other.surveyUserid))) {
+        SurveyResponse other = (SurveyResponse) object;
+        if ((this.id == null && other.id != null) || (this.id != null && !this.id.equals(other.id))) {
             return false;
         }
         return true;
@@ -109,7 +121,7 @@ public class Surveyuser implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ngocanh.pojo.Surveyuser[ surveyUserid=" + surveyUserid + " ]";
+        return "com.ngocanh.pojo.SurveyResponse[ id=" + id + " ]";
     }
     
 }

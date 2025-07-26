@@ -78,10 +78,10 @@ public class User implements Serializable {
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
+    @OneToMany(mappedBy = "userId")
+    private Set<SurveyResponse> surveyResponseSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private Set<Complaint> complaintSet;
-    @OneToMany(mappedBy = "userId")
-    private Set<Surveyuser> surveyuserSet;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private Set<Invoice> invoiceSet;
     @JoinColumn(name = "locker_id", referencedColumnName = "locker_id")
@@ -105,12 +105,6 @@ public class User implements Serializable {
         this.fullName = fullName;
     }
 
-      public User(String username, String password, String role, String fullName) {
-        this.username = username;
-        this.password = password;
-        this.role = role;
-        this.fullName = fullName;
-    }
     public Integer getUserId() {
         return userId;
     }
@@ -207,20 +201,20 @@ public class User implements Serializable {
         this.createdAt = createdAt;
     }
 
+    public Set<SurveyResponse> getSurveyResponseSet() {
+        return surveyResponseSet;
+    }
+
+    public void setSurveyResponseSet(Set<SurveyResponse> surveyResponseSet) {
+        this.surveyResponseSet = surveyResponseSet;
+    }
+
     public Set<Complaint> getComplaintSet() {
         return complaintSet;
     }
 
     public void setComplaintSet(Set<Complaint> complaintSet) {
         this.complaintSet = complaintSet;
-    }
-
-    public Set<Surveyuser> getSurveyuserSet() {
-        return surveyuserSet;
-    }
-
-    public void setSurveyuserSet(Set<Surveyuser> surveyuserSet) {
-        this.surveyuserSet = surveyuserSet;
     }
 
     public Set<Invoice> getInvoiceSet() {

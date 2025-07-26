@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 import org.springframework.stereotype.Repository;
 import org.springframework.transaction.annotation.Transactional;
+import jakarta.persistence.TypedQuery;
 
 /**
  *
@@ -34,41 +35,47 @@ public class UserRepositoryImpl implements UserRepositoriy {
 
     @Override
     public User createUser(String username, String password, String role, String fullName) {
-        Session s = this.factory.getObject().getCurrentSession();
-
-        User a = new User(username, password, role, fullName);
-        s.persist(a);
-        return a;
+//        Session s = this.factory.getObject().getCurrentSession();
+//
+//        User a = new User(username, password, role, fullName);
+//        s.persist(a);
+        return null;
     }
 
     @Override
-    public List<User> getUsers(Map<String, String> params) {
+    public List<User> getUsers() {
         Session s = this.factory.getObject().getCurrentSession();
-        CriteriaBuilder b = s.getCriteriaBuilder();
-        CriteriaQuery<User> q = b.createQuery(User.class);
-        Root root = q.from(User.class);
-
-//        if (params != null) {
-//            List<Predicate> predicates = new ArrayList<>();
-//
-//            String kw = params.get("kw");
-//            if (kw != null && !kw.isEmpty()) {
-//                predicates.add(b.like(root.get("fullName"), String.format("%%%s%%", kw)));
-//            }
-//
-//            q.where(predicates.toArray(Predicate[]::new));
-//        }
-        Query query = s.createQuery(q);
-//
-//        if (params != null) {
-//            String page = params.get("page");
-//            if (page != null) {
-//                int p = Integer.parseInt(page);
-//                int start = (p - 1) * PAGE_SIZE;
-//                query.setFirstResult(start);
-//                query.setMaxResults(PAGE_SIZE);
-//            }
-//        }
-        return query.getResultList();
+        Query q = s.createQuery("FROM User where role='resident' ", User.class);
+        return q.getResultList();
     }
+
+    @Override
+    public List<User> getUsersByName(String name) {
+        Session s = this.factory.getObject().getCurrentSession();
+        CriteriaBuilder cb = s.getCriteriaBuilder();
+
+        CriteriaQuery<User> cq = cb.createQuery(User.class);
+        Root<User> root = cq.from(User.class);
+        cq.select(root);
+
+        if (name != null && !name.isEmpty()) {
+            Predicate namePredicate = cb.like(root.get("username"), "%" + name + "%");
+            cq.where(namePredicate);
+        }
+
+      
+        Query query = s.createQuery(cq); 
+
+       
+        List<User> users = new ArrayList<>();
+        List<Object> resultList = query.getResultList(); 
+        for (Object o : resultList) {
+            if (o instanceof User) { 
+                users.add((User) o); 
+            }
+        }
+        return users;
+
+    }
+
 }

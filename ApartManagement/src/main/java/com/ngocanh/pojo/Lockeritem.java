@@ -16,9 +16,12 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.persistence.Transient;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -30,6 +33,7 @@ import jakarta.persistence.TemporalType;
     @NamedQuery(name = "Lockeritem.findAll", query = "SELECT l FROM Lockeritem l"),
     @NamedQuery(name = "Lockeritem.findByItemId", query = "SELECT l FROM Lockeritem l WHERE l.itemId = :itemId"),
     @NamedQuery(name = "Lockeritem.findByItemName", query = "SELECT l FROM Lockeritem l WHERE l.itemName = :itemName"),
+    @NamedQuery(name = "Lockeritem.findByImages", query = "SELECT l FROM Lockeritem l WHERE l.images = :images"),
     @NamedQuery(name = "Lockeritem.findByStatus", query = "SELECT l FROM Lockeritem l WHERE l.status = :status"),
     @NamedQuery(name = "Lockeritem.findByReceivedAt", query = "SELECT l FROM Lockeritem l WHERE l.receivedAt = :receivedAt"),
     @NamedQuery(name = "Lockeritem.findByCreatedAt", query = "SELECT l FROM Lockeritem l WHERE l.createdAt = :createdAt")})
@@ -44,6 +48,8 @@ public class Lockeritem implements Serializable {
     @Basic(optional = false)
     @Column(name = "item_name")
     private String itemName;
+    @Column(name = "images")
+    private String images;
     @Column(name = "status")
     private String status;
     @Column(name = "received_at")
@@ -55,6 +61,8 @@ public class Lockeritem implements Serializable {
     @JoinColumn(name = "locker_id", referencedColumnName = "locker_id")
     @ManyToOne(optional = false)
     private Locker lockerId;
+    @Transient
+    private MultipartFile file;
 
     public Lockeritem() {
     }
@@ -82,6 +90,14 @@ public class Lockeritem implements Serializable {
 
     public void setItemName(String itemName) {
         this.itemName = itemName;
+    }
+
+    public String getImages() {
+        return images;
+    }
+
+    public void setImages(String images) {
+        this.images = images;
     }
 
     public String getStatus() {
@@ -123,6 +139,14 @@ public class Lockeritem implements Serializable {
         return hash;
     }
 
+    @PrePersist
+    protected void onCreate() {
+         this.createdAt = new Date();
+        if (this.status == null) {
+            this.status = "waiting";
+        }
+    }
+
     @Override
     public boolean equals(Object object) {
         // TODO: Warning - this method won't work in the case the id fields are not set
@@ -140,5 +164,19 @@ public class Lockeritem implements Serializable {
     public String toString() {
         return "com.ngocanh.pojo.Lockeritem[ itemId=" + itemId + " ]";
     }
-    
+
+    /**
+     * @return the file
+     */
+    public MultipartFile getFile() {
+        return file;
+    }
+
+    /**
+     * @param file the file to set
+     */
+    public void setFile(MultipartFile file) {
+        this.file = file;
+    }
+
 }

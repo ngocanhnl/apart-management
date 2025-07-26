@@ -4,16 +4,15 @@
  */
 package com.ngocanh.repositories;
 
-import com.ngocanh.pojo.Locker;
 import com.ngocanh.pojo.Lockeritem;
-import java.util.List;
 
 /**
  *
- * @author Ngoc Anh
+ * @author ADMIN
  */
-public interface LockerRepository {
-    public List<Locker> getLockers();
-     public List<Lockeritem> getLockeritem(int id);
-     public Locker getLockers(int id);
+public interface ItemRepo {
+    void addOrUpdateItem(Lockeritem item);
+    Lockeritem findItemById(int id);
+    public void updateStatus(Lockeritem item, String status) ;
+    void deleteItem(int id);
 }

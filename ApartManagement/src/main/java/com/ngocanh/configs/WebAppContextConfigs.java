@@ -17,6 +17,10 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.ngocanh.formatter.LockerFormatter;
+import com.ngocanh.formatter.UserFormatter;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.format.FormatterRegistry;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 
 /**
@@ -43,6 +47,13 @@ public class WebAppContextConfigs implements WebMvcConfigurer {
         return new StandardServletMultipartResolver();
     }
 
+//  @Override
+public void addFormatters(FormatterRegistry registry) {
+    registry.addFormatter(new LockerFormatter()); // ✅ ĐÚNG
+    // registry.addFormatter(new UserFormatter());
+}
+
+    
     @Bean
     public Cloudinary cloudinary() {
         return new Cloudinary(ObjectUtils.asMap(
@@ -51,11 +62,13 @@ public class WebAppContextConfigs implements WebMvcConfigurer {
                 "api_secret", "uBM6EnO3A2Nfmp7lkkOGMNvi9u8",
                 "secure", true));
     }
-
+    
+    
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/css/**")
                 .addResourceLocations("classpath:/static/css/");
     }
-
+    
+   
 }

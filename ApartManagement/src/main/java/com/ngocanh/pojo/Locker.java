@@ -116,7 +116,9 @@ public class Locker implements Serializable {
 
     @Override
     public String toString() {
-        return "com.ngocanh.pojo.Locker[ lockerId=" + lockerId + " ]";
+         return String.valueOf(this.lockerId); 
     }
+
+
     
 }

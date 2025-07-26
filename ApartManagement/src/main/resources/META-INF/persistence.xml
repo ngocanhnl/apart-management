@@ -13,5 +13,6 @@
     <class>com.ngocanh.pojo.Surveyuser</class>
     <class>com.ngocanh.pojo.Answer</class>
     <class>com.ngocanh.pojo.Surveyquestion</class>
+    <class>com.ngocanh.pojo.SurveyResponse</class>
   </persistence-unit>
 </persistence>
