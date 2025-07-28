@@ -6,6 +6,7 @@ package com.ngocanh.repositories.impl;
 
 import com.ngocanh.pojo.User;
 import com.ngocanh.repositories.UserRepositoriy;
+import jakarta.persistence.NoResultException;
 import jakarta.persistence.Query;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
@@ -32,7 +33,7 @@ public class UserRepositoryImpl implements UserRepositoriy {
     private int PAGE_SIZE = 10;
     @Autowired
     private LocalSessionFactoryBean factory;
-    
+
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
@@ -105,10 +106,13 @@ public class UserRepositoryImpl implements UserRepositoriy {
     @Override
     public User getUserByUsername(String username) {
         Session s = this.factory.getObject().getCurrentSession();
-        Query q = s.createNamedQuery("User.findByUsername", User.class);
-        q.setParameter("username", username);
-
-        return (User) q.getSingleResult();
+        try {
+            Query q = s.createNamedQuery("User.findByUsername",User.class);
+            q.setParameter("username", username);
+            return (User) q.getSingleResult();
+        } catch (NoResultException ex) {
+            return null; // hoặc throw UsernameNotFoundException
+        }
     }
 
     @Override
@@ -120,9 +124,23 @@ public class UserRepositoryImpl implements UserRepositoriy {
 
     @Override
     public User addUser(User u) {
-         Session s = this.factory.getObject().getCurrentSession();
+        Session s = this.factory.getObject().getCurrentSession();
         s.persist(u);
-        
+
         return u;
     }
+
+    @Override
+    public void changePassword(String username, String password) {
+        Session s = this.factory.getObject().getCurrentSession();
+        User u = this.getUserByUsername(username);
+        u.setPassword(this.passwordEncoder.encode(password));
+        u.setFirstLogin(Boolean.FALSE);
+        if(u!=null){
+            s.merge(u);
+        }
+        
+    }
+
+   
 }
