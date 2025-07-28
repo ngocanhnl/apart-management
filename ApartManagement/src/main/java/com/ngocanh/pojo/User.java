@@ -4,6 +4,7 @@
  */
 package com.ngocanh.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -80,16 +81,21 @@ public class User implements Serializable {
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
+    @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     private Set<Complaint> complaintSet;
     @OneToMany(mappedBy = "userId")
+    @JsonIgnore
     private Set<Answers> answersSet;
     @OneToMany(mappedBy = "userId")
+    @JsonIgnore
     private Set<Invoice> invoiceSet;
     @JoinColumn(name = "locker_id", referencedColumnName = "locker_id")
     @ManyToOne
+    @JsonIgnore
     private Locker lockerId;
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
+    @JsonIgnore
     private Set<Vehiclecardregistration> vehiclecardregistrationSet;
     
     @Transient

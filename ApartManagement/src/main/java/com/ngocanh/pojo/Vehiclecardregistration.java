@@ -4,6 +4,7 @@
  */
 package com.ngocanh.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -53,6 +54,7 @@ public class Vehiclecardregistration implements Serializable {
     private String status;
     @JoinColumn(name = "user_id", referencedColumnName = "user_id")
     @ManyToOne(optional = false)
+    @JsonIgnore
     private User userId;
 
     public Vehiclecardregistration() {

@@ -31,6 +31,7 @@ import org.springframework.web.multipart.MultipartFile;
 @RequestMapping("/api")
 @CrossOrigin
 public class ApiUserController {
+
     @Autowired
     private UserService userDetailsService;
 
@@ -58,8 +59,22 @@ public class ApiUserController {
 
     @RequestMapping("/secure/profile")
     @ResponseBody
-    @CrossOrigin
+//    @CrossOrigin
     public ResponseEntity<User> getProfile(Principal principal) {
         return new ResponseEntity<>(this.userDetailsService.getUserByUsername(principal.getName()), HttpStatus.OK);
+    }
+    
+    @PostMapping("/secure/changePassword")
+    public ResponseEntity<?> changePassword(@RequestParam("password") String password, Principal principal) {
+       
+        this.userDetailsService.changePassword(principal.getName(), password);
+        return new ResponseEntity<>(HttpStatus.CREATED); 
+    }
+    @PostMapping(path="/secure/update",  consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
+            produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> update(@RequestParam Map<String, String> params, @RequestParam(value = "avatar") MultipartFile avatar) {
+       
+        User u = this.userDetailsService.updateUser(params,avatar);
+        return new ResponseEntity<>(u,HttpStatus.CREATED); 
     }
 }

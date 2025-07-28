@@ -18,8 +18,10 @@ import jakarta.persistence.NamedQuery;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.persistence.Transient;
 import java.io.Serializable;
 import java.util.Date;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -54,7 +56,9 @@ public class Payment implements Serializable {
     @JoinColumn(name = "invoiceId", referencedColumnName = "id")
     @ManyToOne
     private Invoice invoiceId;
-
+    @Transient
+    private MultipartFile file;
+    
     public Payment() {
     }
 
@@ -133,6 +137,20 @@ public class Payment implements Serializable {
     @Override
     public String toString() {
         return "com.ngocanh.pojo.Payment[ id=" + id + " ]";
+    }
+
+    /**
+     * @return the file
+     */
+    public MultipartFile getFile() {
+        return file;
+    }
+
+    /**
+     * @param file the file to set
+     */
+    public void setFile(MultipartFile file) {
+        this.file = file;
     }
     
 }

@@ -121,4 +121,33 @@ public class UserServiceImpl implements UserService {
         return this.userRepo.addUser(u);
     }
 
+    @Override
+    public void changePassword(String username, String password) {
+         this.userRepo.changePassword(username, password);
+    }
+
+    @Override
+    public User updateUser(Map<String, String> params, MultipartFile avatar) {
+        
+        
+        User u = this.userRepo.getUserByUsername(params.get("username"));
+        u.setFullName(params.get("fullName"));
+        u.setEmail(params.get("email"));
+        u.setPhone(params.get("phone"));
+   
+        
+        if (!avatar.isEmpty()) {
+            try {
+                Map res = cloudinary.uploader().upload(avatar.getBytes(), ObjectUtils.asMap("resource_type", "auto"));
+                u.setAvatarUrl(res.get("secure_url").toString());
+            } catch (IOException ex) {
+                
+            }
+        }
+        
+        this.userRepo.updateOrCreateUser(u);
+        return u;
+        
+    }
+
 }
