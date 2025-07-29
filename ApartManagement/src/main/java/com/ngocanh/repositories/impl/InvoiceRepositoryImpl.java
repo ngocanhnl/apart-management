@@ -62,9 +62,9 @@ public class InvoiceRepositoryImpl implements Invoicerepository {
             List<Predicate> predicates = new ArrayList<>();
             predicates.add(b.equal(uRoot.get("userId"), iRoot.get("userId").get("userId")));
 
-            String kw = params.get("name");
+            String kw = params.get("username");
             if (kw != null && !kw.isEmpty()) {
-                predicates.add(b.like(uRoot.get("fullName"), String.format("%%%s%%", kw)));
+                predicates.add(b.equal(uRoot.get("username"), kw));
             }
 
             q.where(predicates.toArray(Predicate[]::new));
@@ -94,4 +94,39 @@ public class InvoiceRepositoryImpl implements Invoicerepository {
         }
     }
 
+    @Override
+    public List<Object[]> getInvoicesByUsername(String username) {
+        Session s = this.factory.getObject().getCurrentSession();
+        CriteriaBuilder b = s.getCriteriaBuilder();
+        CriteriaQuery<Object[]> q = b.createQuery(Object[].class);
+
+        Root<Invoice> iRoot = q.from(Invoice.class);
+
+        Root<User> uRoot = q.from(User.class);
+        
+       
+        q.multiselect(
+                iRoot.get("id"),
+                iRoot.get("name"),
+                iRoot.get("total"),
+                iRoot.get("isPaid")
+               
+        );
+        List<Predicate> predicates = new ArrayList<>();
+        predicates.add(b.equal(uRoot.get("userId"), iRoot.get("userId").get("userId")));
+
+        predicates.add(b.equal(uRoot.get("username"), username));
+            
+
+        q.where(predicates.toArray(Predicate[]::new));
+        Query query = s.createQuery(q);
+        
+        return query.getResultList();
+    }
+
+    @Override
+    public Invoice getInvoiceById(int id) {
+        Session s = this.factory.getObject().getCurrentSession();
+        return s.get(Invoice.class, id);
+    }
 }
