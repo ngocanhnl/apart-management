@@ -31,4 +31,6 @@ public interface UserService extends UserDetailsService {
     boolean authenticate(String username, String password);
     
     public User addUser(Map<String, String> params, MultipartFile avatar);
+    
+    
 }

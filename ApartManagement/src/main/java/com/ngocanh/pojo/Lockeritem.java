@@ -14,11 +14,14 @@ import jakarta.persistence.JoinColumn;
 import jakarta.persistence.ManyToOne;
 import jakarta.persistence.NamedQueries;
 import jakarta.persistence.NamedQuery;
+import jakarta.persistence.PrePersist;
 import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
+import jakarta.persistence.Transient;
 import java.io.Serializable;
 import java.util.Date;
+import org.springframework.web.multipart.MultipartFile;
 
 /**
  *
@@ -58,7 +61,8 @@ public class Lockeritem implements Serializable {
     @JoinColumn(name = "locker_id", referencedColumnName = "locker_id")
     @ManyToOne(optional = false)
     private Locker lockerId;
-
+ @Transient
+    private MultipartFile file;
     public Lockeritem() {
     }
 
@@ -126,7 +130,13 @@ public class Lockeritem implements Serializable {
     public void setLockerId(Locker lockerId) {
         this.lockerId = lockerId;
     }
-
+    @PrePersist
+    protected void onCreate() {
+         this.createdAt = new Date();
+        if (this.status == null) {
+            this.status = "waiting";
+        }
+    }
     @Override
     public int hashCode() {
         int hash = 0;
@@ -150,6 +160,20 @@ public class Lockeritem implements Serializable {
     @Override
     public String toString() {
         return "com.ngocanh.pojo.Lockeritem[ itemId=" + itemId + " ]";
+    }
+
+    /**
+     * @return the file
+     */
+    public MultipartFile getFile() {
+        return file;
+    }
+
+    /**
+     * @param file the file to set
+     */
+    public void setFile(MultipartFile file) {
+        this.file = file;
     }
     
 }

@@ -32,7 +32,7 @@ public class UserRepositoryImpl implements UserRepositoriy {
     private int PAGE_SIZE = 10;
     @Autowired
     private LocalSessionFactoryBean factory;
-    
+
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
@@ -120,9 +120,32 @@ public class UserRepositoryImpl implements UserRepositoriy {
 
     @Override
     public User addUser(User u) {
-         Session s = this.factory.getObject().getCurrentSession();
+        Session s = this.factory.getObject().getCurrentSession();
         s.persist(u);
-        
+
         return u;
+    }
+
+    @Override
+    public User findByLockerId(Integer lockerId) {
+        Session s = this.factory.getObject().getCurrentSession();
+        CriteriaBuilder cb = s.getCriteriaBuilder();
+        CriteriaQuery<User> cq = cb.createQuery(User.class);
+        Root<User> root = cq.from(User.class);
+
+        // Tạo điều kiện so sánh locker.id = lockerId
+        cq.select(root);
+        cq.where(cb.equal(root.get("lockerId").get("lockerId"), lockerId));
+
+
+        Query query = s.createQuery(cq);
+
+        // Tránh lỗi nếu không tìm thấy
+        List<User> users = query.getResultList();
+        if (!users.isEmpty()) {
+            return users.get(0);
+        }
+
+        return null;
     }
 }
