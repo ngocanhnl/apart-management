@@ -25,7 +25,7 @@
                 <h4 class="text-center mb-4">Quan ly chung cu</h4>
                 <a th:href="@{/}">Dashboard</a>
                 <a th:href="@{/users}" sec:authorize="isAuthenticated()">User</a>
-                <a href="#" sec:authorize="isAuthenticated()">Locker</a>
+                <a th:href="@{/locker/}" sec:authorize="isAuthenticated()">Locker</a>
                 <a th:href="@{/surveys}" sec:authorize="isAuthenticated()">Survey</a>
                 <a th:href="@{/vehicle-cards}">Vehicle card</a>
                 <a th:href="@{/invoices}">Hoa don</a>

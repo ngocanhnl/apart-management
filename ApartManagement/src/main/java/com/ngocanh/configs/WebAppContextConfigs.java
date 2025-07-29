@@ -17,6 +17,7 @@ import org.springframework.web.servlet.config.annotation.EnableWebMvc;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurer;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.ngocanh.formatters.LockerFormatter;
 import com.ngocanh.formatters.UserFormatter;
 
 import org.springframework.format.FormatterRegistry;
@@ -58,6 +59,8 @@ public class WebAppContextConfigs implements WebMvcConfigurer {
     @Override
     public void addFormatters(FormatterRegistry registry) {
         registry.addFormatter(new UserFormatter());
+         registry.addFormatter(new LockerFormatter());  // ✅ ĐÚNG
+
     }
     
     

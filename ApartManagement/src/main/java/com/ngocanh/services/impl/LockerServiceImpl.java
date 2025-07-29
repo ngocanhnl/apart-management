@@ -3,6 +3,7 @@ package com.ngocanh.services.impl;
 
 
 import com.ngocanh.pojo.Locker;
+import com.ngocanh.pojo.Lockeritem;
 import com.ngocanh.repositories.LockerRepository;
 import com.ngocanh.services.LockerService;
 import java.util.List;
@@ -26,5 +27,15 @@ public class LockerServiceImpl implements LockerService{
     public List<Locker> getLockers() {
         return this.lockerRepo.getLockers();
     }
-    
+
+    @Override
+    public List<Lockeritem> getLockeritem(int id) {
+        return this.lockerRepo.getLockeritem(id);
+    }
+
+    @Override
+    public Locker getLocker(int id) {
+         return this.lockerRepo.getLockers(id);   
+    }
+
 }

@@ -32,7 +32,9 @@ public interface UserService extends UserDetailsService {
     
     public User addUser(Map<String, String> params, MultipartFile avatar);
     
+
     public void changePassword(String username, String password);
     
     public User updateUser(Map<String, String> params, MultipartFile avatar);
+
 }
