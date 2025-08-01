@@ -39,7 +39,7 @@ public class UserController {
         return "user";
     }
     @GetMapping("/user/{userId}")
-    public String updateProduct(Model model,@PathVariable(value = "userId") int id){
+    public String updateUser(Model model,@PathVariable(value = "userId") int id){
         model.addAttribute("user", this.userService.getUserById(id));
         
         return "userCreateForm";
@@ -54,6 +54,13 @@ public class UserController {
     @GetMapping("/login")
     public String loginView() {
         return "login";
+    }
+    
+    @GetMapping("/user/block/{userId}")
+    public String blockUser(Model model,@PathVariable(value = "userId") int id){
+        User u = this.userService.getUserById(id);
+        this.userService.blockUser(u);
+        return "redirect:/users";
     }
     
     

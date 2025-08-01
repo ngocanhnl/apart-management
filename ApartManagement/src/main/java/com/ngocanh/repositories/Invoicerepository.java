@@ -17,5 +17,6 @@ public interface Invoicerepository {
     public List<Object[]> getAllInvoice(Map<String,String> params);
     public void updateOrCreateInvoice(Invoice invoice);
     public List<Object[]> getInvoicesByUsername(String username);
-   public Invoice getInvoiceById(int id);
+    public Invoice getInvoiceById(int id);
+    public void isPaidInvoice(int id);
 }

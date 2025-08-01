@@ -52,11 +52,8 @@ public class SpringSecurityConfig {
             Exception {
          http.cors(cors -> cors.configurationSource(corsConfigurationSource()))
                 .csrf(c -> c.disable()).authorizeHttpRequests(requests
-                -> requests.requestMatchers("/", "/home").authenticated()
+                -> requests.requestMatchers("/", "/home").hasAuthority("admin")
                         .requestMatchers("/api/**").permitAll()
-                        .requestMatchers(HttpMethod.GET, "/api/products").hasRole("ADMIN")
-                        .requestMatchers(HttpMethod.GET,
-                                "/api/products/**").hasAnyRole("USER", "ADMIN")
                         .anyRequest().authenticated())
                 .formLogin(form -> form.loginPage("/login")
                 .loginProcessingUrl("/login")
@@ -96,8 +93,8 @@ public class SpringSecurityConfig {
 
         config.setAllowedOrigins(List.of("http://localhost:3000")); 
         config.setAllowedMethods(List.of("GET", "POST", "PUT", "DELETE", "OPTIONS"));
-        config.setAllowedHeaders(List.of("Authorization", "Content-Type"));
-        config.setExposedHeaders(List.of("Authorization"));
+        config.setExposedHeaders(List.of("*"));
+        config.setAllowedHeaders(List.of("*")); // Nên để "*" để không bị giới hạn header
         config.setAllowCredentials(true); 
 
         UrlBasedCorsConfigurationSource source = new UrlBasedCorsConfigurationSource();

@@ -4,6 +4,7 @@
  */
 package com.ngocanh.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -41,9 +42,11 @@ public class Questions implements Serializable {
     @Column(name = "content")
     private String content;
     @OneToMany(mappedBy = "questionId")
+    @JsonIgnore
     private Set<Answers> answersSet;
     @JoinColumn(name = "survey_id", referencedColumnName = "id")
     @ManyToOne
+    @JsonIgnore
     private Survey surveyId;
 
     public Questions() {

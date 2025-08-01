@@ -2,7 +2,7 @@
  * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
  * Click nbfs://nbhost/SystemFileSystem/Templates/Classes/Class.java to edit this template
  */
-package com.ngocanh.configs;
+package com.ngocanh.controllers;
 
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.xml.bind.DatatypeConverter;
@@ -10,16 +10,41 @@ import java.nio.charset.StandardCharsets;
 import java.util.Random;
 import javax.crypto.Mac;
 import javax.crypto.spec.SecretKeySpec;
+import org.springframework.beans.factory.annotation.Value;
+import org.springframework.stereotype.Component;
 
 /**
  *
  * @author Ngoc Anh
  */
+@Component
 public class VNPayConfig {
-    public static String vnp_TmnCode = "ABC123"; // mã TMN
-    public static String vnp_HashSecret = "HASH_SECRET_KEY";
-    public static String vnp_Returnurl = "http://localhost:8080/return"; // URL sau khi thanh toán
-    public static String vnp_PayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
+    @Value("${vnpay.tmnCode}")
+    private String vnp_TmnCode;
+
+    @Value("${vnpay.hashSecret}")
+    private String vnp_HashSecret;
+
+    @Value("${vnpay.payUrl}")
+    private String vnp_PayUrl;
+
+    @Value("${vnpay.returnUrl}")
+    private String vnp_Returnurl;
+    public String getTmnCode() {
+        return vnp_TmnCode;
+    }
+
+    public String getHashSecret() {
+        return vnp_HashSecret;
+    }
+
+    public String getPayUrl() {
+        return vnp_PayUrl;
+    }
+
+    public String getReturnurl() {
+        return vnp_Returnurl;
+    }
 
     public static String getIpAddress(HttpServletRequest request) {
         String ipAddress = request.getHeader("X-FORWARDED-FOR");

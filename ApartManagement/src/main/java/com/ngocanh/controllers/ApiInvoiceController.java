@@ -51,6 +51,7 @@ public class ApiInvoiceController {
     public ResponseEntity<?> updateBill(@RequestParam Map<String, String> params, @RequestParam(value = "image") MultipartFile image) {
         
         this.paymentService.updateOrCreatePayment(params, image);
+        this.invoiceService.isPaidInvoice(Integer.valueOf(params.get("invoiceId")));
         return new ResponseEntity<>(HttpStatus.OK);
         
     }

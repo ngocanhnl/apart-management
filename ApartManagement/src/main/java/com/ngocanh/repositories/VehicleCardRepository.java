@@ -17,4 +17,5 @@ public interface VehicleCardRepository {
     public List<Vehiclecardregistration> getAllVehiclecardregistration(Map<String,String> params);
     public void updateOrCreateVehicleCard(Vehiclecardregistration card);
     public Vehiclecardregistration getCardById(int id);
+    public List<Vehiclecardregistration> getVehiclecardByUser(User u);
 }

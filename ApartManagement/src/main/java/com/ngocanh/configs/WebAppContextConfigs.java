@@ -33,7 +33,8 @@ import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry
 @ComponentScan(basePackages = {
     "com.ngocanh.controllers",
     "com.ngocanh.repositories",
-    "com.ngocanh.services"
+    "com.ngocanh.services",
+
 })
 public class WebAppContextConfigs implements WebMvcConfigurer {
 
