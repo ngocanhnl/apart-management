@@ -137,7 +137,29 @@ public class UserRepositoryImpl implements UserRepositoriy {
     }
 
     @Override
-    public void changePassword(String username, String password, String avatar) {
+    public User findByLockerId(Integer lockerId) {
+        Session s = this.factory.getObject().getCurrentSession();
+        CriteriaBuilder cb = s.getCriteriaBuilder();
+        CriteriaQuery<User> cq = cb.createQuery(User.class);
+        Root<User> root = cq.from(User.class);
+
+        // Tạo điều kiện so sánh locker.id = lockerId
+        cq.select(root);
+        cq.where(cb.equal(root.get("lockerId").get("lockerId"), lockerId));
+
+
+        Query query = s.createQuery(cq);
+
+        // Tránh lỗi nếu không tìm thấy
+        List<User> users = query.getResultList();
+        if (!users.isEmpty()) {
+            return users.get(0);
+        }
+
+        return null;
+    }
+    @Override
+     public void changePassword(String username, String password, String avatar) {
         Session s = this.factory.getObject().getCurrentSession();
         User u = this.getUserByUsername(username);
         u.setPassword(this.passwordEncoder.encode(password));
@@ -152,4 +174,5 @@ public class UserRepositoryImpl implements UserRepositoriy {
     }
 
    
+
 }

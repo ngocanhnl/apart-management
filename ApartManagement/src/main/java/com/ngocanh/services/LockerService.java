@@ -5,12 +5,17 @@
 package com.ngocanh.services;
 
 import com.ngocanh.pojo.Locker;
+import com.ngocanh.pojo.Lockeritem;
+import com.ngocanh.pojo.User;
 import java.util.List;
+import java.util.Map;
 
 /**
  *
  * @author Ngoc Anh
  */
 public interface LockerService {
-    List<Locker> getLockers();
+    public List<Locker> getLockers();
+     public List<Lockeritem> getLockeritem(int id);
+     public Locker getLocker(int id);
 }
