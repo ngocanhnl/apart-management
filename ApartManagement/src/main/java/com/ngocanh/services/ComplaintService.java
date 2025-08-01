@@ -5,10 +5,15 @@
 package com.ngocanh.services;
 import com.ngocanh.pojo.Complaint;
 import com.ngocanh.pojo.Lockeritem;
+import java.util.List;
+import java.util.Map;
+import org.springframework.web.bind.annotation.RequestParam;
 /**
  *
  * @author ADMIN
  */
 public interface ComplaintService {
-    void addOrUpdateItem(Complaint p);
+    void addOrUpdateItem(Map<String, String> params);
+     public List<Object[]> getAllComplaints(Map<String, String> params);
+     public Complaint findById(int id);
 }

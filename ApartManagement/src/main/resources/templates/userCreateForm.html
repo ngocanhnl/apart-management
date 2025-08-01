@@ -297,10 +297,10 @@
 
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8">
-    <title>Thêm người dùng</title>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <head>
+        <meta charset="UTF-8">
+        <title>Thêm người dùng</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <th:context th:replace="base :: resources"></th:context>
 </head>
 <body class="bg-light">
@@ -316,6 +316,80 @@
 
                 <div class="card shadow-sm mb-5">
                     <div class="card-body">
+                        <!--                        <form th:action="@{/users}" th:object="${user}" method="post" enctype="multipart/form-data">
+                                                    <input type="hidden" th:field="*{userId}" />
+                                                    <input type="hidden" th:field="*{avatarUrl}" />
+                        
+                                                    <div class="mb-3 row">
+                                                        <div class="col-md-6">
+                                                            <label for="username" class="form-label">Username</label>
+                                                            <input type="text" class="form-control" id="username" th:field="*{username}" required>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label for="password" class="form-label">Password</label>
+                                                            <input type="password" class="form-control" id="password" th:field="*{password}" required>
+                                                        </div>
+                                                    </div>
+                        
+                                                    <div class="mb-3 row">
+                                                        <div class="col-md-6">
+                                                            <label for="fullName" class="form-label">Họ tên</label>
+                                                            <input type="text" class="form-control" id="fullName" th:field="*{fullName}" required>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label for="phone" class="form-label">SĐT</label>
+                                                            <input type="text" class="form-control" id="phone" th:field="*{phone}">
+                                                        </div>
+                                                    </div>
+                        
+                                                    <div class="mb-3 row">
+                                                        <div class="col-md-6">
+                                                            <label for="email" class="form-label">Email</label>
+                                                            <input type="email" class="form-control" id="email" th:field="*{email}">
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label for="address" class="form-label">Địa chỉ</label>
+                                                            <input type="text" class="form-control" id="address" th:field="*{address}">
+                                                        </div>
+                                                    </div>
+                        
+                                                    <div class="mb-3">
+                                                        <label for="file" class="form-label">Ảnh đại diện</label>
+                                                        <input type="file" class="form-control" id="file" th:field="*{file}">
+                                                    </div>
+                        
+                                                    <div class="mb-3" th:if="${user.avatarUrl != null}">
+                                                        <img th:src="${user.avatarUrl}" alt="Avatar" width="200" class="img-thumbnail">
+                                                    </div>
+                        
+                                                    <div class="mb-3 row">
+                                                        <div class="col-md-6">
+                                                            <label for="role" class="form-label">Vai trò</label>
+                                                            <select class="form-select" id="role" th:field="*{role}" required>
+                                                                <option value="">Chọn vai trò</option>
+                                                                <option value="admin">Quản trị viên</option>
+                                                                <option value="resident">Người dùng</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label for="isActive" class="form-label">Trạng thái</label>
+                                                            <select class="form-select" id="isActive" th:field="*{isActive}" required>
+                                                                <option value="">Chọn trạng thái</option>
+                                                                <option value="true">Hoạt động</option>
+                                                                <option value="false">Ngừng hoạt động</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                        
+                                                    <div class="text-end">
+                                                        <button type="submit" class="btn btn-primary">
+                                                            <i class="bi bi-save2 me-1"></i>
+                                                            <span th:if="${user.userId == null}">Tạo người dùng</span>
+                                                            <span th:if="${user.userId != null}">Cập nhật</span>
+                                                        </button>
+                                                        <a th:href="@{/users}" class="btn btn-secondary">Quay lại</a>
+                                                    </div>
+                                                </form>-->
                         <form th:action="@{/users}" th:object="${user}" method="post" enctype="multipart/form-data">
                             <input type="hidden" th:field="*{userId}" />
                             <input type="hidden" th:field="*{avatarUrl}" />
@@ -324,10 +398,12 @@
                                 <div class="col-md-6">
                                     <label for="username" class="form-label">Username</label>
                                     <input type="text" class="form-control" id="username" th:field="*{username}" required>
+                                    <div class="text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
                                 </div>
                                 <div class="col-md-6">
                                     <label for="password" class="form-label">Password</label>
                                     <input type="password" class="form-control" id="password" th:field="*{password}" required>
+                                    <div class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
                                 </div>
                             </div>
 
@@ -335,10 +411,12 @@
                                 <div class="col-md-6">
                                     <label for="fullName" class="form-label">Họ tên</label>
                                     <input type="text" class="form-control" id="fullName" th:field="*{fullName}" required>
+                                    <div class="text-danger" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></div>
                                 </div>
                                 <div class="col-md-6">
                                     <label for="phone" class="form-label">SĐT</label>
                                     <input type="text" class="form-control" id="phone" th:field="*{phone}">
+                                    <div class="text-danger" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></div>
                                 </div>
                             </div>
 
@@ -346,20 +424,19 @@
                                 <div class="col-md-6">
                                     <label for="email" class="form-label">Email</label>
                                     <input type="email" class="form-control" id="email" th:field="*{email}">
+                                    <div class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
                                 </div>
                                 <div class="col-md-6">
                                     <label for="address" class="form-label">Địa chỉ</label>
                                     <input type="text" class="form-control" id="address" th:field="*{address}">
+                                    <div class="text-danger" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></div>
                                 </div>
                             </div>
 
                             <div class="mb-3">
                                 <label for="file" class="form-label">Ảnh đại diện</label>
                                 <input type="file" class="form-control" id="file" th:field="*{file}">
-                            </div>
-
-                            <div class="mb-3" th:if="${user.avatarUrl != null}">
-                                <img th:src="${user.avatarUrl}" alt="Avatar" width="200" class="img-thumbnail">
+                                <div class="text-danger" th:if="${#fields.hasErrors('file')}" th:errors="*{file}"></div>
                             </div>
 
                             <div class="mb-3 row">
@@ -370,6 +447,7 @@
                                         <option value="admin">Quản trị viên</option>
                                         <option value="resident">Người dùng</option>
                                     </select>
+                                    <div class="text-danger" th:if="${#fields.hasErrors('role')}" th:errors="*{role}"></div>
                                 </div>
                                 <div class="col-md-6">
                                     <label for="isActive" class="form-label">Trạng thái</label>
@@ -380,7 +458,6 @@
                                     </select>
                                 </div>
                             </div>
-
                             <div class="text-end">
                                 <button type="submit" class="btn btn-primary">
                                     <i class="bi bi-save2 me-1"></i>
@@ -389,7 +466,6 @@
                                 </button>
                                 <a th:href="@{/users}" class="btn btn-secondary">Quay lại</a>
                             </div>
-                        </form>
                     </div>
                 </div>
             </main>

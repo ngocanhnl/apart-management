@@ -23,10 +23,7 @@ import org.springframework.stereotype.Service;
 public class LockerServiceImpl implements LockerService{
     @Autowired
     private LockerRepository lockerRepo;
-    @Override
-    public List<Locker> getLockers() {
-        return this.lockerRepo.getLockers();
-    }
+    
 
     @Override
     public List<Lockeritem> getLockeritem(int id) {

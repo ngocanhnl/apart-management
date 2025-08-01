@@ -38,8 +38,7 @@
 
                         <td>
                             <a th:if="${user.lockerId != null}" th:href="@{/locker/{id}(id=${user.lockerId.lockerId})}" class="btn btn-sm btn-warning">Sửa</a>
-                            <a th:if="${user.lockerId != null}" th:href="@{/locker/{id}(id=${user.lockerId.lockerId})}" class="btn btn-sm btn-danger"
-                               onclick="return confirm('Bạn có chắc muốn xóa tủ này không?');">Xóa</a>
+                            
                         </td>
                     </tr>
                 </tbody>

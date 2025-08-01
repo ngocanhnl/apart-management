@@ -41,7 +41,7 @@ public class HomeController {
     @Transactional
     public String index(Model model, @RequestParam Map<String, String> params) {
 
-        model.addAttribute("lockers", this.lockerService.getLockers());
+     
         model.addAttribute("surveys", this.surveyService.getAllSurvey(params));
      
 

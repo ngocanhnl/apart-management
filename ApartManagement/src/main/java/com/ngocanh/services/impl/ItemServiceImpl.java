@@ -14,6 +14,7 @@ import com.ngocanh.services.ItemService;
 import com.ngocanh.utils.EmailService;
 import java.io.IOException;
 import java.util.Date;
+import java.util.List;
 import java.util.Map;
 import java.util.logging.Level;
 import java.util.logging.Logger;
@@ -81,5 +82,10 @@ private Cloudinary cloudinary;
     public void deleteItem(int id) {
         this.itemRepo.deleteItem(id);
       }
+
+    @Override
+    public List<Lockeritem> getLockeritem(Map<String, String> params) {
+        return this.itemRepo.getLockeritem(params);
+    }
 
 }

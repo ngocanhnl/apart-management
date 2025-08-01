@@ -15,7 +15,7 @@ import java.util.Map;
  * @author Ngoc Anh
  */
 public interface LockerService {
-    public List<Locker> getLockers();
+  
      public List<Lockeritem> getLockeritem(int id);
      public Locker getLocker(int id);
 }

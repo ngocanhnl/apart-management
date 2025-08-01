@@ -21,6 +21,9 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.persistence.Transient;
+import jakarta.validation.constraints.Email;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 import java.util.Set;
@@ -56,12 +59,17 @@ public class User implements Serializable {
     private Integer userId;
     @Basic(optional = false)
     @Column(name = "username")
+    @NotBlank(message = "{user.username.notBlank}")
+    @Size(min = 4, max = 50, message = "{user.username.size}")
     private String username;
     @Basic(optional = false)
     @Column(name = "password")
+    @NotBlank(message = "{user.password.notBlank}")
+    @Size(min = 6, message = "{user.password.size}")
     private String password;
     @Basic(optional = false)
     @Column(name = "role")
+    @NotBlank(message = "{user.role.notBlank}")
     private String role;
     @Column(name = "is_active")
     private Boolean isActive;
@@ -71,12 +79,18 @@ public class User implements Serializable {
     private Boolean firstLogin;
     @Basic(optional = false)
     @Column(name = "full_name")
+    @NotBlank(message = "{user.fullName.notBlank}")
+    @Size(min = 2, max = 100, message = "{user.fullName.size}")
     private String fullName;
     @Column(name = "phone")
+    @Size(max = 15, message = "{user.phone.size}")
     private String phone;
     @Column(name = "email")
+    @Email(message = "{user.email.valid}")
     private String email;
     @Column(name = "address")
+    @Size(max = 255, message = "{user.address.size}")
+
     private String address;
     @Column(name = "created_at")
     @Temporal(TemporalType.TIMESTAMP)
@@ -97,7 +111,7 @@ public class User implements Serializable {
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "userId")
     @JsonIgnore
     private Set<Vehiclecardregistration> vehiclecardregistrationSet;
-    
+
     @Transient
     private MultipartFile file;
 
@@ -107,7 +121,8 @@ public class User implements Serializable {
     public User(Integer userId) {
         this.userId = userId;
     }
-     public User(String username, String password, String role, String fullName) {
+
+    public User(String username, String password, String role, String fullName) {
 
         this.username = username;
         this.password = password;
@@ -297,5 +312,5 @@ public class User implements Serializable {
     public void setFile(MultipartFile file) {
         this.file = file;
     }
-    
+
 }

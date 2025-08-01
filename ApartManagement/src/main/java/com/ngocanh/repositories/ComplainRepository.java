@@ -5,10 +5,14 @@
 package com.ngocanh.repositories;
 
 import com.ngocanh.pojo.Complaint;
+import java.util.List;
+import java.util.Map;
 /**
  *
  * @author ADMIN
  */
 public interface ComplainRepository {
-     void addOrUpdateItem(Complaint p);
+     void addOrUpdateItem(Map<String, String> params);
+      public List<Object[]> getAllCamplaints(Map<String, String> params);
+      public Complaint findById(int id);
 }
