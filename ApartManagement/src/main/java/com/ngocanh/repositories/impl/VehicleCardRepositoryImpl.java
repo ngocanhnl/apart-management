@@ -80,4 +80,16 @@ public class VehicleCardRepositoryImpl implements VehicleCardRepository {
         return s.get(Vehiclecardregistration.class, id);
     }
 
+    @Override
+    public List<Vehiclecardregistration> getVehiclecardByUser(User u) {
+        Session s = this.factory.getObject().getCurrentSession();
+         CriteriaBuilder b = s.getCriteriaBuilder();
+        CriteriaQuery<Vehiclecardregistration> q = b.createQuery(Vehiclecardregistration.class);
+        Root root = q.from(Vehiclecardregistration.class);
+        
+        q.where(b.equal(root.get("userId").get("userId"), u.getUserId()));
+        Query query = s.createQuery(q);  
+        return query.getResultList();
+    }
+
 }

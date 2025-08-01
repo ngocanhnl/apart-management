@@ -4,15 +4,12 @@
  */
 package com.ngocanh.services;
 
-import java.util.Map;
-
-import org.springframework.web.multipart.MultipartFile;
+import java.util.List;
 
 /**
  *
  * @author Ngoc Anh
  */
-public interface PaymentService {
-    public void updateOrCreatePayment(Map<String, String> params,MultipartFile image);
-    public void updateOnlinePayment(int id, String code);
+public interface StatService {
+    public List<Object[]> statSurvey(int id);
 }

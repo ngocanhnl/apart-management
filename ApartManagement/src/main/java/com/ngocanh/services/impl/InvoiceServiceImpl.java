@@ -50,4 +50,9 @@ public class InvoiceServiceImpl implements InvoiceService {
         return result;
     }
 
+    @Override
+    public void isPaidInvoice(int id) {
+        this.invoiceRepo.isPaidInvoice(id);
+    }
+
 }

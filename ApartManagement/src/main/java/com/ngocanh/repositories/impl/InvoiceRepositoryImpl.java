@@ -46,7 +46,7 @@ public class InvoiceRepositoryImpl implements Invoicerepository {
         Root<Invoice> iRoot = q.from(Invoice.class);
 //        Root<Payment> pRoot = q.from(Payment.class);
         Root<User> uRoot = q.from(User.class);
-        
+
 //        q.where(b.and(b.equal(uRoot.get("userId"), iRoot.get("userId").get("userId")), b.equal(iRoot.get("id"), pRoot.get("invoiceId").get("id"))));
         q.where(b.equal(uRoot.get("userId"), iRoot.get("userId").get("userId")));
         q.multiselect(
@@ -56,15 +56,28 @@ public class InvoiceRepositoryImpl implements Invoicerepository {
                 iRoot.get("name"),
                 iRoot.get("total"),
                 iRoot.get("isPaid")
-               
         );
         if (params != null) {
             List<Predicate> predicates = new ArrayList<>();
             predicates.add(b.equal(uRoot.get("userId"), iRoot.get("userId").get("userId")));
 
-            String kw = params.get("username");
+            String kw = params.get("kw");
             if (kw != null && !kw.isEmpty()) {
-                predicates.add(b.equal(uRoot.get("username"), kw));
+                predicates.add(b.like(uRoot.get("fullName"), String.format("%%%s%%", kw)));
+            }
+            String status = params.get("status");
+            if (status != null && !status.isEmpty()) {
+                String tmp;
+                if(status.equals("1")){
+                    tmp = "Chưa thanh toán";
+                }
+                else if(status.equals("2")){
+                    tmp = "Chờ xác minh";
+                }
+                else{
+                    tmp = "Đã thanh toán";
+                }
+                predicates.add(b.equal(iRoot.get("isPaid"), tmp));
             }
 
             q.where(predicates.toArray(Predicate[]::new));
@@ -80,6 +93,7 @@ public class InvoiceRepositoryImpl implements Invoicerepository {
                 query.setMaxResults(PAGE_SIZE);
             }
         }
+        query.setMaxResults(PAGE_SIZE);
         return query.getResultList();
     }
 
@@ -103,24 +117,21 @@ public class InvoiceRepositoryImpl implements Invoicerepository {
         Root<Invoice> iRoot = q.from(Invoice.class);
 
         Root<User> uRoot = q.from(User.class);
-        
-       
+
         q.multiselect(
                 iRoot.get("id"),
                 iRoot.get("name"),
                 iRoot.get("total"),
                 iRoot.get("isPaid")
-               
         );
         List<Predicate> predicates = new ArrayList<>();
         predicates.add(b.equal(uRoot.get("userId"), iRoot.get("userId").get("userId")));
 
         predicates.add(b.equal(uRoot.get("username"), username));
-            
 
         q.where(predicates.toArray(Predicate[]::new));
         Query query = s.createQuery(q);
-        
+
         return query.getResultList();
     }
 
@@ -128,5 +139,16 @@ public class InvoiceRepositoryImpl implements Invoicerepository {
     public Invoice getInvoiceById(int id) {
         Session s = this.factory.getObject().getCurrentSession();
         return s.get(Invoice.class, id);
+    }
+
+    @Override
+    public void isPaidInvoice(int id) {
+        Session s = this.factory.getObject().getCurrentSession();
+        Invoice i = getInvoiceById(id);
+        if (i != null) {
+            i.setIsPaid("Đã thanh toán");
+                 
+        }
+       
     }
 }
