@@ -4,7 +4,6 @@
  */
 package com.ngocanh.controllers;
 
-import com.ngocanh.configs.VNPayConfig;
 import com.ngocanh.pojo.Invoice;
 import com.ngocanh.pojo.User;
 import com.ngocanh.services.InvoiceService;
@@ -51,6 +50,15 @@ public class InvoiceController {
     @GetMapping("/invoices")
     public String invoiceList(Model model, @RequestParam Map<String, String> params) {
         model.addAttribute("invoices", this.invoiceService.getAllInvoice(params));
+        model.addAttribute("currentPage", Integer.valueOf(params.getOrDefault("page","1")));
+        System.out.println(params.getOrDefault("page","1"));
+        int total = 0;
+        if(this.invoiceService.getAllInvoice(params) != null){
+            total = this.invoiceService.getAllInvoice(params).size();
+            System.out.println(total);
+        }
+        model.addAttribute("totalPages", (int) Math.ceil((double) total / 10));
+        System.out.println((int) Math.ceil((double) total / 10));
         return "invoiceList";
     }
 

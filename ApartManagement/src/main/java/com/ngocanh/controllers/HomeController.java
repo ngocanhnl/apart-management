@@ -4,8 +4,9 @@
  */
 package com.ngocanh.controllers;
 
-
 import com.ngocanh.services.LockerService;
+import com.ngocanh.services.StatService;
+import com.ngocanh.services.SurveyService;
 
 import java.util.Map;
 
@@ -26,15 +27,30 @@ import org.springframework.web.bind.annotation.RequestParam;
 @Controller
 @ControllerAdvice
 public class HomeController {
+
     @Autowired
     private LockerService lockerService;
-    
+
+    @Autowired
+    private SurveyService surveyService;
+
+    @Autowired
+    private StatService statService;
+
     @RequestMapping("/")
     @Transactional
-    public String index(Model model, @RequestParam Map<String, String> params){
-        
-        
-        
+    public String index(Model model, @RequestParam Map<String, String> params) {
+
+     
+        model.addAttribute("surveys", this.surveyService.getAllSurvey(params));
+     
+
+        int selectedId = params.get("surveyId") == null ? 1 : Integer.parseInt(params.get("surveyId"));
+        model.addAttribute("selectedSurveyId", selectedId);
+
+
+        model.addAttribute("stats", this.statService.statSurvey(selectedId));
+
         return "index";
     }
 }

@@ -6,6 +6,7 @@ package com.ngocanh.repositories.impl;
 
 import com.ngocanh.pojo.Payment;
 import com.ngocanh.pojo.User;
+import com.ngocanh.repositories.Invoicerepository;
 import com.ngocanh.repositories.PaymentRepository;
 import jakarta.persistence.Query;
 import jakarta.persistence.criteria.CriteriaBuilder;
@@ -13,6 +14,7 @@ import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.List;
 import org.hibernate.Session;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,6 +32,9 @@ public class PaymentRepositoryImpl implements PaymentRepository{
 
     @Autowired
     private LocalSessionFactoryBean factory;
+    
+    @Autowired 
+    private Invoicerepository invoiceRepo; 
 
     @Override
     public void updateOrCreatePayMent(Payment p) {
@@ -58,6 +63,24 @@ public class PaymentRepositoryImpl implements PaymentRepository{
         
        List<Payment> results = query.getResultList();
         return results.isEmpty() ? null : results.get(0);
+    }
+
+    @Override
+    public void updateOnlinePayment(int id, String code) {
+        Session s = this.factory.getObject().getCurrentSession();
+        Payment p = findPaymentByInvoiceId(id);
+        if(p != null){
+            p.setMethod("VNpay");
+            p.setTranferCode(code);
+        }
+        else{
+            p = new Payment();
+            p.setInvoiceId(this.invoiceRepo.getInvoiceById(id));
+            p.setMethod("VNpay");
+            p.setTranferCode(code);
+            p.setCreatedAt(new Date());
+            s.persist(p);
+        }
     }
     
 }

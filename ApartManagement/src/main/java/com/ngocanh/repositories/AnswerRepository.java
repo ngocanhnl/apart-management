@@ -4,14 +4,13 @@
  */
 package com.ngocanh.repositories;
 
-import com.ngocanh.pojo.Payment;
+import com.ngocanh.pojo.Questions;
+import com.ngocanh.pojo.User;
 
 /**
  *
  * @author Ngoc Anh
  */
-public interface PaymentRepository {
-    public void updateOrCreatePayMent(Payment p);
-    public Payment findPaymentByInvoiceId(int id);
-    public void updateOnlinePayment(int id, String code);
+public interface AnswerRepository {
+    public void addAnswer(String text, User userId, Questions questionId);
 }

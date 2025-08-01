@@ -42,7 +42,7 @@ public class UserRepositoryImpl implements UserRepositoriy {
     public User createUser(String username, String password, String role, String fullName) {
         Session s = this.factory.getObject().getCurrentSession();
 
-        User a = new User(username, password, role, fullName);
+        User a = new User(username, password, passwordEncoder.encode(password), fullName);
         s.persist(a);
         return a;
     }
@@ -60,6 +60,11 @@ public class UserRepositoryImpl implements UserRepositoriy {
             String kw = params.get("kw");
             if (kw != null && !kw.isEmpty()) {
                 predicates.add(b.like(root.get("username"), String.format("%%%s%%", kw)));
+            }
+            String status = params.get("status");
+            Boolean tmp = "active".equals(status) ? Boolean.TRUE : Boolean.FALSE;
+            if (status != null && !status.isEmpty()) {
+                predicates.add(b.equal(root.get("isActive"), tmp));
             }
 
             q.where(predicates.toArray(Predicate[]::new));
@@ -82,11 +87,15 @@ public class UserRepositoryImpl implements UserRepositoriy {
     public void updateOrCreateUser(User user) {
         Session s = this.factory.getObject().getCurrentSession();
         if (user.getUserId() == null) {
+
             Locker locker = new Locker();
             s.persist(locker); 
 
             
             user.setLockerId(locker);
+
+            user.setPassword(passwordEncoder.encode(user.getPassword()));
+
             s.persist(user);
         } else {
             s.merge(user);
@@ -128,7 +137,7 @@ public class UserRepositoryImpl implements UserRepositoriy {
     @Override
     public boolean authenticate(String username, String password) {
         User u = this.getUserByUsername(username);
-
+        if(u.getIsActive()==Boolean.FALSE) return Boolean.FALSE;
         return this.passwordEncoder.matches(password, u.getPassword());
     }
 
@@ -141,7 +150,6 @@ public class UserRepositoryImpl implements UserRepositoriy {
     }
 
     @Override
-
     public User findByLockerId(Integer lockerId) {
         Session s = this.factory.getObject().getCurrentSession();
         CriteriaBuilder cb = s.getCriteriaBuilder();
@@ -162,13 +170,18 @@ public class UserRepositoryImpl implements UserRepositoriy {
 
         return null;
     }
-
-    public void changePassword(String username, String password) {
+    @Override
+     public void changePassword(String username, String password, String avatar) {
         Session s = this.factory.getObject().getCurrentSession();
         User u = this.getUserByUsername(username);
         u.setPassword(this.passwordEncoder.encode(password));
         u.setFirstLogin(Boolean.FALSE);
-        if (u != null) {
+
+       
+        if(avatar.equals("") == Boolean.FALSE){
+            u.setAvatarUrl(avatar);
+        }
+        if(u!=null){
             s.merge(u);
         }
 

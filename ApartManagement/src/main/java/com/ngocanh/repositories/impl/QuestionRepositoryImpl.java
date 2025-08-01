@@ -4,7 +4,9 @@
  */
 package com.ngocanh.repositories.impl;
 
+import com.ngocanh.pojo.Answers;
 import com.ngocanh.pojo.Questions;
+import com.ngocanh.pojo.User;
 import com.ngocanh.pojo.Vehiclecardregistration;
 import com.ngocanh.repositories.QuestionRepository;
 import jakarta.persistence.Query;
@@ -121,5 +123,13 @@ public class QuestionRepositoryImpl implements QuestionRepository {
             s.remove(question);
         }
     }
+
+    @Override
+    public Questions getQuestionById(int id) {
+         Session s = this.factory.getObject().getCurrentSession();
+        return s.get(Questions.class, id);
+    }
+
+   
 
 }

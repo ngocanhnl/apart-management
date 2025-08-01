@@ -38,6 +38,8 @@ public class Answers implements Serializable {
     @Lob
     @Column(name = "answer_text")
     private String answerText;
+    @Column(name="answer_number")
+    private Integer answerNumber;
     @JoinColumn(name = "question_id", referencedColumnName = "id")
     @ManyToOne
     private Questions questionId;
@@ -107,6 +109,20 @@ public class Answers implements Serializable {
     @Override
     public String toString() {
         return "com.ngocanh.pojo.Answers[ id=" + id + " ]";
+    }
+
+    /**
+     * @return the answerNumber
+     */
+    public Integer getAnswerNumber() {
+        return answerNumber;
+    }
+
+    /**
+     * @param answerNumber the answerNumber to set
+     */
+    public void setAnswerNumber(Integer answerNumber) {
+        this.answerNumber = answerNumber;
     }
     
 }

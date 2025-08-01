@@ -24,9 +24,13 @@ public interface UserRepositoriy {
     boolean authenticate(String username, String password);
     public User addUser(User u);
 
+    public void changePassword(String username, String password, String avatar);
+
+
     public User findByLockerId(Integer lockerId);
 
-    public void changePassword(String username, String password);
+   
+
 
 
 }

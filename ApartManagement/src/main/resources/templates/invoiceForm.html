@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!--<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -11,7 +11,7 @@
     <h2 class="mb-4">Thêm Hóa đơn mới</h2>
 
     <form th:action="@{/invoice/add/{userId}(userId=${userId})}" th:object="${invoice}" method="post">
-        <!-- Tên hóa đơn -->
+         Tên hóa đơn 
         <div class="mb-3">
             <label for="name" class="form-label">Loại hóa đơn</label>
             <select class="form-select" id="name" th:field="*{name}" required>
@@ -23,13 +23,13 @@
             </select>
         </div>
 
-        <!-- Tổng tiền -->
+         Tổng tiền 
         <div class="mb-3">
             <label for="total" class="form-label">Số tiền</label>
             <input type="number" class="form-control" id="total" th:field="*{total}" required min="0">
         </div>
 
-        <!-- Trạng thái hóa đơn -->
+         Trạng thái hóa đơn 
         <div class="mb-3">
             <label for="isPaid" class="form-label">Trạng thái</label>
             <select class="form-select" id="isPaid" th:field="*{isPaid}" required>
@@ -40,10 +40,66 @@
             </select>
         </div>
 
-        <!-- Nút lưu -->
+         Nút lưu 
         <button type="submit" class="btn btn-primary">Lưu hóa đơn</button>
         <a th:href="@{/invoices}" class="btn btn-secondary ms-2">Quay lại danh sách</a>
     </form>
+</div>
+</body>
+</html>-->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <title>Thêm Hóa đơn mới</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
+<body class="bg-light">
+<div class="container py-5">
+    <div class="card shadow-lg border-0 rounded">
+        <div class="card-body p-4">
+            <h3 class="mb-4">📝 Thêm Hóa đơn mới</h3>
+
+            <form th:action="@{/invoice/add/{userId}(userId=${userId})}" th:object="${invoice}" method="post">
+                <!-- Loại hóa đơn -->
+                <div class="mb-3">
+                    <label for="name" class="form-label fw-semibold">Loại hóa đơn</label>
+                    <select class="form-select" id="name" th:field="*{name}" required>
+                        <option value="" disabled selected>-- Chọn loại hóa đơn --</option>
+                        <option value="Phí quản lý">Phí quản lý</option>
+                        <option value="Phí giữ xe">Phí giữ xe</option>
+                        <option value="Phí dịch vụ">Phí dịch vụ</option>
+                        <option value="Khác">Khác</option>
+                    </select>
+                </div>
+
+                <!-- Số tiền -->
+                <div class="mb-3">
+                    <label for="total" class="form-label fw-semibold">Số tiền</label>
+                    <input type="number" class="form-control" id="total" th:field="*{total}" required min="0"
+                           placeholder="Nhập số tiền (VNĐ)">
+                </div>
+
+                <!-- Trạng thái -->
+                <div class="mb-4">
+                    <label for="isPaid" class="form-label fw-semibold">Trạng thái</label>
+                    <select class="form-select" id="isPaid" th:field="*{isPaid}" required>
+                        <option value="" disabled selected>-- Chọn trạng thái --</option>
+                        <option value="Chưa thanh toán">Chưa thanh toán</option>
+                        <option value="Đã thanh toán">Đã thanh toán</option>
+                        <option value="Chờ xác minh">Chờ xác minh</option>
+                    </select>
+                </div>
+
+                <!-- Buttons -->
+                <div class="d-flex justify-content-end">
+                    <a th:href="@{/invoices}" class="btn btn-outline-secondary me-2">Quay lại</a>
+                    <button type="submit" class="btn btn-primary">💾 Lưu hóa đơn</button>
+                </div>
+            </form>
+        </div>
+    </div>
 </div>
 </body>
 </html>

@@ -24,4 +24,8 @@ public interface QuestionRepository {
     public Questions getQuestionByContent(int id, String content);
 
     public void deleteQuestion(int id);
+    
+    public Questions getQuestionById(int id);
+    
+    
 }

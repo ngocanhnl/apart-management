@@ -53,7 +53,7 @@ public class UserServiceImpl implements UserService {
     @Override
     public void updateOrCreateuser(User user) {
 
-        if (!user.getFile().isEmpty()) {
+        if (user.getFile() != null && !user.getFile().isEmpty()) {
             try {
                 Map res = cloudinary.uploader().upload(user.getFile().getBytes(),
                         ObjectUtils.asMap("resource_type", "auto"));
@@ -122,8 +122,18 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
-    public void changePassword(String username, String password) {
-         this.userRepo.changePassword(username, password);
+    public void changePassword(String username, String password, MultipartFile avatar) {
+        if (!avatar.isEmpty()) {
+            try {
+                Map res = cloudinary.uploader().upload(avatar.getBytes(), ObjectUtils.asMap("resource_type", "auto"));
+                
+                this.userRepo.changePassword(username, password, res.get("secure_url").toString());
+                return;
+            } catch (IOException ex) {
+                
+            }
+        }
+         this.userRepo.changePassword(username, password, "");
     }
 
     @Override
@@ -148,6 +158,12 @@ public class UserServiceImpl implements UserService {
         this.userRepo.updateOrCreateUser(u);
         return u;
         
+    }
+
+    @Override
+    public void blockUser(User u) {
+        u.setIsActive(Boolean.FALSE);
+        this.updateOrCreateuser(u);
     }
 
 }

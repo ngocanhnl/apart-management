@@ -58,5 +58,10 @@ public class PaymentServiceImpl implements PaymentService{
         this.paymentRepo.updateOrCreatePayMent(p);
         
     }
+
+    @Override
+    public void updateOnlinePayment(int id, String code) {
+        this.paymentRepo.updateOnlinePayment(id, code);
+    }
     
 }

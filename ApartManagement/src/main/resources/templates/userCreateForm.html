@@ -1,14 +1,14 @@
-<!DOCTYPE html>
+<!--<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
     <head>
         <title>Create User</title>
         <meta charset="UTF-8" />
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
-        <!-- Bootstrap 5 CSS -->
+         Bootstrap 5 CSS 
         <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-        <!-- Bootstrap Icons -->
+         Bootstrap Icons 
         <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.0/font/bootstrap-icons.css" rel="stylesheet">
-        <!-- Custom CSS -->
+         Custom CSS 
         <style>
             body {
                 background-color: #f8f9fa;
@@ -141,7 +141,7 @@
                         <form th:action="@{/users}" th:object="${user}" method="post" novalidate enctype="multipart/form-data">
                             <input type="hidden" th:field="*{userId}" />
                             <input type="hidden" th:field="*{avatarUrl}" />
-                            <!-- Username Field -->
+                             Username Field 
                             <div class="form-floating mb-3">
                                 <input type="text" 
                                        class="form-control" 
@@ -154,7 +154,7 @@
                                 </label>
                             </div>
 
-                            <!-- Password Field -->
+                             Password Field 
                             <div class="form-floating mb-3">
                                 <input type="password" 
                                        class="form-control" 
@@ -167,7 +167,7 @@
                                 </label>
                             </div>
 
-                            <!-- Full Name Field -->
+                             Full Name Field 
                             <div class="form-floating mb-3">
                                 <input type="text" 
                                        class="form-control" 
@@ -219,7 +219,7 @@
                                 <img th:src="${user.avatarUrl}" width="300" />
                             </div>
 
-                            <!-- Role Field -->
+                             Role Field 
                             <div class="form-floating mb-4">
                                 <select class="form-select role-select" 
                                         id="role" 
@@ -247,7 +247,7 @@
                                 </label>
                             </div>
 
-                            <!-- Submit Button -->
+                             Submit Button 
                            
                             <button type="submit" class="btn btn-primary btn-submit">
                                 <span th:if="${user.userId == null}">Create user</span>
@@ -259,10 +259,10 @@
             </div>
         </div>
 
-        <!-- Bootstrap 5 JS -->
+         Bootstrap 5 JS 
         <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
-        <!-- Optional: Form validation script -->
+         Optional: Form validation script 
         <script>
             // Bootstrap form validation
             (function () {
@@ -293,4 +293,186 @@
             });
         </script>
     </body>
+</html>-->
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8">
+        <title>Thêm người dùng</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <th:context th:replace="base :: resources"></th:context>
+</head>
+<body class="bg-light">
+    <div class="container-fluid">
+        <div class="row">
+            <div th:replace="base :: navbar"></div>
+
+            <main class="col-md-10 ms-sm-auto col-lg-10 px-4">
+                <div class="py-4 text-center">
+                    <h2 class="mb-0">Thêm người dùng mới</h2>
+                    <small class="text-muted">Điền đầy đủ thông tin người dùng</small>
+                </div>
+
+                <div class="card shadow-sm mb-5">
+                    <div class="card-body">
+                        <!--                        <form th:action="@{/users}" th:object="${user}" method="post" enctype="multipart/form-data">
+                                                    <input type="hidden" th:field="*{userId}" />
+                                                    <input type="hidden" th:field="*{avatarUrl}" />
+                        
+                                                    <div class="mb-3 row">
+                                                        <div class="col-md-6">
+                                                            <label for="username" class="form-label">Username</label>
+                                                            <input type="text" class="form-control" id="username" th:field="*{username}" required>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label for="password" class="form-label">Password</label>
+                                                            <input type="password" class="form-control" id="password" th:field="*{password}" required>
+                                                        </div>
+                                                    </div>
+                        
+                                                    <div class="mb-3 row">
+                                                        <div class="col-md-6">
+                                                            <label for="fullName" class="form-label">Họ tên</label>
+                                                            <input type="text" class="form-control" id="fullName" th:field="*{fullName}" required>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label for="phone" class="form-label">SĐT</label>
+                                                            <input type="text" class="form-control" id="phone" th:field="*{phone}">
+                                                        </div>
+                                                    </div>
+                        
+                                                    <div class="mb-3 row">
+                                                        <div class="col-md-6">
+                                                            <label for="email" class="form-label">Email</label>
+                                                            <input type="email" class="form-control" id="email" th:field="*{email}">
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label for="address" class="form-label">Địa chỉ</label>
+                                                            <input type="text" class="form-control" id="address" th:field="*{address}">
+                                                        </div>
+                                                    </div>
+                        
+                                                    <div class="mb-3">
+                                                        <label for="file" class="form-label">Ảnh đại diện</label>
+                                                        <input type="file" class="form-control" id="file" th:field="*{file}">
+                                                    </div>
+                        
+                                                    <div class="mb-3" th:if="${user.avatarUrl != null}">
+                                                        <img th:src="${user.avatarUrl}" alt="Avatar" width="200" class="img-thumbnail">
+                                                    </div>
+                        
+                                                    <div class="mb-3 row">
+                                                        <div class="col-md-6">
+                                                            <label for="role" class="form-label">Vai trò</label>
+                                                            <select class="form-select" id="role" th:field="*{role}" required>
+                                                                <option value="">Chọn vai trò</option>
+                                                                <option value="admin">Quản trị viên</option>
+                                                                <option value="resident">Người dùng</option>
+                                                            </select>
+                                                        </div>
+                                                        <div class="col-md-6">
+                                                            <label for="isActive" class="form-label">Trạng thái</label>
+                                                            <select class="form-select" id="isActive" th:field="*{isActive}" required>
+                                                                <option value="">Chọn trạng thái</option>
+                                                                <option value="true">Hoạt động</option>
+                                                                <option value="false">Ngừng hoạt động</option>
+                                                            </select>
+                                                        </div>
+                                                    </div>
+                        
+                                                    <div class="text-end">
+                                                        <button type="submit" class="btn btn-primary">
+                                                            <i class="bi bi-save2 me-1"></i>
+                                                            <span th:if="${user.userId == null}">Tạo người dùng</span>
+                                                            <span th:if="${user.userId != null}">Cập nhật</span>
+                                                        </button>
+                                                        <a th:href="@{/users}" class="btn btn-secondary">Quay lại</a>
+                                                    </div>
+                                                </form>-->
+                        <form th:action="@{/users}" th:object="${user}" method="post" enctype="multipart/form-data">
+                            <input type="hidden" th:field="*{userId}" />
+                            <input type="hidden" th:field="*{avatarUrl}" />
+
+                            <div class="mb-3 row">
+                                <div class="col-md-6">
+                                    <label for="username" class="form-label">Username</label>
+                                    <input type="text" class="form-control" id="username" th:field="*{username}" required>
+                                    <div class="text-danger" th:if="${#fields.hasErrors('username')}" th:errors="*{username}"></div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="password" class="form-label">Password</label>
+                                    <input type="password" class="form-control" id="password" th:field="*{password}" required>
+                                    <div class="text-danger" th:if="${#fields.hasErrors('password')}" th:errors="*{password}"></div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3 row">
+                                <div class="col-md-6">
+                                    <label for="fullName" class="form-label">Họ tên</label>
+                                    <input type="text" class="form-control" id="fullName" th:field="*{fullName}" required>
+                                    <div class="text-danger" th:if="${#fields.hasErrors('fullName')}" th:errors="*{fullName}"></div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="phone" class="form-label">SĐT</label>
+                                    <input type="text" class="form-control" id="phone" th:field="*{phone}">
+                                    <div class="text-danger" th:if="${#fields.hasErrors('phone')}" th:errors="*{phone}"></div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3 row">
+                                <div class="col-md-6">
+                                    <label for="email" class="form-label">Email</label>
+                                    <input type="email" class="form-control" id="email" th:field="*{email}">
+                                    <div class="text-danger" th:if="${#fields.hasErrors('email')}" th:errors="*{email}"></div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="address" class="form-label">Địa chỉ</label>
+                                    <input type="text" class="form-control" id="address" th:field="*{address}">
+                                    <div class="text-danger" th:if="${#fields.hasErrors('address')}" th:errors="*{address}"></div>
+                                </div>
+                            </div>
+
+                            <div class="mb-3">
+                                <label for="file" class="form-label">Ảnh đại diện</label>
+                                <input type="file" class="form-control" id="file" th:field="*{file}">
+                                <div class="text-danger" th:if="${#fields.hasErrors('file')}" th:errors="*{file}"></div>
+                            </div>
+
+                            <div class="mb-3 row">
+                                <div class="col-md-6">
+                                    <label for="role" class="form-label">Vai trò</label>
+                                    <select class="form-select" id="role" th:field="*{role}" required>
+                                        <option value="">Chọn vai trò</option>
+                                        <option value="admin">Quản trị viên</option>
+                                        <option value="resident">Người dùng</option>
+                                    </select>
+                                    <div class="text-danger" th:if="${#fields.hasErrors('role')}" th:errors="*{role}"></div>
+                                </div>
+                                <div class="col-md-6">
+                                    <label for="isActive" class="form-label">Trạng thái</label>
+                                    <select class="form-select" id="isActive" th:field="*{isActive}" required>
+                                        <option value="">Chọn trạng thái</option>
+                                        <option value="true">Hoạt động</option>
+                                        <option value="false">Ngừng hoạt động</option>
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="text-end">
+                                <button type="submit" class="btn btn-primary">
+                                    <i class="bi bi-save2 me-1"></i>
+                                    <span th:if="${user.userId == null}">Tạo người dùng</span>
+                                    <span th:if="${user.userId != null}">Cập nhật</span>
+                                </button>
+                                <a th:href="@{/users}" class="btn btn-secondary">Quay lại</a>
+                            </div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <!-- Bootstrap Icons -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css">
+</body>
 </html>
