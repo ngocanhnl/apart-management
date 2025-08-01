@@ -13,7 +13,7 @@ import java.util.List;
  * @author Ngoc Anh
  */
 public interface LockerRepository {
-    public List<Locker> getLockers();
+  
      public List<Lockeritem> getLockeritem(int id);
      public Locker getLockers(int id);
 }

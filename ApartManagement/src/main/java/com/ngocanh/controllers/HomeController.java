@@ -34,7 +34,7 @@ public class HomeController {
     public String index(Model model, @RequestParam Map<String, String> params){
         
         
-        model.addAttribute("lockers",this.lockerService.getLockers());
+        
         return "index";
     }
 }

@@ -4,10 +4,11 @@
  */
 package com.ngocanh.repositories.impl;
 
+import com.ngocanh.pojo.Locker;
 import com.ngocanh.pojo.User;
 import com.ngocanh.repositories.UserRepositoriy;
 import jakarta.persistence.NoResultException;
-import jakarta.persistence.Query;
+import org.hibernate.query.Query;
 import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
@@ -58,7 +59,7 @@ public class UserRepositoryImpl implements UserRepositoriy {
 
             String kw = params.get("kw");
             if (kw != null && !kw.isEmpty()) {
-                predicates.add(b.like(root.get("fullName"), String.format("%%%s%%", kw)));
+                predicates.add(b.like(root.get("username"), String.format("%%%s%%", kw)));
             }
 
             q.where(predicates.toArray(Predicate[]::new));
@@ -81,6 +82,11 @@ public class UserRepositoryImpl implements UserRepositoriy {
     public void updateOrCreateUser(User user) {
         Session s = this.factory.getObject().getCurrentSession();
         if (user.getUserId() == null) {
+            Locker locker = new Locker();
+            s.persist(locker); 
+
+            
+            user.setLockerId(locker);
             s.persist(user);
         } else {
             s.merge(user);
@@ -98,8 +104,12 @@ public class UserRepositoryImpl implements UserRepositoriy {
         Session s = this.factory.getObject().getCurrentSession();
         CriteriaBuilder b = s.getCriteriaBuilder();
         CriteriaQuery<User> q = b.createQuery(User.class);
-        Root root = q.from(User.class);
-        Query query = s.createQuery(q);
+        Root<User> root = q.from(User.class);
+
+        Predicate rolePredicate = b.equal(root.get("role"), "resident");
+        q.where(rolePredicate);
+
+        Query<User> query = s.createQuery(q);
         return query.getResultList();
     }
 
@@ -107,7 +117,7 @@ public class UserRepositoryImpl implements UserRepositoriy {
     public User getUserByUsername(String username) {
         Session s = this.factory.getObject().getCurrentSession();
         try {
-            Query q = s.createNamedQuery("User.findByUsername",User.class);
+            Query q = s.createNamedQuery("User.findByUsername", User.class);
             q.setParameter("username", username);
             return (User) q.getSingleResult();
         } catch (NoResultException ex) {
@@ -142,7 +152,6 @@ public class UserRepositoryImpl implements UserRepositoriy {
         cq.select(root);
         cq.where(cb.equal(root.get("lockerId").get("lockerId"), lockerId));
 
-
         Query query = s.createQuery(cq);
 
         // Tránh lỗi nếu không tìm thấy
@@ -159,12 +168,10 @@ public class UserRepositoryImpl implements UserRepositoriy {
         User u = this.getUserByUsername(username);
         u.setPassword(this.passwordEncoder.encode(password));
         u.setFirstLogin(Boolean.FALSE);
-        if(u!=null){
+        if (u != null) {
             s.merge(u);
         }
-        
-    }
 
-   
+    }
 
 }

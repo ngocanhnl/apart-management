@@ -19,8 +19,13 @@ import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
 import com.ngocanh.formatters.LockerFormatter;
 import com.ngocanh.formatters.UserFormatter;
+import com.ngocanh.validation.FileValidator;
+import java.util.HashSet;
+import java.util.Set;
 
 import org.springframework.format.FormatterRegistry;
+import org.springframework.validation.Validator;
+import org.springframework.validation.beanvalidation.LocalValidatorFactoryBean;
 import org.springframework.web.servlet.config.annotation.ResourceHandlerRegistry;
 
 /**
@@ -47,22 +52,28 @@ public class WebAppContextConfigs implements WebMvcConfigurer {
         return new StandardServletMultipartResolver();
     }
 
-    
-
     @Override
     public void addResourceHandlers(ResourceHandlerRegistry registry) {
         registry.addResourceHandler("/css/**")
                 .addResourceLocations("classpath:/static/css/");
     }
 
-
     @Override
     public void addFormatters(FormatterRegistry registry) {
         registry.addFormatter(new UserFormatter());
-         registry.addFormatter(new LockerFormatter());  // ✅ ĐÚNG
+        registry.addFormatter(new LockerFormatter());  // ✅ ĐÚNG
 
     }
-    
-    
+ 
+
+    @Bean
+    public WebAppValidator lockerItemValidator() {
+        Set<org.springframework.validation.Validator> springValidators = new HashSet<>();
+        springValidators.add(new FileValidator());
+
+        WebAppValidator validator = new WebAppValidator();
+        validator.setSpringValidators(springValidators);
+        return validator;
+    }
 
 }

@@ -4,6 +4,7 @@
  */
 package com.ngocanh.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Basic;
 import jakarta.persistence.CascadeType;
 import jakarta.persistence.Column;
@@ -42,8 +43,10 @@ public class Locker implements Serializable {
     @Lob
     @Column(name = "description")
     private String description;
+        @JsonIgnore
     @OneToMany(cascade = CascadeType.ALL, mappedBy = "lockerId")
     private Set<Lockeritem> lockeritemSet;
+    @JsonIgnore
     @OneToMany(mappedBy = "lockerId")
     private Set<User> userSet;
 

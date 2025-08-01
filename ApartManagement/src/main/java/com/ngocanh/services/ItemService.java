@@ -5,6 +5,8 @@
 package com.ngocanh.services;
 
 import com.ngocanh.pojo.Lockeritem;
+import java.util.List;
+import java.util.Map;
 
 /**
  *
@@ -16,4 +18,5 @@ public interface ItemService {
     Lockeritem getItemById(int id);
     void updateStatus(int itemId, String status);
     void deleteItem(int id);
+     public List<Lockeritem> getLockeritem(Map<String, String> params);
 }

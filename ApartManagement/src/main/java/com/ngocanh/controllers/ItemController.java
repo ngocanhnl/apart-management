@@ -6,12 +6,18 @@ package com.ngocanh.controllers;
 
 import com.ngocanh.pojo.Locker;
 import com.ngocanh.pojo.Lockeritem;
+import com.ngocanh.pojo.User;
 import com.ngocanh.services.ItemService;
+import com.ngocanh.services.LockerService;
 import com.ngocanh.services.UserService;
+import jakarta.validation.Valid;
+import java.util.List;
+import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
+import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.ModelAttribute;
@@ -25,27 +31,67 @@ import org.springframework.web.bind.annotation.RequestParam;
  */
 @Controller
 public class ItemController {
+
     @Autowired
     private ItemService itemService;
-    
+
     @Autowired
-     private UserService userService;
+    private UserService userService;
+    @Autowired
+    private LockerService lockerService;
+
     @GetMapping("/Item")
     public String getUser(Model model) {
-       model.addAttribute("Item", new Lockeritem());
-       model.addAttribute("Users",this.userService.getUsers() );
-        
+        model.addAttribute("Item", new Lockeritem());
+        model.addAttribute("Users", this.userService.getUsers());
+
         return "ItemLocker";
     }
-   @PostMapping("/Item")
-    public String addItem(@ModelAttribute(value="Item") Lockeritem item ){
+//   @PostMapping("/Item")
+//    public String addItem(@ModelAttribute(value="Item") Lockeritem item ){
+//        this.itemService.addOrUpdateItem(item);
+//        return  "redirect:/locker/" + item.getLockerId().getLockerId();
+//    }
+
+    @PostMapping("/Item")
+    public String addItem(@ModelAttribute("Item") @Valid Lockeritem item,
+            BindingResult result,
+            Model model) {
+
+        if (result.hasErrors()) {
+
+            model.addAttribute("Users", this.userService.getUsers());
+            return "ItemLocker";  // quay lại form nếu lỗi
+        }
+
         this.itemService.addOrUpdateItem(item);
-        return  "redirect:/locker/" + item.getLockerId().getLockerId();
+        return "redirect:/locker/" + item.getLockerId().getLockerId();
     }
+
     @GetMapping("/Item/delete")
     public String deleteItem(@RequestParam("itemId") Integer itemId,
-                           @RequestParam("lockerId") Integer lockerId){
-       this.itemService.deleteItem(itemId);
+            @RequestParam("lockerId") Integer lockerId) {
+        this.itemService.deleteItem(itemId);
         return "redirect:/locker/" + lockerId;
+    }
+
+    @GetMapping("/item/search")
+    public String getLockerByName(Model model, @RequestParam Map<String, String> params) {
+         String lockerIdRaw = params.get("lockerId");
+    if (lockerIdRaw == null || lockerIdRaw.isEmpty()) {
+        return "redirect:/locker/"; // fallback nếu thiếu lockerId
+    }
+
+    int lockerId = Integer.parseInt(lockerIdRaw);
+
+    // 2. Lấy thông tin tủ & danh sách item theo từ khóa
+    Locker locker = this.lockerService.getLocker(lockerId);
+    List<Lockeritem> lockerItems = this.itemService.getLockeritem(params); // lọc theo kw + lockerId
+
+    // 3. Gửi dữ liệu về view
+    model.addAttribute("locker", locker);
+    model.addAttribute("lockerItems", lockerItems);
+
+    return "locker"; // view chi tiết tủ
     }
 }

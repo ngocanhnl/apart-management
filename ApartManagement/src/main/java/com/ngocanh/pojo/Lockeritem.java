@@ -4,6 +4,7 @@
  */
 package com.ngocanh.pojo;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.Basic;
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
@@ -19,6 +20,9 @@ import jakarta.persistence.Table;
 import jakarta.persistence.Temporal;
 import jakarta.persistence.TemporalType;
 import jakarta.persistence.Transient;
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Size;
 import java.io.Serializable;
 import java.util.Date;
 import org.springframework.web.multipart.MultipartFile;
@@ -46,6 +50,8 @@ public class Lockeritem implements Serializable {
     @Column(name = "item_id")
     private Integer itemId;
     @Basic(optional = false)
+    @NotBlank(message = "{lockeritem.itemName.notBlank}")
+    @Size(min = 2, max = 100, message = "{lockeritem.itemName.size}")
     @Column(name = "item_name")
     private String itemName;
     @Column(name = "status")
@@ -59,10 +65,13 @@ public class Lockeritem implements Serializable {
     @Temporal(TemporalType.TIMESTAMP)
     private Date createdAt;
     @JoinColumn(name = "locker_id", referencedColumnName = "locker_id")
+    @NotNull(message = "{lockeritem.lockerId.notNull}")
+    @JsonIgnore
     @ManyToOne(optional = false)
     private Locker lockerId;
- @Transient
+    @Transient
     private MultipartFile file;
+
     public Lockeritem() {
     }
 
@@ -130,13 +139,15 @@ public class Lockeritem implements Serializable {
     public void setLockerId(Locker lockerId) {
         this.lockerId = lockerId;
     }
+
     @PrePersist
     protected void onCreate() {
-         this.createdAt = new Date();
+        this.createdAt = new Date();
         if (this.status == null) {
             this.status = "waiting";
         }
     }
+
     @Override
     public int hashCode() {
         int hash = 0;
@@ -175,5 +186,5 @@ public class Lockeritem implements Serializable {
     public void setFile(MultipartFile file) {
         this.file = file;
     }
-    
+
 }
