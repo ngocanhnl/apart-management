@@ -136,4 +136,21 @@ public class ComplaintRepoImpl implements ComplainRepository {
        return s.get(Complaint.class, id);
     }
 
+    @Override
+    public void updateStatus(int complaintId, String status) {
+         Session s = this.factory.getObject().getCurrentSession();
+        Complaint c = findById(complaintId);
+          
+        c.setStatus(status);
+        c.setResolvedAt(new Date());
+        s.merge(c);
+    }
+
+    @Override
+    public void deleteComplaint(int complaintId) {
+         Session s = this.factory.getObject().getCurrentSession();
+        Complaint p = this.findById(complaintId);
+        s.remove(p);
+    }
+
 }
