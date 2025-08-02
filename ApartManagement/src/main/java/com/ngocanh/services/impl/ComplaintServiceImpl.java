@@ -35,6 +35,16 @@ public class ComplaintServiceImpl  implements ComplaintService{
     public Complaint findById(int id) {
         return this.complaintRepo.findById(id);
     }
+
+    @Override
+    public void updateStatus(int complaintId, String status) {
+      this.complaintRepo.updateStatus(complaintId,status);
+    }
+
+    @Override
+    public void deleteComplaint(int id) {
+        this.complaintRepo.deleteComplaint(id);
+    }
     
     
 }

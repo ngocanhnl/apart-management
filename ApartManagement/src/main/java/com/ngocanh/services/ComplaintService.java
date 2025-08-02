@@ -16,4 +16,6 @@ public interface ComplaintService {
     void addOrUpdateItem(Map<String, String> params);
      public List<Object[]> getAllComplaints(Map<String, String> params);
      public Complaint findById(int id);
+     void updateStatus(int complaintId, String status);
+     void deleteComplaint(int id);
 }
