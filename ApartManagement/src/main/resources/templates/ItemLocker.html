@@ -10,27 +10,9 @@
 
     <main class="container">
         <h1 class="text-center text-info mt-2">QUẢN LÝ SẢN PHẨM</h1>
-    
+
         <form th:action="@{/Item}" method="post" enctype="multipart/form-data" th:object="${Item}">
-            <!--            <div class="form-floating mb-3 mt-3">
-                            <input type="text" class="form-control" id="name" placeholder="Tên sản phẩm" th:field="*{ItemName}" required />
-                            <label for="name">Tên sản phẩm</label>
-                        </div>
-                        <div class="form-floating mb-2">
-                            <input type="text" class="form-control" id="searchUserInput" placeholder="Tìm người nhận..." onkeyup="filterUsers()">
-                            <label for="searchUserInput">Tìm người nhận</label>
-                        </div>
-                        <div class="form-floating">
-                            <select class="form-select" id="cate" th:field="*{lockerId}">
-                                <option th:each="c: ${Users}" th:value="${c.lockerId}" th:text="${c.username}"></option>
-                            </select>
-            
-                            <label for="sel1" class="form-label">Nguoi nhan:</label>
-                        </div>
-                        <div class="form-floating mb-3 mt-3" >
-                            <input type="file"  class="form-control"  th:field="*{file}" />
-                        </div>-->
-            <!-- Tên sản phẩm -->
+         
             <div class="form-floating mb-3 mt-3">
                 <input type="text" class="form-control" id="name" placeholder="Tên sản phẩm" th:field="*{ItemName}" required />
                 <label for="name">Tên sản phẩm</label>
@@ -39,16 +21,7 @@
                 </div>
             </div>
 
-            <!-- Người nhận -->
-            <div class="form-floating">
-                <select class="form-select" id="cate" th:field="*{lockerId}">
-                    <option th:each="c: ${Users}" th:value="${c.lockerId}" th:text="${c.username}"></option>
-                </select>
-                <label for="sel1" class="form-label">Nguoi nhan:</label>
-                <div th:if="${#fields.hasErrors('lockerId')}" class="text-danger">
-                    <p th:errors="*{lockerId}"></p>
-                </div>
-            </div>
+          <input type="hidden" th:field="*{lockerId.lockerId}" />
 
             <!-- File -->
             <div class="form-floating mb-3 mt-3">

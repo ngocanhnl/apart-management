@@ -63,7 +63,7 @@ public class WebAppContextConfigs implements WebMvcConfigurer {
     @Override
     public void addFormatters(FormatterRegistry registry) {
         registry.addFormatter(new UserFormatter());
-        registry.addFormatter(new LockerFormatter());  // ✅ ĐÚNG
+        registry.addFormatter(new LockerFormatter());  
 
     }
 

@@ -41,9 +41,14 @@ public class ItemController {
     private LockerService lockerService;
 
     @GetMapping("/Item")
-    public String getUser(Model model) {
-        model.addAttribute("Item", new Lockeritem());
-        model.addAttribute("Users", this.userService.getUsers());
+    public String getUser(@RequestParam("lockerId") int lockerId, Model model) {
+        Lockeritem item = new Lockeritem();
+        
+        item.setLockerId(lockerService.getLocker(lockerId));
+        System.out.println("lockerIdsssssssss" + lockerService.getLocker(lockerId));
+        System.out.println("itemsssssssss" + item);
+        model.addAttribute("Item", item);
+ 
 
         return "ItemLocker";
     }
@@ -57,10 +62,9 @@ public class ItemController {
     public String addItem(@ModelAttribute("Item") @Valid Lockeritem item,
             BindingResult result,
             Model model) {
-
+        System.out.println("Itesssssssssssssssssm"+ item);
         if (result.hasErrors()) {
-
-            model.addAttribute("Users", this.userService.getUsers());
+             System.out.println("Itesssssssssssssssssm"+ result.hasErrors());
             return "ItemLocker";  // quay lại form nếu lỗi
         }
 
