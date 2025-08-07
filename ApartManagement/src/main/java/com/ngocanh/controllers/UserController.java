@@ -39,8 +39,11 @@ public class UserController {
             BindingResult result,
             Model model) {
         if (result.hasErrors()) {
+            System.out.println("Loi");
+            result.getAllErrors().forEach(err -> System.out.println(err.toString()));
             return "userCreateForm";
         }
+        System.out.println(">> Raw password từ form: [" + u.getPassword() + "]");
         this.userService.updateOrCreateuser(u);
         return "redirect:/users";
     }
@@ -75,6 +78,13 @@ public class UserController {
     public String blockUser(Model model, @PathVariable(value = "userId") int id) {
         User u = this.userService.getUserById(id);
         this.userService.blockUser(u);
+        return "redirect:/users";
+    }
+    
+    @GetMapping("/user/delete/{userId}")
+    public String deleteUser(Model model, @PathVariable(value = "userId") int id) {
+       
+        this.userService.deleteUser(id);
         return "redirect:/users";
     }
 

@@ -74,7 +74,7 @@ public class ApiUserController {
 
     @PostMapping(path = "/secure/update", consumes = MediaType.MULTIPART_FORM_DATA_VALUE,
             produces = MediaType.APPLICATION_JSON_VALUE)
-    public ResponseEntity<?> update(@RequestParam Map<String, String> params, @RequestParam(value = "avatar") MultipartFile avatar) {
+    public ResponseEntity<?> update(@RequestParam Map<String, String> params, @RequestParam(value = "avatar", required = false) MultipartFile avatar) {
 
         User u = this.userDetailsService.updateUser(params, avatar);
         return new ResponseEntity<>(u, HttpStatus.CREATED);

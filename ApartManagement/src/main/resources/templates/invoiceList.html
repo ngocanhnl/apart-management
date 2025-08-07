@@ -1,97 +1,3 @@
-<!--
-
-<!DOCTYPE html>
-<html lang="vi" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Danh sách Hóa đơn</title>
-    <th:context th:replace="base :: resources"></th:context>
-</head>
-<body>
-<div class="container-fluid">
-    <div class="row">
-         Sidebar 
-        <div th:replace="base :: navbar"></div>
-
-         Main Content 
-        <main class="col-md-10 ms-sm-auto col-lg-10 px-4">
-            <div class="py-4 text-center">
-                <h2 class="mb-0">Danh sách Hóa đơn</h2>
-                <small class="text-muted">Quản lý hóa đơn người dùng</small>
-            </div>
-
-             Form tìm kiếm 
-            <div class="card shadow-sm mb-4">
-                <div class="card-body">
-                    <form method="get" action="#" class="row g-3 align-items-center">
-                        <div class="col-md-4">
-                            <input type="text" class="form-control" name="name"
-                                   placeholder="Tìm theo tên người dùng" th:value="${param.name}">
-                        </div>
-                        <div class="col-auto">
-                            <button type="submit" class="btn btn-primary">Tìm kiếm</button>
-                        </div>
-                        <div class="col text-end">
-                            <a th:href="@{/invoices/add}" class="btn btn-success">+ Thêm hóa đơn</a>
-                        </div>
-                    </form>
-                </div>
-            </div>
-
-             Bảng danh sách hóa đơn 
-            <div class="card shadow-sm">
-                <div class="card-body">
-                    <h5 class="card-title mb-3">Danh sách hóa đơn</h5>
-                    <div class="table-responsive">
-                        <table class="table table-bordered table-hover align-middle text-center">
-                            <thead class="table-light">
-                                <tr>
-                                    <th>ID</th>
-                                    <th>Họ tên</th>
-                                    <th>Tên đăng nhập</th>
-                                    <th>Loại hóa đơn</th>
-                                    <th>Số tiền</th>
-                                    <th>Trạng thái</th>
-                                    <th>Hành động</th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                <tr th:each="row : ${invoices}">
-                                    <td th:text="${row[0]}"></td>
-                                    <td th:text="${row[1]}"></td>
-                                    <td th:text="${row[2]}"></td>
-                                    <td th:text="${row[3]}"></td>
-                                    <td th:text="${#numbers.formatDecimal(row[4], 0, 'COMMA', 2, 'POINT')} + ' VNĐ'"></td>
-                                    <td>
-                                        <span th:if="${row[5] == 'Đã thanh toán'}" class="badge bg-success">Đã thanh toán</span>
-                                        <span th:if="${row[5] == 'Chờ xác minh'}" class="badge bg-warning text-dark">Chờ xác minh</span>
-                                        <span th:if="${row[5] == 'Chưa thanh toán'}" class="badge bg-danger">Chưa thanh toán</span>
-                                        <span th:if="${row[5] != 'Đã thanh toán' and row[5] != 'Chờ xác minh' and row[5] != 'Chưa thanh toán'}"
-                                              class="badge bg-secondary" th:text="${row[5]}">Không rõ</span>
-                                    </td>
-                                    <td>
-                                        <a th:href="@{'/invoices/pay/' + ${row[0]}}"
-                                           class="btn btn-sm btn-primary"
-                                           th:if="${row[5] == 'Chờ xác minh'}">
-                                            Thanh toán
-                                        </a>
-                                    </td>
-                                </tr>
-                                <tr th:if="${invoices.size() == 0}">
-                                    <td colspan="7" class="text-center text-muted">Không có hóa đơn nào phù hợp.</td>
-                                </tr>
-                            </tbody>
-                        </table>
-                    </div>
-                </div>
-            </div>
-
-        </main>
-    </div>
-</div>
-</body>
-</html>-->
 
 <!DOCTYPE html>
 <html lang="vi" xmlns:th="http://www.thymeleaf.org">
@@ -216,7 +122,7 @@
                             </li>
                         </ul>
                     </nav>
-
+                </div>
             </main>
         </div>
     </div>

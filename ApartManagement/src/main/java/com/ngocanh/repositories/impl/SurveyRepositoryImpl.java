@@ -4,6 +4,7 @@
  */
 package com.ngocanh.repositories.impl;
 
+import com.ngocanh.pojo.Answers;
 import com.ngocanh.pojo.Questions;
 import com.ngocanh.pojo.Survey;
 import com.ngocanh.pojo.User;
@@ -15,6 +16,7 @@ import jakarta.persistence.criteria.CriteriaBuilder;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
+import jakarta.persistence.criteria.Subquery;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
@@ -121,6 +123,35 @@ public class SurveyRepositoryImpl implements SurveyRepository {
     public Survey getSurveyById(int id) {
         Session s = this.factory.getObject().getCurrentSession();
         return s.get(Survey.class, id);
+    }
+
+    @Override
+    public List<Survey> getAllSurveyForUser(Map<String, String> params, User u) {
+        Session s = this.factory.getObject().getCurrentSession();
+        CriteriaBuilder b = s.getCriteriaBuilder();
+        
+        CriteriaQuery<Survey> q = b.createQuery(Survey.class);
+        Root root = q.from(Survey.class); // Survey
+
+
+        Subquery<Integer> sub = q.subquery(Integer.class);
+        Root aRoot = sub.from(Answers.class);
+        Root qRoot = sub.from(Questions.class); // Questions
+
+        sub.select(qRoot.get("surveyId").get("id"))
+                .where(
+                        b.equal(aRoot.get("questionId").get("id"), qRoot.get("id")),
+                        b.equal(aRoot.get("userId").get("userId"), u.getUserId())
+                )
+                .distinct(true);
+
+
+        q.select(root)
+                .where(b.not(root.get("id").in(sub)))
+                .distinct(true);
+
+
+        return s.createQuery(q).getResultList();
     }
 
 }

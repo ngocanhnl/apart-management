@@ -1,4 +1,4 @@
-
+<!--
 <!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
@@ -46,7 +46,7 @@
     <tr th:each="item : ${lockerItems}">
         <form th:action="@{/locker/updateStatus}" method="post">
 
-            <!-- Ảnh sản phẩm -->
+             Ảnh sản phẩm 
             <td>
                 <img th:if="${item.image != null}" th:src=" ${item.image}"
                      alt="Ảnh" width="80" height="80" style="object-fit: cover; border-radius: 5px;" />
@@ -98,5 +98,108 @@
         }
     }
 </script>
+</body>
+</html>-->
+
+
+<!DOCTYPE html>
+<html lang="vi" xmlns:th="http://www.thymeleaf.org">
+    <head>
+        <meta charset="UTF-8" />
+        <title>Chi tiết Tủ</title>
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <th:context th:replace="base :: resources"></th:context>
+</head>
+<body>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div th:replace="base :: navbar"></div>
+
+            <!-- Main Content -->
+            <main class="col-md-10 ms-sm-auto col-lg-10 px-4">
+                <div class="py-4 text-center">
+                    <h2 class="mb-0">Chi tiết Tủ số <span th:text="${locker.lockerId}"></span></h2>
+                    <small class="text-muted" th:text="'Vị trí: ' + ${locker.location} + ' | Mô tả: ' + ${locker.description}"></small>
+                </div>
+
+                <!-- Form tìm kiếm -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <form th:action="@{/item/search}" method="get" class="row g-3 align-items-center">
+                            <input type="hidden" name="lockerId" th:value="${locker.lockerId}" />
+                            <div class="col-md-6">
+                                <input type="text" class="form-control" name="kw" placeholder="Nhập từ khóa" />
+                            </div>
+                            <div class="col-auto">
+                                <button type="submit" class="btn btn-primary">Tìm kiếm</button>
+                            </div>
+                        </form>
+                        <div class="text-end mt-2">
+                            <a th:href="@{/Item}" class="btn btn-success">+ Tạo mới món hàng</a>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Bảng danh sách món hàng -->
+                <div class="card shadow-sm mb-5">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">Danh sách món hàng trong tủ</h5>
+                        <div class="table-responsive">
+                            <table class="table table-bordered table-hover align-middle text-center">
+                                <thead class="table-light">
+                                    <tr>
+                                        <th>Ảnh</th>
+                                        <th>Tên món hàng</th>
+                                        <th>Trạng thái</th>
+                                        <th>Ngày nhận</th>
+                                        <th>Ngày tạo</th>
+                                        <th>Hành động</th>
+                                    </tr>
+                                </thead>
+                                <tbody>
+                                    <tr th:each="item : ${lockerItems}">
+                                <form th:action="@{/locker/updateStatus}" method="post">
+                                    <td>
+                                        <img th:if="${item.image != null}" th:src="${item.image}" alt="Ảnh"
+                                             width="80" height="80" style="object-fit: cover; border-radius: 5px;" />
+                                        <span th:if="${item.image == null}" class="text-muted">Không có ảnh</span>
+                                    </td>
+                                    <td th:text="${item.itemName}"></td>
+                                    <td>
+                                        <select name="status" class="form-select">
+                                            <option value="waiting" th:selected="${item.status == 'waiting'}">Waiting</option>
+                                            <option value="received" th:selected="${item.status == 'received'}">Received</option>
+                                        </select>
+                                    </td>
+                                    <td th:text="${#dates.format(item.receivedAt, 'dd/MM/yyyy HH:mm')}"></td>
+                                    <td th:text="${#dates.format(item.createdAt, 'dd/MM/yyyy HH:mm')}"></td>
+
+                                    <input type="hidden" name="itemId" th:value="${item.itemId}" />
+                                    <input type="hidden" name="lockerId" th:value="${locker.lockerId}" />
+
+                                    <td class="d-flex justify-content-center gap-1">
+                                        <button type="submit" class="btn btn-primary btn-sm">Cập nhật</button>
+                                </form>
+                                <a th:href="@{'/Item/delete?itemId=' + ${item.itemId} + '&lockerId=' + ${locker.lockerId}}"
+                                   onclick="return confirm('Bạn có chắc muốn xoá không?');"
+                                   class="btn btn-danger btn-sm">
+                                    Xoá
+                                </a>
+                                </td>
+                                </tr>
+                                <tr th:if="${lockerItems.size() == 0}">
+                                    <td colspan="6" class="text-center text-muted">Không có món hàng nào trong tủ.</td>
+                                </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <a class="btn btn-secondary mb-5" th:href="@{/locker/}">← Quay lại danh sách tủ</a>
+            </main>
+        </div>
+    </div>
 </body>
 </html>

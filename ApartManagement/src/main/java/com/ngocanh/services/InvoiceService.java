@@ -17,4 +17,5 @@ public interface InvoiceService {
      public void updateOrCreateInvoice(Invoice invoice);
      public List<Map<String, Object>> getInvoicesByUsername(String username);
      public void isPaidInvoice(int id);
+    
 }

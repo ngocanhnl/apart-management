@@ -11,6 +11,7 @@ import com.ngocanh.services.ItemService;
 import com.ngocanh.services.LockerService;
 import com.ngocanh.services.UserService;
 import jakarta.validation.Valid;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -59,11 +60,24 @@ public class LockerController {
         return "redirect:/locker/" + lockerId;
     }
    
-    @GetMapping("/locker/")
-    public String getLockers(Model model) {
-        List<User> users = this.userService.getUsers();
+    @GetMapping("/locker")
+    public String getLockers(Model model, @RequestParam Map<String, String> params) {
+        Map<String, String> updatedParams = new HashMap<>(params);
+        int curentPage = Integer.valueOf(params.getOrDefault("page","1"));
+        model.addAttribute("currentPage", curentPage);
+        List<User> a = this.userService.getUsers(updatedParams);
+        int start = (curentPage-1)*10;
+        int end = Math.min(start+10, a.size());
+        List<User> b = a.subList(start, end);
+        
+        model.addAttribute("invoices", b);
+        
+       
+        model.addAttribute("totalPages", (int) Math.ceil((double) a.size() / 10));
+        System.out.println("TotalPage "+(int) Math.ceil((double) a.size() / 10));
 
-        model.addAttribute("users", users);
+
+        model.addAttribute("users", b);
 
         return "listLocker";
 

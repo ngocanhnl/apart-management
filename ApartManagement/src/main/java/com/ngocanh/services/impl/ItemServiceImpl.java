@@ -32,14 +32,15 @@ public class ItemServiceImpl implements ItemService {
     private ItemRepo itemRepo;
     @Autowired
     private UserRepositoriy userRepo;
-@Autowired
-private Cloudinary cloudinary;
+    @Autowired
+    private Cloudinary cloudinary;
 
     @Override
     public void addOrUpdateItem(Lockeritem p) {
-
+        
         //upload
-       if (!p.getFile().isEmpty()) {
+        if (!p.getFile().isEmpty()) {
+            System.out.println("com.ngocanh.services.impl.ItemServiceImpl.addOrUpdateItem()");
             try {
                 Map res = cloudinary.uploader().upload(p.getFile().getBytes(),
                         ObjectUtils.asMap("resource_type", "auto"));
@@ -48,23 +49,35 @@ private Cloudinary cloudinary;
                 Logger.getLogger(ItemServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
             }
         }
+//         if (user.getFile() != null && !user.getFile().isEmpty()) {
+//            try {
+//                Map res = cloudinary.uploader().upload(user.getFile().getBytes(),
+//                        ObjectUtils.asMap("resource_type", "auto"));
+//                user.setAvatarUrl(res.get("secure_url").toString());
+//            } catch (IOException ex) {
+//                Logger.getLogger(UserServiceImpl.class.getName()).log(Level.SEVERE, null, ex);
+//            }
+//        }
+//        
+        
+        
+        
 
         this.itemRepo.addOrUpdateItem(p);
-         if (p.getLockerId()!= null && p.getLockerId().getLockerId()  != null) {
-        Integer lockerId = p.getLockerId().getLockerId() ;
+        if (p.getLockerId() != null && p.getLockerId().getLockerId() != null) {
+            Integer lockerId = p.getLockerId().getLockerId();
 
-        // Tìm user theo lockerId
-            User user = userRepo.findByLockerId(lockerId); // Viết hàm này trong repository
+            User user = userRepo.findByLockerId(lockerId);
 
-        if (user != null && user.getEmail() != null) {
-            String to = user.getEmail();
-            String subject = "Có món đồ mới trong tủ của bạn";
-            String content = String.format("Xin chào %s,\n\nMón đồ '%s' đã được thêm vào tủ của bạn.",
-                    user.getFullName(), p.getItemName());
+            if (user != null && user.getEmail() != null) {
+                String to = user.getEmail();
+                String subject = "Có món đồ mới trong tủ của bạn";
+                String content = String.format("Xin chào %s,\n\nMón đồ '%s' đã được thêm vào tủ của bạn.",
+                        user.getFullName(), p.getItemName());
 
-            EmailService.sendEmail(to, subject, content);
+                EmailService.sendEmail(to, subject, content);
+            }
         }
-    }
     }
 
     @Override
@@ -81,7 +94,7 @@ private Cloudinary cloudinary;
     @Override
     public void deleteItem(int id) {
         this.itemRepo.deleteItem(id);
-      }
+    }
 
     @Override
     public List<Lockeritem> getLockeritem(Map<String, String> params) {

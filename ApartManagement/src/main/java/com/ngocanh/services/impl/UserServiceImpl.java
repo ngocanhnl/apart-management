@@ -13,6 +13,11 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import com.cloudinary.Cloudinary;
 import com.cloudinary.utils.ObjectUtils;
+import com.ngocanh.pojo.Invoice;
+import com.ngocanh.repositories.Invoicerepository;
+import com.ngocanh.repositories.PaymentRepository;
+import com.ngocanh.services.InvoiceService;
+import com.ngocanh.services.PaymentService;
 import java.io.IOException;
 import java.util.HashSet;
 import java.util.Set;
@@ -31,6 +36,7 @@ import org.springframework.web.multipart.MultipartFile;
  */
 @Service
 public class UserServiceImpl implements UserService {
+
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
 
@@ -39,6 +45,12 @@ public class UserServiceImpl implements UserService {
 
     @Autowired
     private Cloudinary cloudinary;
+
+    @Autowired
+    private PaymentRepository paymentRepo;
+
+    @Autowired
+    private Invoicerepository invocieRepo;
 
     @Override
     public User createUser(String username, String password, String role, String fullName) {
@@ -107,17 +119,17 @@ public class UserServiceImpl implements UserService {
         u.setPhone(params.get("phone"));
         u.setUsername(params.get("username"));
         u.setPassword(this.passwordEncoder.encode(params.get("password")));
-        u.setRole("ROLE_USER");
-        
+        u.setRole("resident");
+
         if (!avatar.isEmpty()) {
             try {
                 Map res = cloudinary.uploader().upload(avatar.getBytes(), ObjectUtils.asMap("resource_type", "auto"));
                 u.setAvatarUrl(res.get("secure_url").toString());
             } catch (IOException ex) {
-                
+
             }
         }
-        
+
         return this.userRepo.addUser(u);
     }
 
@@ -126,44 +138,58 @@ public class UserServiceImpl implements UserService {
         if (!avatar.isEmpty()) {
             try {
                 Map res = cloudinary.uploader().upload(avatar.getBytes(), ObjectUtils.asMap("resource_type", "auto"));
-                
+
                 this.userRepo.changePassword(username, password, res.get("secure_url").toString());
                 return;
             } catch (IOException ex) {
-                
+
             }
         }
-         this.userRepo.changePassword(username, password, "");
+        this.userRepo.changePassword(username, password, "");
     }
 
     @Override
     public User updateUser(Map<String, String> params, MultipartFile avatar) {
-        
-        
+
         User u = this.userRepo.getUserByUsername(params.get("username"));
         u.setFullName(params.get("fullName"));
         u.setEmail(params.get("email"));
         u.setPhone(params.get("phone"));
-   
-        
-        if (!avatar.isEmpty()) {
+
+        if (avatar != null && !avatar.isEmpty()) {
             try {
                 Map res = cloudinary.uploader().upload(avatar.getBytes(), ObjectUtils.asMap("resource_type", "auto"));
                 u.setAvatarUrl(res.get("secure_url").toString());
             } catch (IOException ex) {
-                
+
             }
         }
-        
+
         this.userRepo.updateOrCreateUser(u);
         return u;
-        
+
     }
 
     @Override
     public void blockUser(User u) {
         u.setIsActive(Boolean.FALSE);
         this.updateOrCreateuser(u);
+    }
+
+    @Override
+    public void deleteUser(int id) {
+
+        User u = this.userRepo.getUserById(id);
+        List<Object[]> invoices = this.invocieRepo.getInvoicesByUsername(u.getUsername());
+        for (Object[] obj : invoices) {
+            int invoiceId = (int) obj[0]; // vì obj[0] = id
+
+            this.paymentRepo.deletePayment(invoiceId);
+            this.invocieRepo.deleteInvocie(u);
+        }
+
+        
+        this.userRepo.deleteUser(id);
     }
 
 }

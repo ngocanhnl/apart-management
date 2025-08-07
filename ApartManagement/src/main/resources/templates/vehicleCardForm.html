@@ -20,6 +20,8 @@
             </div>
 
             <form th:action="@{/vehicle-cards}" th:object="${vehicleCard}" method="post" enctype="multipart/form-data" class="mx-auto" style="max-width: 600px;">
+                <input type="hidden" th:field="*{registrationId}" />
+
                 <div class="mb-3">
                     <label class="form-label">Tên người thân <span class="text-danger">*</span></label>
                     <input type="text" class="form-control" th:field="*{relativeName}" required>

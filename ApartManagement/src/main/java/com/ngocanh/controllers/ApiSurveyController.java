@@ -4,13 +4,16 @@
  */
 package com.ngocanh.controllers;
 
+import com.ngocanh.pojo.User;
 import com.ngocanh.services.QuestionService;
 import com.ngocanh.services.SurveyService;
+import com.ngocanh.services.UserService;
 import java.security.Principal;
 import java.util.Map;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.web.bind.annotation.CrossOrigin;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
@@ -30,12 +33,18 @@ public class ApiSurveyController {
     private SurveyService surveySer;
     
     @Autowired
+    private UserService userDetailService;
+    
+    @Autowired
     private QuestionService questionService;
     
     @GetMapping("/secure/survey")
-    public ResponseEntity<?> surveyList(@RequestParam Map<String,String> params) {
+    public ResponseEntity<?> surveyList(@RequestParam Map<String,String> params, Principal p) {
         
-        return new ResponseEntity<>(this.surveySer.getAllSurvey(params), HttpStatus.OK);
+        User u = this.userDetailService.getUserByUsername(p.getName());
+        
+        
+        return new ResponseEntity<>(this.surveySer.getAllSurveyForUser(params,u), HttpStatus.OK);
         
     }
     

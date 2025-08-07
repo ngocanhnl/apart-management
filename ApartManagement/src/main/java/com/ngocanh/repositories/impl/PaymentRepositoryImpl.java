@@ -4,12 +4,14 @@
  */
 package com.ngocanh.repositories.impl;
 
+import com.ngocanh.pojo.Invoice;
 import com.ngocanh.pojo.Payment;
 import com.ngocanh.pojo.User;
 import com.ngocanh.repositories.Invoicerepository;
 import com.ngocanh.repositories.PaymentRepository;
 import jakarta.persistence.Query;
 import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaDelete;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Predicate;
 import jakarta.persistence.criteria.Root;
@@ -81,6 +83,18 @@ public class PaymentRepositoryImpl implements PaymentRepository{
             p.setCreatedAt(new Date());
             s.persist(p);
         }
+    }
+
+    @Override
+    public void deletePayment(int u) {
+        Session s = this.factory.getObject().getCurrentSession();
+        Invoice i = this.invoiceRepo.getInvoiceById(u);
+        CriteriaBuilder b = s.getCriteriaBuilder();
+        CriteriaDelete<Payment> q = b.createCriteriaDelete(Payment.class);
+        Root root = q.from(Payment.class);
+        q.where(b.equal(root.get("invoiceId").get("id"), i.getId()));
+        Query query = s.createQuery(q);
+        query.executeUpdate();
     }
     
 }

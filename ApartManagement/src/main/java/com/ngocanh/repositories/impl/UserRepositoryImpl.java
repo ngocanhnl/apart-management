@@ -71,33 +71,41 @@ public class UserRepositoryImpl implements UserRepositoriy {
         }
         Query query = s.createQuery(q);
 
-        if (params != null) {
-            String page = params.get("page");
-            if (page != null) {
-                int p = Integer.parseInt(page);
-                int start = (p - 1) * PAGE_SIZE;
-                query.setFirstResult(start);
-                query.setMaxResults(PAGE_SIZE);
-            }
-        }
+//        if (params != null) {
+//            String page = params.get("page");
+//            if (page != null) {
+//                int p = Integer.parseInt(page);
+//                int start = (p - 1) * PAGE_SIZE;
+//                query.setFirstResult(start);
+//                query.setMaxResults(PAGE_SIZE);
+//            }
+//        }
         return query.getResultList();
     }
 
     @Override
     public void updateOrCreateUser(User user) {
         Session s = this.factory.getObject().getCurrentSession();
+        System.out.println("UserId: " + user.getUserId());
+
         if (user.getUserId() == null) {
 
             Locker locker = new Locker();
-            s.persist(locker); 
+            s.persist(locker);
 
-            
             user.setLockerId(locker);
+            System.out.println("pw: " + user.getPassword());
 
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
+            String rawPassword = user.getPassword();
+            if (rawPassword != null) {
+                rawPassword = rawPassword.replace(",", "").trim();
+                user.setPassword(passwordEncoder.encode(rawPassword));
+            }
+            System.out.println(passwordEncoder.encode("123456"));
 
             s.persist(user);
         } else {
+
             s.merge(user);
         }
     }
@@ -137,7 +145,13 @@ public class UserRepositoryImpl implements UserRepositoriy {
     @Override
     public boolean authenticate(String username, String password) {
         User u = this.getUserByUsername(username);
-        if(u.getIsActive()==Boolean.FALSE) return Boolean.FALSE;
+        System.out.println(this.passwordEncoder.matches("$2a$10$TFCHUZWzKcNfVnXMAeAOi.jX1CJxBHDpziCqI44j1/Yi0ezpZoVVC", "123456"));
+        System.out.println("Plain password: " + password);
+        System.out.println("Encoded from DB: " + u.getPassword());
+        System.out.println("Match? " + passwordEncoder.matches(password, u.getPassword()));
+        if (u.getIsActive() == Boolean.FALSE) {
+            return Boolean.FALSE;
+        }
         return this.passwordEncoder.matches(password, u.getPassword());
     }
 
@@ -156,13 +170,11 @@ public class UserRepositoryImpl implements UserRepositoriy {
         CriteriaQuery<User> cq = cb.createQuery(User.class);
         Root<User> root = cq.from(User.class);
 
-        // Tạo điều kiện so sánh locker.id = lockerId
         cq.select(root);
         cq.where(cb.equal(root.get("lockerId").get("lockerId"), lockerId));
 
         Query query = s.createQuery(cq);
 
-        // Tránh lỗi nếu không tìm thấy
         List<User> users = query.getResultList();
         if (!users.isEmpty()) {
             return users.get(0);
@@ -170,21 +182,30 @@ public class UserRepositoryImpl implements UserRepositoriy {
 
         return null;
     }
+
     @Override
-     public void changePassword(String username, String password, String avatar) {
+    public void changePassword(String username, String password, String avatar) {
         Session s = this.factory.getObject().getCurrentSession();
         User u = this.getUserByUsername(username);
         u.setPassword(this.passwordEncoder.encode(password));
         u.setFirstLogin(Boolean.FALSE);
 
-       
-        if(avatar.equals("") == Boolean.FALSE){
+        if (avatar.equals("") == Boolean.FALSE) {
             u.setAvatarUrl(avatar);
         }
-        if(u!=null){
+        if (u != null) {
             s.merge(u);
         }
 
+    }
+
+    @Override
+    public void deleteUser(int id) {
+        Session s = this.factory.getObject().getCurrentSession();
+        User u = this.getUserById(id);
+        if (u != null) {
+            s.remove(u);
+        }
     }
 
 }
