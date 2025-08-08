@@ -5,6 +5,7 @@
 package com.ngocanh.repositories;
 
 import com.ngocanh.pojo.Invoice;
+import com.ngocanh.pojo.User;
 
 import java.util.List;
 import java.util.Map;
@@ -19,4 +20,5 @@ public interface Invoicerepository {
     public List<Object[]> getInvoicesByUsername(String username);
     public Invoice getInvoiceById(int id);
     public void isPaidInvoice(int id);
+    public void deleteInvocie(User u);
 }

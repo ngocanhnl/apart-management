@@ -28,6 +28,7 @@ public interface UserRepositoriy {
 
 
     public User findByLockerId(Integer lockerId);
+    public void deleteUser(int id);
 
    
 

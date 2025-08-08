@@ -5,6 +5,7 @@
 package com.ngocanh.repositories;
 
 import com.ngocanh.pojo.Survey;
+import com.ngocanh.pojo.User;
 import com.ngocanh.pojo.Vehiclecardregistration;
 import java.util.List;
 import java.util.Map;
@@ -17,4 +18,5 @@ public interface SurveyRepository {
     public List<Survey> getAllSurvey(Map<String,String> params);
     public void updateOrCreateSurvey(Survey suvey);
     public Survey getSurveyById(int id);
+    public List<Survey> getAllSurveyForUser(Map<String,String> params, User u);
 }

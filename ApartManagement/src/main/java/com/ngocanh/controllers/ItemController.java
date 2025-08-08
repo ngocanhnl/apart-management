@@ -52,11 +52,7 @@ public class ItemController {
 
         return "ItemLocker";
     }
-//   @PostMapping("/Item")
-//    public String addItem(@ModelAttribute(value="Item") Lockeritem item ){
-//        this.itemService.addOrUpdateItem(item);
-//        return  "redirect:/locker/" + item.getLockerId().getLockerId();
-//    }
+
 
     @PostMapping("/Item")
     public String addItem(@ModelAttribute("Item") @Valid Lockeritem item,
@@ -65,7 +61,7 @@ public class ItemController {
         System.out.println("Itesssssssssssssssssm"+ item);
         if (result.hasErrors()) {
              System.out.println("Itesssssssssssssssssm"+ result.hasErrors());
-            return "ItemLocker";  // quay lại form nếu lỗi
+            return "ItemLocker";  
         }
 
         this.itemService.addOrUpdateItem(item);
@@ -83,19 +79,19 @@ public class ItemController {
     public String getLockerByName(Model model, @RequestParam Map<String, String> params) {
          String lockerIdRaw = params.get("lockerId");
     if (lockerIdRaw == null || lockerIdRaw.isEmpty()) {
-        return "redirect:/locker/"; // fallback nếu thiếu lockerId
+        return "redirect:/locker/"; 
     }
 
     int lockerId = Integer.parseInt(lockerIdRaw);
 
-    // 2. Lấy thông tin tủ & danh sách item theo từ khóa
-    Locker locker = this.lockerService.getLocker(lockerId);
-    List<Lockeritem> lockerItems = this.itemService.getLockeritem(params); // lọc theo kw + lockerId
 
-    // 3. Gửi dữ liệu về view
+    Locker locker = this.lockerService.getLocker(lockerId);
+    List<Lockeritem> lockerItems = this.itemService.getLockeritem(params); 
+
+  
     model.addAttribute("locker", locker);
     model.addAttribute("lockerItems", lockerItems);
 
-    return "locker"; // view chi tiết tủ
+    return "locker"; 
     }
 }

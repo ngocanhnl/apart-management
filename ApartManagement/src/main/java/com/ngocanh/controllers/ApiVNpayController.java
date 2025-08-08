@@ -34,7 +34,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RequestMapping("/api")
 @RestController
 public class ApiVNpayController {
-    
+
 //    @Value("${vnpay.tmnCode}")
 //    private String vnp_TmnCode;
 //
@@ -47,28 +47,26 @@ public class ApiVNpayController {
 //    @Value("${vnpay.returnUrl}")
 //    private String vnp_Returnurl;
 //   
-   
-    
     @Autowired
     private VNPayConfig vnPayConfig;
-    
+
     @Autowired
     private InvoiceService invoiceSer;
-    
+
     @Autowired
     private PaymentService paymentService;
 
     @GetMapping("/create-payment")
-    public ResponseEntity<?> createPayment(@RequestParam("amount") int amount,  @RequestParam("invoiceId") int invoiceId) throws Exception {
-  
+    public ResponseEntity<?> createPayment(@RequestParam("amount") int amount, @RequestParam("invoiceId") int invoiceId) throws Exception {
+
         String vnp_TmnCode = "VH92V83I";
         String vnp_HashSecret = "FI8DNHRRIWNQ3WB4RVMJ4ZTYKQGTLMJG";
         String vnp_PayUrl = "https://sandbox.vnpayment.vn/paymentv2/vpcpay.html";
 //        String vnp_Returnurl = "https://a7ffcc9087b0.ngrok-free.app/ApartManagement/api/secure/invoices";
-       String vnp_Returnurl = "http://localhost:3000/payment-result";
+        String vnp_Returnurl = "http://localhost:3000/payment-result";
         // ... giữ nguyên phần xử lý tiếp theo
 
-        String vnp_TxnRef = String.valueOf(System.currentTimeMillis());
+        String vnp_TxnRef = String.valueOf(System.currentTimeMillis()) + "-" + String.valueOf(invoiceId);
         String vnp_OrderInfo = "Thanh toan don hang: " + vnp_TxnRef;
         String orderType = "other";
         String vnp_Amount = String.valueOf(amount * 100);
@@ -114,8 +112,8 @@ public class ApiVNpayController {
 
         System.out.println("Payment URL: " + paymentUrl);
         System.out.println("Payment invoiceId: " + invoiceId);
-        this.invoiceSer.isPaidInvoice(invoiceId);
-        this.paymentService.updateOnlinePayment(invoiceId, vnp_TxnRef);
+//        this.invoiceSer.isPaidInvoice(invoiceId);
+//        this.paymentService.updateOnlinePayment(invoiceId, vnp_TxnRef);
         return ResponseEntity.ok(Collections.singletonMap("paymentUrl", paymentUrl));
     }
 
@@ -124,6 +122,15 @@ public class ApiVNpayController {
         String vnp_SecureHash = allParams.remove("vnp_SecureHash");
         allParams.remove("vnp_SecureHashType");
         String vnp_HashSecret = "FI8DNHRRIWNQ3WB4RVMJ4ZTYKQGTLMJG";
+        System.out.println("iddd" + allParams.get("vnp_TxnRef"));
+        String tmp = allParams.get("vnp_TxnRef");
+        String result = "";
+        if(tmp != null ){
+            result = tmp.substring(tmp.lastIndexOf("-") + 1);
+        }
+        this.invoiceSer.isPaidInvoice(Integer.valueOf(result));
+        this.paymentService.updateOnlinePayment(Integer.valueOf(result), tmp);
+        
 
         // Sắp xếp tham số để tạo chuỗi dữ liệu cần kiểm tra hash
         List<String> fieldNames = new ArrayList<>(allParams.keySet());

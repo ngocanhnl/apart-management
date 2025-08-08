@@ -12,6 +12,7 @@ import com.ngocanh.pojo.User;
 import com.ngocanh.repositories.Invoicerepository;
 import jakarta.persistence.Query;
 import jakarta.persistence.criteria.CriteriaBuilder;
+import jakarta.persistence.criteria.CriteriaDelete;
 import jakarta.persistence.criteria.CriteriaQuery;
 import jakarta.persistence.criteria.Join;
 import jakarta.persistence.criteria.Predicate;
@@ -84,16 +85,19 @@ public class InvoiceRepositoryImpl implements Invoicerepository {
         }
 //        Query query = s.createQuery(q);
         Query query = s.createQuery(q);
-        if (params != null) {
-            String page = params.get("page");
-            if (page != null) {
-                int p = Integer.parseInt(page);
-                int start = (p - 1) * PAGE_SIZE;
-                query.setFirstResult(start);
-                query.setMaxResults(PAGE_SIZE);
-            }
-        }
-        query.setMaxResults(PAGE_SIZE);
+//        if (params != null) {
+//            String page = params.get("page");
+//            if (page != null) {
+//                int p = Integer.parseInt(page);
+//                int start = (p - 1) * PAGE_SIZE;
+//                query.setFirstResult(start);
+//                query.setMaxResults(PAGE_SIZE);
+//            }
+//        }
+        
+        
+       
+        
         return query.getResultList();
     }
 
@@ -150,5 +154,17 @@ public class InvoiceRepositoryImpl implements Invoicerepository {
                  
         }
        
+    }
+
+    @Override
+    public void deleteInvocie(User u) {
+        Session s = this.factory.getObject().getCurrentSession();
+         
+        CriteriaBuilder b = s.getCriteriaBuilder();
+        CriteriaDelete<Invoice> q = b.createCriteriaDelete(Invoice.class);
+        Root root = q.from(Invoice.class);
+        q.where(b.equal(root.get("userId").get("userId"), u.getUserId()));
+        Query query = s.createQuery(q);
+        query.executeUpdate();
     }
 }

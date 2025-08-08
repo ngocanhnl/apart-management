@@ -1,112 +1,115 @@
 <!DOCTYPE html>
 <html lang="en" xmlns:th="http://www.thymeleaf.org">
-<head>
-    <meta charset="UTF-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Dashboard</title>
+    <head>
+        <meta charset="UTF-8" />
+        <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+        <title>Dashboard</title>
     <th:context th:replace="base :: resources"></th:context>
 </head>
 <body>
-<div class="container-fluid">
-    <div class="row">
-        <!-- Sidebar -->
-        <div th:replace="base :: navbar"></div>
+    <div class="container-fluid">
+        <div class="row">
+            <!-- Sidebar -->
+            <div th:replace="base :: navbar"></div>
 
-        <!-- Main Content -->
-        <main class="col-md-10 ms-sm-auto col-lg-10 px-4">
-            <div class="py-4 text-center">
-                <h2 class="mb-0">Dashboard</h2>
-                <small class="text-muted">Thống kê khảo sát</small>
-            </div>
-
-            <!-- Survey Selector -->
-            <form method="get" th:action="@{/}" class="row align-items-center mb-4">
-                <div class="col-auto">
-                    <label for="surveyId" class="form-label mb-0">Chọn khảo sát:</label>
+            <!-- Main Content -->
+            <main class="col-md-10 ms-sm-auto col-lg-10 px-4">
+                <div class="py-4 text-center">
+                    <h2 class="mb-0">Dashboard</h2>
+                    <small class="text-muted">Thống kê khảo sát</small>
                 </div>
-                <div class="col-auto">
-                    <select name="surveyId" id="surveyId" onchange="this.form.submit()" class="form-select">
-                        <option th:each="s : ${surveys}"
-                                th:value="${s.id}"
-                                th:text="${s.title}"
-                                th:selected="${s.id == selectedSurveyId}">
-                        </option>
-                    </select>
-                </div>
-            </form>
 
-            <!-- Table Result -->
-            <div class="card shadow-sm mb-4">
-                <div class="card-body">
-                    <h5 class="card-title mb-3">Kết quả khảo sát</h5>
-                    <table class="table table-bordered table-striped text-center align-middle">
-                        <thead class="table-light">
-                        <tr>
-                            <th scope="col">Câu hỏi</th>
-                            <th scope="col">Điểm trung bình</th>
-                        </tr>
-                        </thead>
-                        <tbody>
-                        <tr th:each="row : ${stats}">
-                            <td th:text="${row[0]}"></td>
-                            <td th:text="${#numbers.formatDecimal(row[1], 1, 2)}"></td>
-                        </tr>
-                        </tbody>
-                    </table>
-                </div>
-            </div>
+                <!-- Survey Selector -->
+                <form method="get" th:action="@{/}" class="row align-items-center mb-4">
+                    <div class="col-auto">
+                        <label for="surveyId" class="form-label mb-0">Chọn khảo sát:</label>
+                    </div>
+                    <div class="col-auto">
+                        <select name="surveyId" id="surveyId" onchange="this.form.submit()" class="form-select">
+                            <option th:each="s : ${surveys}"
+                                    th:value="${s.id}"
+                                    th:text="${s.title}"
+                                    th:selected="${s.id == selectedSurveyId}">
+                            </option>
+                        </select>
+                    </div>
+                </form>
 
-            <!-- Chart Result -->
-            <div class="card shadow-sm mb-5">
+                <!-- Table Result -->
+                <div class="card shadow-sm mb-4">
+                    <div class="card-body">
+                        <h5 class="card-title mb-3">Kết quả khảo sát</h5>
+                        <table class="table table-bordered table-striped text-center align-middle">
+                            <thead class="table-light">
+                                <tr>
+                                    <th scope="col">Câu hỏi</th>
+                                    <th scope="col">Điểm trung bình</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                <tr th:each="row : ${stats}">
+                                    <td th:text="${row[0]}"></td>
+                                    <td th:text="${#numbers.formatDecimal(row[1], 1, 2)}"></td>
+                                </tr>
+                            </tbody>
+                        </table>
+                    </div>
+                </div>
+
+                <!-- Chart Result -->
                 <div class="card-body">
                     <h5 class="card-title mb-3">Biểu đồ thống kê điểm trung bình</h5>
-                    <canvas id="surveyChart" height="200"></canvas>
+                    <div class="d-flex justify-content-center">
+                        <div style="width: 60%; max-width: 600px;">
+                            <canvas id="surveyChart" height="150"></canvas>
+                        </div>
+                    </div>
                 </div>
-            </div>
 
-            <!-- Scripts -->
-            <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
-            <script th:inline="javascript">
-                const stats = /*[[${stats}]]*/ [];
 
-                const chartLabels = stats.map(row => row[0]);
-                const chartValues = stats.map(row => row[1]);
+                <!-- Scripts -->
+                <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+                <script th:inline="javascript">
+                            const stats = /*[[${stats}]]*/ [];
 
-                const ctx = document.getElementById('surveyChart').getContext('2d');
-                const surveyChart = new Chart(ctx, {
-                    type: 'bar',
-                    data: {
-                        labels: chartLabels,
-                        datasets: [{
-                            label: 'Điểm trung bình',
-                            data: chartValues,
-                            backgroundColor: 'rgba(75, 192, 192, 0.5)',
-                            borderColor: 'rgba(75, 192, 192, 1)',
-                            borderWidth: 1
-                        }]
-                    },
-                    options: {
-                        responsive: true,
-                        scales: {
-                            y: {
-                                beginAtZero: true,
-                                max: 10
-                            }
-                        },
-                        plugins: {
-                            tooltip: {
-                                callbacks: {
-                                    label: function (context) {
-                                        return context.raw.toFixed(2);
+                            const chartLabels = stats.map(row => row[0]);
+                            const chartValues = stats.map(row => row[1]);
+
+                            const ctx = document.getElementById('surveyChart').getContext('2d');
+                            const surveyChart = new Chart(ctx, {
+                                type: 'bar',
+                                data: {
+                                    labels: chartLabels,
+                                    datasets: [{
+                                            label: 'Điểm trung bình',
+                                            data: chartValues,
+                                            backgroundColor: 'rgba(75, 192, 192, 0.5)',
+                                            borderColor: 'rgba(75, 192, 192, 1)',
+                                            borderWidth: 1
+                                        }]
+                                },
+                                options: {
+                                    responsive: true,
+                                    scales: {
+                                        y: {
+                                            beginAtZero: true,
+                                            max: 10
+                                        }
+                                    },
+                                    plugins: {
+                                        tooltip: {
+                                            callbacks: {
+                                                label: function (context) {
+                                                    return context.raw.toFixed(2);
+                                                }
+                                            }
+                                        }
                                     }
                                 }
-                            }
-                        }
-                    }
-                });
-            </script>
-        </main>
+                            });
+                </script>
+            </main>
+        </div>
     </div>
-</div>
 </body>
 </html>

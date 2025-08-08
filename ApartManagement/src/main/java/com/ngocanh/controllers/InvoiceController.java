@@ -49,23 +49,41 @@ public class InvoiceController {
 
     @GetMapping("/invoices")
     public String invoiceList(Model model, @RequestParam Map<String, String> params) {
-        model.addAttribute("invoices", this.invoiceService.getAllInvoice(params));
-        model.addAttribute("currentPage", Integer.valueOf(params.getOrDefault("page","1")));
-        System.out.println(params.getOrDefault("page","1"));
-        int total = 0;
-        if(this.invoiceService.getAllInvoice(params) != null){
-            total = this.invoiceService.getAllInvoice(params).size();
-            System.out.println(total);
-        }
-        model.addAttribute("totalPages", (int) Math.ceil((double) total / 10));
-        System.out.println((int) Math.ceil((double) total / 10));
+        Map<String, String> updatedParams = new HashMap<>(params);
+        int curentPage = Integer.valueOf(params.getOrDefault("page","1"));
+        model.addAttribute("currentPage", curentPage);
+        List<Object[]> a = this.invoiceService.getAllInvoice(updatedParams);
+        int start = (curentPage-1)*10;
+        int end = Math.min(start+10, a.size());
+        List<Object[]> b = a.subList(start, end);
+        
+        model.addAttribute("invoices", b);
+        
+       
+        model.addAttribute("totalPages", (int) Math.ceil((double) a.size() / 10));
+        System.out.println("TotalPage "+(int) Math.ceil((double) a.size() / 10));
+
         return "invoiceList";
     }
 
     @GetMapping("/invoices/add")
     public String addInvoice(Model model, @RequestParam Map<String, String> params) {
-//        model.addAttribute("invoice", new Invoice());
-        model.addAttribute("users", this.userService.getUsers(params));
+        Map<String, String> updatedParams = new HashMap<>(params);
+        int curentPage = Integer.valueOf(params.getOrDefault("page","1"));
+        model.addAttribute("currentPage", curentPage);
+        List<User> a = this.userService.getUsers(updatedParams);
+        int start = (curentPage-1)*10;
+        int end = Math.min(start+10, a.size());
+        List<User> b = a.subList(start, end);
+        
+       
+        model.addAttribute("totalPages", (int) Math.ceil((double) a.size() / 10));
+        System.out.println("TotalPage "+(int) Math.ceil((double) a.size() / 10));
+        
+        
+        
+        model.addAttribute("users", b);
+        
         return "InvoiceListUser";
     }
 

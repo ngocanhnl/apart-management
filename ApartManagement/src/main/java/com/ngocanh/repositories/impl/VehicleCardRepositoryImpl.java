@@ -67,6 +67,7 @@ public class VehicleCardRepositoryImpl implements VehicleCardRepository {
     @Override
     public void updateOrCreateVehicleCard(Vehiclecardregistration card) {
         Session s = this.factory.getObject().getCurrentSession();
+        System.out.println("VEHEICLID" + card.getRegistrationId());
         if (card.getRegistrationId()== null) {
             s.persist(card);
         } else {

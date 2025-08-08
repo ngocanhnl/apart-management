@@ -38,5 +38,6 @@ public interface UserService extends UserDetailsService {
     public User updateUser(Map<String, String> params, MultipartFile avatar);
     
     public void blockUser(User u);
+    public void deleteUser(int id) ;
 
 }

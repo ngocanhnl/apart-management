@@ -5,6 +5,7 @@
 package com.ngocanh.services.impl;
 
 import com.ngocanh.pojo.Survey;
+import com.ngocanh.pojo.User;
 import com.ngocanh.repositories.SurveyRepository;
 import com.ngocanh.services.SurveyService;
 import java.util.List;
@@ -34,6 +35,11 @@ public class SurveyServiceImpl implements SurveyService{
     @Override
     public Survey getSurveyById(int id) {
         return this.surveyRepo.getSurveyById(id);
+    }
+
+    @Override
+    public List<Survey> getAllSurveyForUser(Map<String, String> params, User u) {
+       return this.surveyRepo.getAllSurveyForUser(params, u);
     }
     
 }
