@@ -58,8 +58,8 @@ public class UserRepositoryImpl implements UserRepositoriy {
             List<Predicate> predicates = new ArrayList<>();
 
             String kw = params.get("kw");
-            if (kw != null && !kw.isEmpty()) {
-                predicates.add(b.like(root.get("username"), String.format("%%%s%%", kw)));
+            if (kw != null && !kw.isEmpty() && kw.equals("")==Boolean.FALSE) {
+                predicates.add(b.like(root.get("fullName"), String.format("%%%s%%", kw)));
             }
             String status = params.get("status");
             Boolean tmp = "active".equals(status) ? Boolean.TRUE : Boolean.FALSE;

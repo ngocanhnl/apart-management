@@ -41,27 +41,27 @@ public class ItemController {
     private LockerService lockerService;
 
     @GetMapping("/Item")
-    public String getUser(Model model) {
-        model.addAttribute("Item", new Lockeritem());
-        model.addAttribute("Users", this.userService.getUsers());
+    public String getUser(@RequestParam("lockerId") int lockerId, Model model) {
+        Lockeritem item = new Lockeritem();
+        
+        item.setLockerId(lockerService.getLocker(lockerId));
+        System.out.println("lockerIdsssssssss" + lockerService.getLocker(lockerId));
+        System.out.println("itemsssssssss" + item);
+        model.addAttribute("Item", item);
+ 
 
         return "ItemLocker";
     }
-//   @PostMapping("/Item")
-//    public String addItem(@ModelAttribute(value="Item") Lockeritem item ){
-//        this.itemService.addOrUpdateItem(item);
-//        return  "redirect:/locker/" + item.getLockerId().getLockerId();
-//    }
+
 
     @PostMapping("/Item")
     public String addItem(@ModelAttribute("Item") @Valid Lockeritem item,
             BindingResult result,
             Model model) {
-
+        System.out.println("Itesssssssssssssssssm"+ item);
         if (result.hasErrors()) {
-
-            model.addAttribute("Users", this.userService.getUsers());
-            return "ItemLocker";  // quay lại form nếu lỗi
+             System.out.println("Itesssssssssssssssssm"+ result.hasErrors());
+            return "ItemLocker";  
         }
 
         this.itemService.addOrUpdateItem(item);
@@ -79,19 +79,19 @@ public class ItemController {
     public String getLockerByName(Model model, @RequestParam Map<String, String> params) {
          String lockerIdRaw = params.get("lockerId");
     if (lockerIdRaw == null || lockerIdRaw.isEmpty()) {
-        return "redirect:/locker/"; // fallback nếu thiếu lockerId
+        return "redirect:/locker/"; 
     }
 
     int lockerId = Integer.parseInt(lockerIdRaw);
 
-    // 2. Lấy thông tin tủ & danh sách item theo từ khóa
-    Locker locker = this.lockerService.getLocker(lockerId);
-    List<Lockeritem> lockerItems = this.itemService.getLockeritem(params); // lọc theo kw + lockerId
 
-    // 3. Gửi dữ liệu về view
+    Locker locker = this.lockerService.getLocker(lockerId);
+    List<Lockeritem> lockerItems = this.itemService.getLockeritem(params); 
+
+  
     model.addAttribute("locker", locker);
     model.addAttribute("lockerItems", lockerItems);
 
-    return "locker"; // view chi tiết tủ
+    return "locker"; 
     }
 }

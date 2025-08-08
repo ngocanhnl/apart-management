@@ -7,6 +7,8 @@ package com.ngocanh.controllers;
 import com.ngocanh.pojo.User;
 import com.ngocanh.services.UserService;
 import jakarta.validation.Valid;
+import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 import org.hibernate.annotations.CreationTimestamp;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -29,11 +31,6 @@ public class UserController {
     @Autowired
     private UserService userService;
 
-//    @PostMapping("/users")
-//    public String createUser(@ModelAttribute(value="user") User u){
-//        this.userService.updateOrCreateuser(u);
-//        return "redirect:/users";
-//    }
     @PostMapping("/users")
     public String createUser(@ModelAttribute("user") @Valid User u,
             BindingResult result,
@@ -43,6 +40,12 @@ public class UserController {
             result.getAllErrors().forEach(err -> System.out.println(err.toString()));
             return "userCreateForm";
         }
+        
+        
+        
+        
+        
+        
         System.out.println(">> Raw password từ form: [" + u.getPassword() + "]");
         this.userService.updateOrCreateuser(u);
         return "redirect:/users";
@@ -50,7 +53,22 @@ public class UserController {
 
     @GetMapping("/users")
     public String getUser(Model model, @RequestParam Map<String, String> params) {
-        model.addAttribute("users", this.userService.getUsers(params));
+        
+        Map<String, String> updatedParams = new HashMap<>(params);
+        int curentPage = Integer.valueOf(params.getOrDefault("page","1"));
+        model.addAttribute("currentPage", curentPage);
+        List<User> a = this.userService.getUsers(updatedParams);
+        int start = (curentPage-1)*10;
+        int end = Math.min(start+10, a.size());
+        List<User> b = a.subList(start, end);
+        
+       
+        model.addAttribute("totalPages", (int) Math.ceil((double) a.size() / 10));
+        System.out.println("TotalPage "+(int) Math.ceil((double) a.size() / 10));
+        
+        
+        
+        model.addAttribute("users", b);
 
         return "user";
     }

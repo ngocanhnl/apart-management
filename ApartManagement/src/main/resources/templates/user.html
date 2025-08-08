@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!--<!DOCTYPE html>
 <html xmlns:th="http://www.thymeleaf.org">
 <head>
     <meta charset="UTF-8">
@@ -9,7 +9,7 @@
 <body>
 <div class="container-fluid">
     <div class="row">
-        <div th:replace="base :: navbar"></div> <!-- Sidebar -->
+        <div th:replace="base :: navbar"></div>  Sidebar 
 
         <main class="col-md-10 ms-sm-auto col-lg-10 px-md-4">
             <h2 class="mb-4 mt-4 d-flex justify-content-between align-items-center">
@@ -17,7 +17,7 @@
                 <a th:href="@{/userCreateForm}" class="btn btn-primary btn-sm">+ Thêm người dùng</a>
             </h2>
 
-            <!-- Form lọc -->
+             Form lọc 
             <form class="row g-3 mb-4" method="get" th:action="@{/users}">
                 <div class="col-md-4">
                     <input type="text" name="kw" class="form-control" placeholder="Tìm theo tên, username..."
@@ -36,7 +36,7 @@
                 </div>
             </form>
 
-            <!-- Bảng danh sách người dùng -->
+             Bảng danh sách người dùng 
             <table class="table table-bordered table-hover align-middle">
                 <thead class="table-dark">
                     <tr>
@@ -73,6 +73,119 @@
                     </tr>
                 </tbody>
             </table>
+        </main>
+    </div>
+</div>
+</body>
+</html>-->
+
+
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org" lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>Danh sách người dùng</title>
+    <th:context th:replace="base :: resources"></th:context>
+</head>
+<body>
+<div class="container-fluid">
+    <div class="row">
+        <!-- Sidebar -->
+        <div th:replace="base :: navbar"></div>
+
+        <!-- Main Content -->
+        <main class="col-md-10 ms-sm-auto col-lg-10 px-md-4">
+            <div class="py-4">
+                <h2 class="mb-4 d-flex justify-content-between align-items-center">
+                    Danh sách người dùng
+                    <a th:href="@{/userCreateForm}" class="btn btn-primary btn-sm">+ Thêm người dùng</a>
+                </h2>
+
+                <!-- Form lọc -->
+                <form class="row g-3 mb-4" method="get" th:action="@{/users}">
+                    <div class="col-md-4">
+                        <input type="text" name="kw" class="form-control" placeholder="Tìm theo tên, username..."
+                               th:value="${param.kw}">
+                    </div>
+                    <div class="col-md-3">
+                        <select name="status" class="form-select">
+                            <option value="">-- Trạng thái --</option>
+                            <option value="active" th:selected="${param.status == 'active'}">Đang hoạt động</option>
+                            <option value="inactive" th:selected="${param.status == 'inactive'}">Tạm khóa</option>
+                        </select>
+                    </div>
+                    <div class="col-md-auto">
+                        <button type="submit" class="btn btn-primary">Lọc</button>
+                    </div>
+                </form>
+
+                <!-- Bảng danh sách người dùng -->
+                <div class="table-responsive">
+                    <table class="table table-bordered table-hover align-middle">
+                        <thead class="table-dark text-center">
+                        <tr>
+                            <th>ID</th>
+                            <th>Username</th>
+                            <th>Họ tên</th>
+                            <th>Số điện thoại</th>
+                            <th>Địa chỉ</th>
+                            <th>Hoạt động</th>
+                            <th>Hành động</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="user : ${users}">
+                            <td th:text="${user.userId}"></td>
+                            <td th:text="${user.username}"></td>
+                            <td th:text="${user.fullName}"></td>
+                            <td th:text="${user.phone}"></td>
+                            <td th:text="${user.address}"></td>
+                            <td class="text-center">
+                                <a th:href="@{'/user/block/' + ${user.userId}}"
+                                   th:if="${user.isActive}" class="badge bg-success">Đang hoạt động</a>
+                                <span th:unless="${user.isActive}" class="badge bg-secondary">Tạm khóa</span>
+                            </td>
+                            <td class="text-center">
+                                <a th:href="@{'/user/' + ${user.userId}}" class="btn btn-sm btn-warning">Sửa</a>
+                                <a th:href="@{'/user/delete/' + ${user.userId}}"
+                                   class="btn btn-sm btn-danger"
+                                   onclick="return confirm('Bạn có chắc muốn xóa người dùng này không?');">Xóa</a>
+                            </td>
+                        </tr>
+                        <tr th:if="${users.size() == 0}">
+                            <td colspan="7" class="text-center text-muted">Không có người dùng nào phù hợp.</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Phân trang -->
+                <div class="mt-3 d-flex justify-content-center">
+                    <nav>
+                        <ul class="pagination">
+                            <!-- Trang trước -->
+                            <li class="page-item" th:classappend="${currentPage == 1}? 'disabled'">
+                                <a class="page-link"
+                                   th:href="@{/users(kw=${param.kw}, status=${param.status}, page=${currentPage - 1})}">Trước</a>
+                            </li>
+
+                            <!-- Các số trang -->
+                            <li class="page-item" th:each="i : ${#numbers.sequence(1, totalPages)}"
+                                th:classappend="${i == currentPage} ? 'active'">
+                                <a class="page-link"
+                                   th:href="@{/users(kw=${param.kw}, status=${param.status}, page=${i})}"
+                                   th:text="${i}">1</a>
+                            </li>
+
+                            <!-- Trang sau -->
+                            <li class="page-item" th:classappend="${currentPage == totalPages}? 'disabled'">
+                                <a class="page-link"
+                                   th:href="@{/users(kw=${param.kw}, status=${param.status}, page=${currentPage + 1})}">Sau</a>
+                            </li>
+                        </ul>
+                    </nav>
+                </div>
+            </div>
         </main>
     </div>
 </div>

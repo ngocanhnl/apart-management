@@ -22,14 +22,14 @@
    
         <nav th:fragment="navbar" class="col-md-2 d-none d-md-block sidebar">
             <div class="pt-3">
-                <h4 class="text-center mb-4">Quan ly chung cu</h4>
+                <h4 class="text-center mb-4">Quản lý chung cư</h4>
                 <a th:href="@{/}">Dashboard</a>
-                <a th:href="@{/users}" sec:authorize="isAuthenticated()">User</a>
-                <a th:href="@{/locker}" sec:authorize="isAuthenticated()">Locker</a>
-                <a th:href="@{/surveys}" sec:authorize="isAuthenticated()">Survey</a>
-                <a th:href="@{/vehicle-cards}">Vehicle card</a>
-                <a th:href="@{/invoices}">Hoa don</a>
-                <a href="#">Complain</a>
+                <a th:href="@{/users}" sec:authorize="isAuthenticated()">Quản lý tài khoản</a>
+                <a th:href="@{/locker}" sec:authorize="isAuthenticated()">Quản lý tủ đồ</a>
+                <a th:href="@{/surveys}" sec:authorize="isAuthenticated()">Quản lý khảo sát</a>
+                <a th:href="@{/vehicle-cards}">Quản lý thẻ xe</a>
+                <a th:href="@{/invoices}">Quản lý hóa đơn</a>
+                <a th:href="@{/complaints}">Quản lý khiếu nại</a>
                 <a th:href="@{/logout}" sec:authorize="isAuthenticated()">Log out</a>
                 
             </div>

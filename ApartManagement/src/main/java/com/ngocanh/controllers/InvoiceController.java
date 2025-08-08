@@ -68,8 +68,22 @@ public class InvoiceController {
 
     @GetMapping("/invoices/add")
     public String addInvoice(Model model, @RequestParam Map<String, String> params) {
-//        model.addAttribute("invoice", new Invoice());
-        model.addAttribute("users", this.userService.getUsers(params));
+        Map<String, String> updatedParams = new HashMap<>(params);
+        int curentPage = Integer.valueOf(params.getOrDefault("page","1"));
+        model.addAttribute("currentPage", curentPage);
+        List<User> a = this.userService.getUsers(updatedParams);
+        int start = (curentPage-1)*10;
+        int end = Math.min(start+10, a.size());
+        List<User> b = a.subList(start, end);
+        
+       
+        model.addAttribute("totalPages", (int) Math.ceil((double) a.size() / 10));
+        System.out.println("TotalPage "+(int) Math.ceil((double) a.size() / 10));
+        
+        
+        
+        model.addAttribute("users", b);
+        
         return "InvoiceListUser";
     }
 
